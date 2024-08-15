@@ -7,6 +7,6 @@ class Enrollment(models.Model):
     first_name = models.CharField(max_length=255)
     father_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
-    health_condition = models.TextField()
-    identification = models.IntegerField()
+    health_condition = models.TextField(blank=True, null=True)
+    id_number = models.IntegerField()
     created_at = models.DateTimeField(auto_now_add=True)

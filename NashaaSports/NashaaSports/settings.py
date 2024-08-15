@@ -12,11 +12,13 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 import os
+import dj_database_url
 from dotenv import load_dotenv # to import env file
 load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+DATABASE_URL = "postgresql://postgres:CZsXOWFrrPLjKCXHlihLZErZOpEHxiVi@roundhouse.proxy.rlwy.net:22438/railway"
 
 
 # Quick-start development settings - unsuitable for production
@@ -92,15 +94,18 @@ WSGI_APPLICATION = 'NashaaSports.wsgi.application'
 #     }
 # }
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'nashaa_db',
-        'USER': 'postgres', 
-        'PASSWORD': '',
-        'HOST': 'localhost'
-
-    }
+        "default":dj_database_url.config(default=DATABASE_URL,conn_max_age=1800),
 }
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'nashaa_db',
+#         'USER': 'postgres', 
+#         'PASSWORD': '',
+#         'HOST': 'localhost'
+
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
