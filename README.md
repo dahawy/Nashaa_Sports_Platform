@@ -1,4 +1,4 @@
-# -Nashaa_Sports_Platform
+# Nashaa_Sports_Platform
 ## Description:
 
 This is a platform for sports academies and clubs to advertise for their sports programs for kids and youngsters. It allows Academies to add their programs, manage the enrollments, check the incomes, and more.
