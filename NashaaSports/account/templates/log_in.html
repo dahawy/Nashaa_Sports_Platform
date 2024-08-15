@@ -1,0 +1,79 @@
+{% extends 'base2.html' %}
+
+{% block title %} Log In  {% endblock %}
+
+{% block content %}{% if messages %} 
+      {% for message in messages %}
+      <div class="flex items-center w-full max-w-sm py-5 px-6 text-gray-600 bg-white rounded-xl border border-gray-200 shadow-sm mb-6" role="alert">
+      <p class="text-base font-medium"> {{message}} </p>
+      <div class="ml-auto flex items-center space-x-3">
+      <button type="button" class="inline-flex flex-shrink-0 justify-center items-center text-gray-400 transition-all duration-150 " data-dismiss="alert">
+        <span class="sr-only">Close</span>
+        <svg class="w-6 h-6 " viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M7 17L17 7M17 17L7 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </button>
+      </div>
+      </div>
+      {% endfor %} {% endif %}
+    <section class="flex justify-center relative">
+        <img
+        src="https://pagedone.io/asset/uploads/1702362010.png"
+        alt="gradient background image"
+        class="w-full h-full object-cover fixed"
+        />
+        <div class="mx-auto max-w-lg px-6 lg:px-8 absolute py-20">
+            <a href="{% url 'main:home_view' %}"> <img src="https://pagedone.io/asset/uploads/1702362108.png" alt="pagedone logo" class="mx-auto lg:mb-11 mb-8"></a>
+          <div class="rounded-2xl bg-white shadow-xl">
+            <form  action="{%url 'account:log_in'%}"
+                method="POST"
+                enctype="multipart/form-data"
+                class="lg:p-11 p-7 mx-auto">
+                {% csrf_token %}
+              <div class="mb-11">
+                <h1
+                  class="text-gray-900 text-center font-manrope text-3xl font-bold leading-10 mb-2"
+                >
+                  Welcome Back
+                </h1>
+                <p
+                  class="text-gray-500 text-center text-base font-medium leading-6"
+                >
+                </p>
+              </div>
+              <input
+                type="text"
+                name="username"
+                class="w-full h-12 text-gray-900 placeholder:text-gray-400 text-lg font-normal leading-7 rounded-full border-gray-300 border shadow-sm focus:outline-none px-4 mb-6"
+                placeholder="Username"
+              />
+              <input
+                type="password"
+                name="password"
+                class="w-full h-12 text-gray-900 placeholder:text-gray-400 text-lg font-normal leading-7 rounded-full border-gray-300 border shadow-sm focus:outline-none px-4 mb-1"
+                placeholder="Password"
+              />
+              <a href="javascript:;" class="flex justify-end mb-6">
+                <span
+                  class="text-indigo-600 text-right text-base font-normal leading-6"
+                  >Forgot Password?</span
+                >
+              </a>
+              <button
+                type="submit"
+                class="w-full h-12 text-white text-center text-base font-semibold leading-6 rounded-full hover:bg-indigo-800 transition-all duration-700 bg-indigo-600 shadow-sm mb-11"
+              >
+                Login
+              </button>
+              <a
+                href="{% url 'account:sign_up' %}"
+                class="flex justify-center text-gray-900 text-base font-medium leading-6"
+              >
+                Don’t have an account?
+                <span class="text-indigo-600 font-semibold pl-3"> Sign Up</span>
+              </a>
+            </form>
+          </div>
+        </div>
+    </section>
+{% endblock%}
