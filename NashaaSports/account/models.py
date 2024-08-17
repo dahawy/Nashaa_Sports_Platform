@@ -50,6 +50,5 @@ class AcademyProfile(models.Model):
     logo =  models.ImageField(upload_to="logos/", default="avatar/defaultAvatar.png")
     approved = models.BooleanField(default=False)
     created_at= models.DateField(auto_now_add=True)
-
     def __str__(self) -> str:
         return self.academy_name
