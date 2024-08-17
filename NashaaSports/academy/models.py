@@ -61,6 +61,7 @@ class Program(models.Model):
     max_age = models.PositiveIntegerField(default=18)
     sport_category=models.CharField(max_length=50,choices=SportChoices.choices,default=SportChoices.FOOTBALL)
     is_available=models.BooleanField(default=True)
+    registration_end_date = models.DateField(default='2024-12-31')
 class Coach(models.Model):
     class Gender(models.TextChoices):
         Male = 'Male', 'ذكر'

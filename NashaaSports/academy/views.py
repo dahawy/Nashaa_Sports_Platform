@@ -43,7 +43,8 @@ def add_program_view(request:HttpRequest,user_id):
                     age_group=request.POST['age_group'],
                                )
                 program.save()
-                
+            return render(request,"add_program.html")
+    return HttpResponse("Not authraized")
 
 
 def add_branch_view(request,user_id):
