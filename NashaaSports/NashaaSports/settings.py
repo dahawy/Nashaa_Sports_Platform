@@ -52,7 +52,7 @@ INSTALLED_APPS = [
     'client',
     'contactUs',
     'enrollment',
-    'administration',
+    
 ]
 
 MIDDLEWARE = [
