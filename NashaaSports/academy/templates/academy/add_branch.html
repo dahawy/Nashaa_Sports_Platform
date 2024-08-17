@@ -9,17 +9,17 @@
     
         function initMap() {
             map = new google.maps.Map(document.getElementById('map'), {
-                center: { lat: 24.7136, lng: 46.6753 }, // Center map at Riyadh
+                center: { lat: 24.7136, lng: 46.6753 }, 
                 zoom: 12,
                 mapTypeControl: false
             });
     
-            // Initialize the search box and link it to the UI element
+            
             const input = document.getElementById('search-box');
             searchBox = new google.maps.places.SearchBox(input);
             map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
     
-            // Bias the SearchBox results towards current map's viewport
+            
             map.addListener('bounds_changed', function () {
                 searchBox.setBounds(map.getBounds());
             });
@@ -30,12 +30,12 @@
                     return;
                 }
     
-                // Clear out the old markers
+                
                 if (marker) {
                     marker.setMap(null);
                 }
     
-                // For each place, get the icon, name, and location
+                
                 const bounds = new google.maps.LatLngBounds();
                 places.forEach(function (place) {
                     if (!place.geometry) {
@@ -43,7 +43,7 @@
                         return;
                     }
     
-                    // Create a marker for each place
+                    
                     marker = new google.maps.Marker({
                         map: map,
                         position: place.geometry.location
@@ -61,7 +61,7 @@
                 map.fitBounds(bounds);
             });
     
-            // Add click event listener to the map
+            
             map.addListener('click', function (event) {
                 placeMarker(event.latLng);
             });

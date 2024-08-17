@@ -33,6 +33,23 @@ class Branch(models.Model):
     register_no = models.CharField(max_length=64)
 
 class Program(models.Model):
+    class SportChoices(models.TextChoices):
+        FOOTBALL = 'football', 'كرة القدم'
+        JUDO = 'judo', 'جودو'
+        BASKETBALL = 'basketball', 'كرة السلة'
+        TENNIS = 'tennis', 'تنس'
+        SWIMMING = 'swimming', 'السباحة'
+        VOLLEYBALL = 'volleyball', 'كرة الطائرة'
+        KARATE = 'karate', 'كاراتيه'
+        BOXING = 'boxing', 'ملاكمة'
+        TABLE_TENNIS = 'table_tennis', 'تنس الطاولة'
+        GYMNASTICS = 'gymnastics', 'جمباز'
+        WATER_POLO = 'water_polo', 'كرة الماء'
+        ATHLETICS = 'athletics', 'ألعاب القوى'
+        HANDBALL = 'handball', 'كرة اليد'
+        TAEKWONDO = 'taekwondo', 'تايكوندو'
+
+
     branch = models.ForeignKey(Branch, on_delete=models.CASCADE)
     program_name = models.CharField(max_length=255)
     description = models.TextField()
@@ -40,7 +57,10 @@ class Program(models.Model):
     start_date = models.DateField()
     end_date = models.DateField()
     no_of_seats = models.IntegerField()
-    age_group = models.CharField(max_length=64)
+    min_age = models.PositiveIntegerField(default=0)
+    max_age = models.PositiveIntegerField(default=18)
+    sport_category=models.CharField(max_length=50,choices=SportChoices.choices,default=SportChoices.FOOTBALL)
+    is_available=models.BooleanField(default=True)
 class Coach(models.Model):
     class Gender(models.TextChoices):
         Male = 'Male', 'ذكر'
