@@ -75,6 +75,7 @@ def profile_view(request:HttpRequest, user_name):
     try:
         user = User.objects.get(username=user_name)
         profile = UserProfile.objects.filter(user=user).first()
+        academyProfile = AcademyProfile.objects.filter(user=user).first()
         
         if not profile:
             # Redirect to create_profile_view if profile doesn't exist
@@ -82,8 +83,8 @@ def profile_view(request:HttpRequest, user_name):
         
     except Exception as e:
         print(f"An error occurred: {e}")
-        return render(request, "404.html")
-    return render(request, "profile.html", {'profile': profile})
+        return render(request, "Sorry, something wrong")
+    return render(request, "profile.html", {'profile': profile,"AcademyProfile":academyProfile})
 
 @login_required(login_url="account:log_in")
 def create_profile_view(request:HttpRequest, user_name):
@@ -156,15 +157,15 @@ def sing_up_asAcademy_view(request: HttpRequest):
 def academy_profile_view(request:HttpRequest, user_name):
     try:
         user = User.objects.get(username=user_name)
-        profile = UserProfile.objects.filter(user=user).first()
+        profile = AcademyProfile.objects.filter(user=user).first()
         
         if not profile:
             # Redirect to create_profile_view if profile doesn't exist
-            return redirect('account:create_profile_view', user_name=user_name)
+            return redirect('account:create_academy_profile_view', user_name=user_name)
         
     except Exception as e:
         print(f"An error occurred: {e}")
-        return render(request, "404.html")
+        return render(request, "404 page not found")
     return render(request, "profile.html", {'profile': profile})
 
 @login_required(login_url="account:log_in")
@@ -172,22 +173,18 @@ def create_academy_profile_view(request:HttpRequest, user_name):
     user = get_object_or_404(User, username=user_name)
     if request.method == "POST":
         try:
-            new_profile = UserProfile(
+            new_profile = AcademyProfile(
                 user=user, 
-                name=request.POST["name"],
-                nationality=request.POST["nationality"],
-                id_number=request.POST["id_number"],
-                gender=request.POST["gender"],
-                birth_date=request.POST["birth_date"],
-                health_condition=request.POST["health_condition"],
+                academy_name=request.POST["academy_name"],
+                description=request.POST["description"],
             )
-            if 'avatar' in request.FILES:
-                new_profile.avatar = request.FILES["avatar"]
+            if 'logo' in request.FILES:
+                new_profile.logo = request.FILES["logo"]
             new_profile.save()
-            messages.success(request, "Profile Created Successfully")
-            return redirect('account:profile_view', user_name=user_name)
+            messages.success(request, "Academy profile Created Successfully")
+            return redirect('account:academy_profile_view', user_name=user_name)
         except IntegrityError:
             messages.error(request, "An error occurred during Creating profile.", "alert-danger")
         except Exception as e:
             messages.error(request, f"An unexpected error occurred: {str(e)}", "alert-danger")
-    return render(request,"create_profile.html", {'user': user, 'UserProfile':UserProfile})
+    return render(request,"create_academy_profile.html", {'user': user, 'UserProfile':UserProfile})
