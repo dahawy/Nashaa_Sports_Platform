@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+     <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Platypi:ital,wght@0,300..800;1,300..800&family=Tajawal:wght@200;300;400;500;700;800;900&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap"
+        rel="stylesheet">
+    <link
+      href="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.css"
+      rel="stylesheet"
+    />
+    <title>{% block title %} {% endblock %} </title>
+</head>
+<body style="font-family: Tajawal;">
+    <nav
+      class="py-5 border-b-default border-solid border-gray-200 z-10 w-full bg-inherit lg:fixed"
+      id="topnav"
+    >
+      <div class="mx-auto max-w-7xl  lg:px-8">
+        <div class="w-full flex flex-col lg:flex-row">
+          <div class="flex justify-between lg:hidden px-4">
+            <button
+              data-collapse-toggle="navbar"
+              type="button"
+              class="inline-flex items-center p-2 ml-3 text-sm text-gray-500 rounded-lg lg:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200"
+              aria-controls="navbar-default"
+              aria-expanded="false"
+            >
+              <span class="sr-only">Open main menu</span>
+              <svg
+                class="w-6 h-6"
+                aria-hidden="true"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
+                  clip-rule="evenodd"
+                ></path>
+              </svg>
+            </button>
+          </div>
+          <div class="hidden w-full lg:flex justify-between  max-lg:bg-white py-5 max-lg:mt-1 max-lg:px-4 max-lg:shadow-lg max-lg:shadow-gray-200 max-lg:h-auto max-lg:overflow-auto transition-all duration-500 delay-200 " id="navbar">
+            <ul
+              class="flex lg:items-center max-lg:gap-4 max-lg:mb-4 flex-col mt-4 lg:flex-1 md:mt-0 lg:flex-row"
+            >
+              <li>
+                <a
+                  href="{%url 'main:home_view' %}"
+                  class="text-gray-500 text-sm font-medium hover:text-prime-blue-700 transition-all duration-500 mb-2 block lg:mr-6 lg:text-base md:mb-0 md:mr-3 hover:text-gray-900"
+                  >الصفحة الرئيسية</a
+                >
+              </li>
+              <li>
+                <a
+                  href="javascript:;"
+                  class="text-gray-500 text-sm font-medium hover:text-prime-blue-700 transition-all duration-500 mb-2 block lg:mr-6 lg:text-base md:mb-0 md:mr-3 hover:text-gray-900"
+                  >من نحن</a
+                >
+              </li>
+              <li class="relative">
+                <div class="dropdown relative inline-flex">
+                </div>
+              </li>
+            </ul>
+            <div
+              class="flex lg:items-center justify-start flex-col lg:flex-row max-lg:gap-4 lg:flex-1 lg:justify-end"
+            >
+            <button
+                type="button"
+                class="flex mx-3 text-sm bg-gray-800 rounded-full md:mr-0 focus:ring-4 focus:ring-gray-300 light:focus:ring-gray-600"
+                id="user-menu-button"
+                aria-expanded="false"
+                data-dropdown-toggle="dropdown"
+              >
+            {% if request.user.is_authenticated %}
+              <span class="sr-only">Open user menu</span>
+            {% if profile.avatar %}
+            <img src="{{ profile.avatar.url}}"
+            class="w-8 h-8 rounded-full"
+            />
+            {%elif profile.logo %}
+            <img src="{{profile.logo.url}}"
+            class="w-8 h-8 rounded-full"
+            />
+            {% else %}
+            <img
+            src="/media/avatars/defaultAvatar.png"
+            class="w-8 h-8 rounded-full"
+             alt="user photo"
+            />
+            {% endif %}
+             
+            </button>
+            <!-- Dropdown menu -->
+            <div
+              class="hidden z-50 my-4 w-56 text-base list-none bg-white rounded divide-y divide-gray-100 shadow light:bg-gray-700 light:divide-gray-600 rounded-xl"
+              id="dropdown"
+            >
+              <div class="py-3 px-4">
+                <span
+                  class="block text-sm font-semibold text-gray-900 light:text-white"
+                  >{{user.username}} ,مرحباً</span
+                >
+                <span
+                  class="block text-sm text-gray-900 truncate light:text-white"
+                  >{{user.email}}</span
+                >
+              </div>
+              <ul
+                class="py-1 text-gray-700 light:text-gray-300"
+                aria-labelledby="dropdown"
+              > 
+              {% if request.user.is_staff %}
+                  <li>
+                  <a
+                    href="{%url 'account:academy_profile_view' user.username%}"
+                    class="block py-2 px-4 text-sm hover:bg-gray-100 light:hover:bg-gray-600 light:text-gray-400 light:hover:text-white"
+                    >حسابي الشخصي</a
+                  >
+                </li>
+                  {%else%}
+                    <a
+                    href="{%url 'account:profile_view' user.username%}"
+                    class="block py-2 px-4 text-sm hover:bg-gray-100 light:hover:bg-gray-600 light:text-gray-400 light:hover:text-white"
+                    >حسابي الشخصي</a
+                  >
+                  {%endif%}
+                {% if request.user.is_staff %}
+                <li>
+                      <a
+                        href="{%url 'academy:academy_dashboard_view' user.id %}"
+                        class="block py-2 px-4 text-sm hover:bg-gray-100 light:hover:bg-gray-600 light:text-gray-400 light:hover:text-white"
+                        >لوحة التحكم</a
+                      >
+                    </li>
+                    {%endif%}
+                    <li>
+                </li>
+                <li>
+                  <a
+                    href=""
+                    class="block py-2 px-4 text-sm hover:bg-gray-100 light:hover:bg-gray-600 light:text-gray-400 light:hover:text-white"
+                    >اشتراكاتي</a
+                  >
+                </li>
+              </ul>
+              
+              <ul
+                class="py-1 text-gray-700 light:text-gray-300"
+                aria-labelledby="dropdown"
+              >
+                <li>
+                  <a
+                    href="{% url 'account:log_out' %}"
+                    class="block py-2 px-4 text-sm text-red-700 hover:bg-red-100 "
+                    >تسجيل خروج</a
+                  >
+                </li>
+              </ul>
+            </div>
+            {%else%}
+            <a href="{% url 'account:log_in'%}"
+                class="bg-indigo-50 text-indigo-600 rounded-full cursor-pointer font-semibold text-center shadow-xs transition-all duration-500 py-3 px-6 text-sm hover:bg-indigo-100"
+              >
+                تسجيل دخول 
+              </a>
+            {%endif%}
+            </div>
+          </div>
+        </div>
+      </div>
+</nav>
+{% block content %}
+
+{% endblock %}
+    <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.js"></script>
+</body>
+</html>
