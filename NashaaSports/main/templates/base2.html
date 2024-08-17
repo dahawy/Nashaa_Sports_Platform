@@ -42,7 +42,7 @@
               </svg>
             </button>
           </div>
-          <div class="hidden w-full lg:flex justify-between max-lg:bg-white py-5 max-lg:mt-1 max-lg:px-4 max-lg:shadow-lg max-lg:shadow-gray-200 max-lg:h-auto max-lg:overflow-auto transition-all duration-500 delay-200 " id="navbar">
+          <div class="hidden w-full lg:flex justify-between  max-lg:bg-white py-5 max-lg:mt-1 max-lg:px-4 max-lg:shadow-lg max-lg:shadow-gray-200 max-lg:h-auto max-lg:overflow-auto transition-all duration-500 delay-200 " id="navbar">
             <ul
               class="flex lg:items-center max-lg:gap-4 max-lg:mb-4 flex-col mt-4 lg:flex-1 md:mt-0 lg:flex-row"
             >
@@ -50,14 +50,14 @@
                 <a
                   href="{%url 'main:home_view' %}"
                   class="text-gray-500 text-sm font-medium hover:text-prime-blue-700 transition-all duration-500 mb-2 block lg:mr-6 lg:text-base md:mb-0 md:mr-3 hover:text-gray-900"
-                  >Home</a
+                  >الصفحة الرئيسية</a
                 >
               </li>
               <li>
                 <a
                   href="javascript:;"
                   class="text-gray-500 text-sm font-medium hover:text-prime-blue-700 transition-all duration-500 mb-2 block lg:mr-6 lg:text-base md:mb-0 md:mr-3 hover:text-gray-900"
-                  >About us</a
+                  >من نحن</a
                 >
               </li>
               <li class="relative">
@@ -65,29 +65,95 @@
                 </div>
               </li>
             </ul>
-            
             <div
               class="flex lg:items-center justify-start flex-col lg:flex-row max-lg:gap-4 lg:flex-1 lg:justify-end"
             >
+            <button
+                type="button"
+                class="flex mx-3 text-sm bg-gray-800 rounded-full md:mr-0 focus:ring-4 focus:ring-gray-300 light:focus:ring-gray-600"
+                id="user-menu-button"
+                aria-expanded="false"
+                data-dropdown-toggle="dropdown"
+              >
             {% if request.user.is_authenticated %}
-            <a
-                href="{% url 'account:log_out' %}"
-                class="bg-indigo-50 text-indigo-600 rounded-full cursor-pointer font-semibold text-center shadow-xs transition-all duration-500 py-3 px-6 text-sm hover:bg-indigo-100"
-                >Log out</a
+              <span class="sr-only">Open user menu</span>
+            {% if profile.avatar %}
+            <img src=""
+            class="w-8 h-8 rounded-full"
+            />
+            {% else %}
+            <img
+            src="/media/avatars/defaultAvatar.png"
+            class="w-8 h-8 rounded-full"
+             alt="user photo"
+            />
+            {% endif %}
+             
+            </button>
+            <!-- Dropdown menu -->
+            <div
+              class="hidden z-50 my-4 w-56 text-base list-none bg-white rounded divide-y divide-gray-100 shadow light:bg-gray-700 light:divide-gray-600 rounded-xl"
+              id="dropdown"
+            >
+              <div class="py-3 px-4">
+                <span
+                  class="block text-sm font-semibold text-gray-900 light:text-white"
+                  >{{user.username}} ,مرحباً</span
+                >
+                <span
+                  class="block text-sm text-gray-900 truncate light:text-white"
+                  >{{user.email}}</span
+                >
+              </div>
+              <ul
+                class="py-1 text-gray-700 light:text-gray-300"
+                aria-labelledby="dropdown"
               >
+                <li>
+                  <a
+                    href="{%url 'account:profile_view' user.username%}"
+                    class="block py-2 px-4 text-sm hover:bg-gray-100 light:hover:bg-gray-600 light:text-gray-400 light:hover:text-white"
+                    >حسابي الشخصي</a
+                  >
+                </li>
+                {% if request.user.is_staff %}
+                <li>
+                      <a
+                        href=""
+                        class="block py-2 px-4 text-sm hover:bg-gray-100 light:hover:bg-gray-600 light:text-gray-400 light:hover:text-white"
+                        >لوحة التحكم</a
+                      >
+                    </li>
+                    {%endif%}
+                <li>
+                  <a
+                    href=""
+                    class="block py-2 px-4 text-sm hover:bg-gray-100 light:hover:bg-gray-600 light:text-gray-400 light:hover:text-white"
+                    >اشتراكاتي</a
+                  >
+                </li>
+              </ul>
+              
+              <ul
+                class="py-1 text-gray-700 light:text-gray-300"
+                aria-labelledby="dropdown"
+              >
+                <li>
+                  <a
+                    href="{% url 'account:log_out' %}"
+                    class="block py-2 px-4 text-sm text-red-700 hover:bg-red-100 "
+                    >تسجيل خروج</a
+                  >
+                </li>
+              </ul>
+            </div>
             {%else%}
-              <a href="{% url 'account:log_in'%}"
+            <a href="{% url 'account:log_in'%}"
                 class="bg-indigo-50 text-indigo-600 rounded-full cursor-pointer font-semibold text-center shadow-xs transition-all duration-500 py-3 px-6 text-sm hover:bg-indigo-100"
               >
-                Login
+                تسجيل دخول 
               </a>
-              <a
-              href="{% url 'account:sign_up'%}"
-                class="bg-indigo-600 text-white rounded-full cursor-pointer font-semibold text-center shadow-xs transition-all duration-500 py-3 px-6 text-sm lg:ml-5 hover:bg-indigo-700"
-              >
-                Sign up
-              </a>
-              {%endif%}
+            {%endif%}
             </div>
           </div>
         </div>

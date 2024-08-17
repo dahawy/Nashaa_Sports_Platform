@@ -1,6 +1,6 @@
 {% extends 'base2.html' %}
 
-{% block title %} إنشاء حساب  {% endblock %}
+{% block title %} إنشاء حساب أكاديمي  {% endblock %}
 
 {% block content %}
     <section class="flex justify-center relative">
@@ -21,20 +21,26 @@
           </div>
           {% endfor %}{%endif%}
         <div class="rounded-2xl bg-white shadow-xl">
-          <form action="{% url 'account:sign_up' %}"
+          <form action="{% url 'account:sing_up_asAcademy_view' %}"
               method="POST"
               enctype="multipart/form-data" 
               class="lg:p-11 p-7 mx-auto"
               id="signupForm">
             {% csrf_token %}
                   <div class="mb-11">
-                      <h1 class="text-gray-900 text-center font-manrope text-3xl font-bold leading-10 mb-2">إنشاء حساب جديد</h1>
+                      <h1 class="text-gray-900 text-center font-manrope text-3xl font-bold leading-10 mb-2">إنشاء حساب اكاديمية جديد</h1>
                       <p class="text-gray-500 text-center text-base font-medium leading-6">لنبدأ رحلة مليئة بالإنجازات</p>
                   </div>
-                  <input type="text" name="username" id="username"
+                  <input type="text" name="first_name" 
                         class="w-full h-12 text-gray-900 placeholder:text-gray-400 text-lg font-normal leading-7 rounded-full border-gray-300 border shadow-sm focus:outline-none px-4 mb-6"
-                        placeholder="إسم المستخدم" required minlength="3" maxlength="150" pattern="^[\w.@+-]+$">
-                  <input type="email" name="email" id="email"
+                        placeholder="إسم الأكاديمية" required minlength="3" maxlength="150" >
+                    <input type="text" name="username" id="username"
+                            class="w-full h-12 text-gray-900 placeholder:text-gray-400 text-lg font-normal leading-7 rounded-full border-gray-300 border shadow-sm focus:outline-none px-4 mb-6"
+                            placeholder="إسم المستخدم" required minlength="3" maxlength="150" pattern="^[\w.@+-]+$">
+                    <input type="text" name="last_name" 
+                            class="w-full h-12 text-gray-900 placeholder:text-gray-400 text-lg font-normal leading-7 rounded-full border-gray-300 border shadow-sm focus:outline-none px-4 mb-6"
+                            placeholder="السجل التجاري" required minlength="3" maxlength="150" >
+                    <input type="email" name="email" id="email"
                         class="w-full h-12 text-gray-900 placeholder:text-gray-400 text-lg font-normal leading-7 rounded-full border-gray-300 border shadow-sm focus:outline-none px-4 mb-6"
                         placeholder="البريد الإلكتروني" required>
                   <input type="password" name="password" id="password"
@@ -49,9 +55,6 @@
                   </button>
                   <a href="{% url 'account:log_in' %}" class="flex justify-center text-gray-900 text-base font-medium leading-6">
                       <span class="text-indigo-600 font-semibold pl-3">تسجيل دخول</span>هل لديك حساب بالفعل؟
-                  </a>
-                  <a href="{% url 'account:sing_up_asAcademy_view' %}" class="flex justify-center text-gray-900 text-base font-medium leading-6">
-                      <span class="text-indigo-600 font-semibold pl-3">إنشاء حساب أكاديمية</span>إنضم إلينا. 
                   </a>
         </form>
           <script>
