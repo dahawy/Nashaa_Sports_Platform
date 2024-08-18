@@ -30,6 +30,8 @@ urlpatterns = [
     path("contactUs/", include("contactUs.urls")),
     path("enrollment/", include("enrollment.urls")),
     path("review/", include("review.urls")),
+    path("moderator/", include("moderator.urls")),
+    
    
     
 ] + static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
