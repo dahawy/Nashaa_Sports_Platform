@@ -3,4 +3,6 @@ from . import views
 
 app_name = "contactUs"
 
-urlpatterns = []
+urlpatterns = [
+    path('customer_query/',views.customer_query_view, name='customer_query_view'),
+]

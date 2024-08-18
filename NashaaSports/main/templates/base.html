@@ -17,6 +17,20 @@
     <title>{% block title %} {% endblock %} </title>
 </head>
 <body style="font-family: Tajawal;">
+  {% if messages %} 
+    {% for message in messages %}
+          <div class="flex absolute z-40 items-center w-full max-w-sm py-5 px-6 text-gray-600 bg-white rounded-xl border border-gray-200 shadow-sm mb-6" id="alert">
+          <p class="text-base font-medium"> {{message}} </p>
+          <div class="ml-auto flex items-center space-x-3">
+          <button type="button" class="inline-flex flex-shrink-0 justify-center items-center text-gray-400 transition-all duration-150 " data-dismiss-target="#alert">
+            <span class="sr-only">Close</span>
+            <svg class="w-6 h-6 " viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M7 17L17 7M17 17L7 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </button>
+          </div>
+          </div>
+          {% endfor %}{%endif%}
     <nav
       class="py-5 border-b-default border-solid border-gray-200 z-10 w-full bg-inherit lg:fixed"
       id="topnav"
@@ -178,9 +192,11 @@
         </div>
       </div>
 </nav>
+
 {% block content %}
 
 {% endblock %}
+
     <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.js"></script>
 </body>
 </html>
