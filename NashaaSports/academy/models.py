@@ -56,12 +56,12 @@ class Program(models.Model):
     fees = models.DecimalField(max_digits=10, decimal_places=2)
     start_date = models.DateField()
     end_date = models.DateField()
-    no_of_seats = models.IntegerField()
     min_age = models.PositiveIntegerField(default=0)
     max_age = models.PositiveIntegerField(default=18)
     sport_category=models.CharField(max_length=50,choices=SportChoices.choices,default=SportChoices.FOOTBALL)
     is_available=models.BooleanField(default=True)
     registration_end_date = models.DateField(default='2024-12-31')
+    is_active=models.BooleanField(default=False)
 class Coach(models.Model):
     class Gender(models.TextChoices):
         Male = 'Male', 'ذكر'
@@ -102,9 +102,24 @@ class Coach(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
 class TimeSlot(models.Model):
+    class DayChoices(models.TextChoices):
+        SUNDAY = 'sun', 'الأحد'
+        MONDAY = 'mon', 'الاثنين'
+        TUESDAY = 'tue', 'الثلاثاء'
+        WEDNESDAY = 'wed', 'الأربعاء'
+        THURSDAY = 'thu', 'الخميس'
+        FRIDAY = 'fri', 'الجمعة'
+        SATURDAY = 'sat', 'السبت'
+
     program = models.ForeignKey(Program, on_delete=models.CASCADE)
     start_time = models.TimeField()
     end_time = models.TimeField()
+    no_of_seats = models.IntegerField(default=0)
+    days = models.CharField(
+        max_length=255,
+        choices=DayChoices.choices,
+        default=DayChoices.SUNDAY
+    )
 
 class ProgramImage(models.Model):
     program = models.ForeignKey(Program, on_delete=models.CASCADE)

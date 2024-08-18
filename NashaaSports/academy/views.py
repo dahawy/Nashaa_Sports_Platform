@@ -1,11 +1,12 @@
 from django.shortcuts import render,redirect
 from django.http import HttpRequest ,HttpResponse
 from account.models import AcademyProfile
-from .models import Branch ,Coach,Program
+from .models import Branch ,Coach,Program ,TimeSlot
 import NashaaSports.settings as settings 
 from django.contrib.auth.models import User
 from datetime import datetime, timedelta
 from django.contrib import messages
+from django.db import transaction
 
 
 
@@ -34,33 +35,80 @@ def add_program_view(request:HttpRequest,user_id):
                     start_date = datetime.strptime(request.POST['start_date'], '%Y-%m-%d')
                     registration_end_date = start_date - timedelta(days=1)
                 else:
-                    # Use the provided 'registration_end_date'
+                    
                     registration_end_date = datetime.strptime(request.POST['registration_end_date'], '%Y-%m-%d')
                 is_available = True if 'is_available' in request.POST else False
-                print(is_available)
 
-                program=Program(
-                    branch=Branch.objects.filter(id=request.POST['branch']).first(),
-                    program_name=request.POST['program_name'],
-                    description=request.POST['description'],
-                    fees=request.POST['fees'],
-                    start_date=request.POST['start_date'],
-                    end_date=request.POST['end_date'],
-                    no_of_seats=request.POST['no_of_seats'],
-                    min_age=request.POST['min_age'],
-                    max_age=request.POST['max_age'],
-                    sport_category=request.POST['sport_category'],
-                    is_available=is_available  # Default to 'FALSE' if not checked
-,
-                    registration_end_date=registration_end_date
+                min_age = int(request.POST['min_age'])
+                max_age = int(request.POST['max_age'])
+                start_date = datetime.strptime(request.POST['start_date'], '%Y-%m-%d')
+                end_date = datetime.strptime(request.POST['end_date'], '%Y-%m-%d')
 
-                               )
-                program.save()
-                print("save")
+                if max_age < min_age:
+                    messages.error(request, "يجب أن يكون الحد الأقصى للعمر مساويًا أو أكبر من الحد الأدنى للعمر.", "red")
+                elif start_date >= end_date:
+                    messages.error(request, "يجب أن يكون تاريخ البدء قبل تاريخ الانتهاء.", "red")
+                elif registration_end_date > end_date:
+                    messages.error(request, "يجب أن يكون تاريخ انتهاء التسجيل مساويًا أو قبل تاريخ الانتهاء.", "red")
+                else:
+
+                 try:
+                    
+                        program = Program(
+                            branch=Branch.objects.filter(id=request.POST['branch']).first(),
+                            program_name=request.POST['program_name'],
+                            description=request.POST['description'],
+                            fees=request.POST['fees'],
+                            start_date=start_date,
+                            end_date=end_date,
+                            no_of_seats=request.POST['no_of_seats'],
+                            min_age=min_age,
+                            max_age=max_age,
+                            sport_category=request.POST['sport_category'],
+                            is_available=is_available,
+                            registration_end_date=registration_end_date,
+                            is_active=False
+                        )
+                        program.save()
+                        messages.success(request, "تم إنشاء البرنامج بنجاح!", "green")
+                        return redirect("academy:add_program_time_slot_view",program_id=program.id)
+                    
+                 except Exception as e:
+                    messages.error(request, f"Error creating program: {str(e)}", "red")
+                    
             return render(request,"academy/add_program.html",context)
     return HttpResponse("Not authraized")
-def add_program_time_slot_view(request:HttpResponse):
-    return render(request,"academy/add_program_time_slot.html")
+def add_program_time_slot_view(request:HttpResponse,program_id):
+    program=Program.objects.get(pk=program_id)
+    if request.method == "POST":
+        start_time = request.POST.get('start_time')
+        end_time = request.POST.get('end_time')
+        days = request.POST.getlist('days')
+        days_str = ', '.join(days) 
+
+        if start_time and end_time:
+            # Ensure times are properly compared and not None
+            if start_time >= end_time:
+                messages.error(request, "بداية وقت البرنامج يجب أن تكون أقل من نهاية وقت البرنامج.")
+            else:
+                # Create the time slot for the program
+              time_slot = TimeSlot(
+                program=Program.objects.get(id=program_id),
+                start_time=start_time,
+                end_time=end_time,
+                days=days_str
+        )
+            time_slot.save()
+                
+            messages.success(request, "تم إضافة فترة البرنامج بنجاح.","green")
+    if 'next_step' in request.POST:
+            return redirect('add_video', program_id=program_id)
+
+    # Get all added time slots for this program to display them
+    time_slots = TimeSlot.objects.filter(program=program)
+
+    return render(request, "academy/add_program_time_slot.html", {'program': program, 'time_slots': time_slots})
+
 
 
 def add_branch_view(request,user_id):
