@@ -24,20 +24,9 @@
                     <label for="price" class="block mb-2 text-sm font-medium text-gray-900 ">قيمة البرنامج للشخص</label>
                     <input type="number" name="fees" id="price" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5   " placeholder="$2999" required="">
                 </div>
-                <div>
-                    <label for="category" class="block mb-2 text-sm font-medium text-gray-900 ">نوع البرنامج</label>
-                    <select id="category" name="sport_category" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 ">
-                        <option selected="">اختر النوع</option>
-                        {% for key , program in programs_list %}
-                        <option value="{{program}}">{{program}}</option>
-                        {% endfor %}
-                    </select>
-                </div>
                 
-                <div>
-                    <label for="item-weight" class="block mb-2 text-sm font-medium text-gray-900 ">عدد المقاعد</label>
-                    <input type="number" name="no_of_seats" id="item-weight" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5  " placeholder="12" required="">
-                </div> 
+                
+                 
                 <div>
                     <label for="item-weight" class="block mb-2 text-sm font-medium text-gray-900 ">تاريخ بداية البرنامج</label>
                     <input type="date" name="start_date" id="item-weight" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5  " placeholder="12" required="">
@@ -53,6 +42,15 @@
                 <div>
                     <label for="item-weight" class="block mb-2 text-sm font-medium text-gray-900 ">اعلى عمر مسموح به في البرنامج</label>
                     <input type="number" name="max_age" id="item-weight" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5  " placeholder="18" required="">
+                </div>
+                <div class="sm:col-span-2">
+                    <label for="category" class="block mb-2 text-sm font-medium text-gray-900 ">نوع البرنامج</label>
+                    <select id="category" name="sport_category" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 ">
+                        <option selected="">اختر النوع</option>
+                        {% for key , program in programs_list %}
+                        <option value="{{program}}">{{program}}</option>
+                        {% endfor %}
+                    </select>
                 </div>
                 <div class="sm:col-span-2">
                     <label for="item-weight" class="block mb-2 text-sm font-medium text-gray-900 "> تاريخ انتهاء التسجيل في البرنامج <span class="text-xs text-gray-400">اختياري(تلقائيا سوف يتم اغلاق التسجيل قبل بدء البرنامج بيوم واحد)</span></label>
