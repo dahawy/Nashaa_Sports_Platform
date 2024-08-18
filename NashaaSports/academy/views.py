@@ -4,7 +4,8 @@ from account.models import AcademyProfile
 from .models import Branch ,Coach,Program
 import NashaaSports.settings as settings 
 from django.contrib.auth.models import User
-from datetime import datetime
+from datetime import datetime, timedelta
+from django.contrib import messages
 
 
 
@@ -21,30 +22,45 @@ def acadmey_dashboard_view(request:HttpRequest,user_id):
         return HttpResponse("not authraized")
 
 def add_program_view(request:HttpRequest,user_id):
-# branch
-# program_name
-# description
-# fees
-# start_date
-# end_date
-# no_of_seats
-# age_group
-    acadmey=AcademyProfile.objects.filter(user=User.objects.get(pk=user_id)).first()
-    if  request.user.id==int(user_id) and acadmey.approved==False: #should be True. False just for testing 
+
+    academy=AcademyProfile.objects.filter(user=User.objects.get(pk=user_id)).first()
+    if  request.user.id==int(user_id) and academy.approved==False: #should be True. False just for testing 
+            branches=Branch.objects.filter(academy=academy)
+            context={"branches":branches,"programs_list":Program.SportChoices.choices}
             if request.method=="POST":
+                
+                if 'registration_end_date' not in request.POST or not request.POST['registration_end_date'].strip():
+                    
+                    start_date = datetime.strptime(request.POST['start_date'], '%Y-%m-%d')
+                    registration_end_date = start_date - timedelta(days=1)
+                else:
+                    # Use the provided 'registration_end_date'
+                    registration_end_date = datetime.strptime(request.POST['registration_end_date'], '%Y-%m-%d')
+                is_available = True if 'is_available' in request.POST else False
+                print(is_available)
+
                 program=Program(
-                    branch=Branch.objects.get(pk=request.POST['branch']),
+                    branch=Branch.objects.filter(id=request.POST['branch']).first(),
                     program_name=request.POST['program_name'],
                     description=request.POST['description'],
                     fees=request.POST['fees'],
                     start_date=request.POST['start_date'],
                     end_date=request.POST['end_date'],
                     no_of_seats=request.POST['no_of_seats'],
-                    age_group=request.POST['age_group'],
+                    min_age=request.POST['min_age'],
+                    max_age=request.POST['max_age'],
+                    sport_category=request.POST['sport_category'],
+                    is_available=is_available  # Default to 'FALSE' if not checked
+,
+                    registration_end_date=registration_end_date
+
                                )
                 program.save()
-            return render(request,"add_program.html")
+                print("save")
+            return render(request,"academy/add_program.html",context)
     return HttpResponse("Not authraized")
+def add_program_time_slot_view(request:HttpResponse):
+    return render(request,"academy/add_program_time_slot.html")
 
 
 def add_branch_view(request,user_id):
