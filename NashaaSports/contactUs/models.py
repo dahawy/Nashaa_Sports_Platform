@@ -1,5 +1,4 @@
 from django.db import models
-
 class CustomerQuery(models.Model):
     class QueryCategory(models.TextChoices):
         Complaint = 'Complaint', 'شكوى'
@@ -12,3 +11,4 @@ class CustomerQuery(models.Model):
     message = models.TextField()
     category = models.CharField(choices=QueryCategory.choices, default= QueryCategory.Query) 
     created_at = models.DateTimeField(auto_now_add=True)
+
