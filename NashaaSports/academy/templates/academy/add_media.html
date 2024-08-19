@@ -8,12 +8,28 @@
             <div class="grid gap-4 sm:grid-cols-2 sm:gap-6">
                 <div class="sm:col-span-2">
                     <label for="program_name" class="block mb-2 text-sm font-medium text-gray-900">الفديوهات</label>
-                    <input class="block w-full text-sm placeholder-gray-400  text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 " id="multiple_files" type="file" multiple>
+                    <input name="videos" class="block w-full text-sm placeholder-gray-400  text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 " id="multiple_files" type="file" multiple>
                 </div>
                 <div class="sm:col-span-2">
                     <label for="program_name" class="block mb-2 text-sm font-medium text-gray-900">الصور</label>
-                    <input class="block w-full text-sm placeholder-gray-400  text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 " id="multiple_files" type="file" multiple>
+                    <input name="images" class="block w-full text-sm placeholder-gray-400  text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 " id="multiple_files" type="file" multiple>
                 </div>
+                <div class="sm:col-span-2">
+                    <label for="program_name" class="block mb-2 text-sm font-medium text-gray-900">الملفات المرفقة</label>
+                    {% for image_url in image_urls %}
+                    {% if image_url %}
+                    <p class="text-gray-400 text-sm">{{image_url}}</p>
+                    {% endif %}
+                    {% endfor %}
+                    {% for video_url in video_urls %}
+                    {% if video_url %}
+                    <p class="text-gray-400 text-sm">{{video_url}}</p>
+                    {% endif %}
+                    {% endfor %}
+
+                </div>
+                
+
                 <div class="flex max-sm:flex-col md:flex-row w-full">
                 <button type="submit"  class="text-white w-full bg-gradient-to-r from-cyan-400 via-cyan-500 to-cyan-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">حفظ الوسائط</button>
                 {% if not status %}

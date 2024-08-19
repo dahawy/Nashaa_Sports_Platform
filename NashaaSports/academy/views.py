@@ -122,7 +122,8 @@ def upload_media_view(request, program_id):
     program.is_active=True
     program.save()
     status=False
-    
+    image_urls = []
+    video_urls = []
     if request.method == 'POST':
         images = request.FILES.getlist('images')  
         videos = request.FILES.getlist('videos')  
@@ -130,8 +131,7 @@ def upload_media_view(request, program_id):
         if not images and not videos:
             messages.error(request, "يرجى رفع ملفات الصور أو الفيديو.","red")
         program = get_object_or_404(Program, id=program_id)
-        image_urls = []
-        video_urls = []
+
         with transaction.atomic():
 
             for image in images:
@@ -143,12 +143,13 @@ def upload_media_view(request, program_id):
                 status=True
                 
 
-        images_str = ', '.join(image_urls) if image_urls else "لا توجد صور مرفوعة"
-        videos_str = ', '.join(video_urls) if video_urls else "لا توجد فيديوهات مرفوعة"
+        images_str = ', '.join(image_urls) if image_urls else None
+        videos_str = ', '.join(video_urls) if video_urls else None
+        print(image_urls,video_urls)
         messages.success(request, f"تم رفع الصور والفيديوهات بنجاح", extra_tags="green")
         if 'save_project' in request.POST:
             return redirect('academy_dashboard_view',user_id=request.user)  
-    return render(request, 'academy/add_media.html', {'program_id': program_id,"status":status})
+    return render(request, 'academy/add_media.html', {'program_id': program_id,"status":status,"image_urls":image_urls,"video_urls":video_urls})
 def add_branch_view(request,user_id):
     # this how to render the branch location as map
     # f"https://maps.googleapis.com/maps/api/geocode/json?address={branch.location}&key={settings.GOOGLE_API_KEY}"
