@@ -64,13 +64,13 @@
             </button>
             <ul id="dropdown-example1" class="hidden py-2 space-y-2">
                   <li>
-                     <a href="{% url 'academy:add_branch_view' request.user.id %}" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 light:text-white light:hover:bg-gray-700">رسائل العملاء المفتوحة</a>
+                     <a href="{% url 'moderator:customers_queries_view' 'Open' %}" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 light:text-white light:hover:bg-gray-700">رسائل العملاء المفتوحة</a>
                   </li>
                   <li>
-                     <a href="#" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 light:text-white light:hover:bg-gray-700">رسائل العملاء المغلقة</a>
+                     <a href="{% url 'moderator:customers_queries_view' 'Closed' %}" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 light:text-white light:hover:bg-gray-700">رسائل العملاء المغلقة</a>
                   </li>
                   <li>
-                     <a href="#" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 light:text-white light:hover:bg-gray-700">جميع الرسائل</a>
+                     <a href="{% url 'moderator:customers_queries_view' 'all' %}" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 light:text-white light:hover:bg-gray-700">جميع الرسائل</a>
                   </li>
             </ul>
          </li>

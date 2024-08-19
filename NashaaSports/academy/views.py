@@ -11,7 +11,7 @@ from datetime import datetime
 def acadmey_dashboard_view(request:HttpRequest,user_id):
     if request.user.is_authenticated:
         acadmey=AcademyProfile.objects.filter(user=User.objects.get(pk=user_id)).first()
-        if  request.user.id==int(user_id) and acadmey.approved==False: #should be True. False just for testing 
+        if  request.user.id==int(user_id) and acadmey.approved==True: #should be True. False just for testing 
             context={"acadmey":acadmey}
             return render(request,"academy/dashboard.html",context)
         else:
@@ -30,7 +30,7 @@ def add_program_view(request:HttpRequest,user_id):
 # no_of_seats
 # age_group
     acadmey=AcademyProfile.objects.filter(user=User.objects.get(pk=user_id)).first()
-    if  request.user.id==int(user_id) and acadmey.approved==False: #should be True. False just for testing 
+    if  request.user.id==int(user_id) and acadmey.approved==True: #should be True. False just for testing 
             if request.method=="POST":
                 program=Program(
                     branch=Branch.objects.get(pk=request.POST['branch']),
@@ -43,7 +43,7 @@ def add_program_view(request:HttpRequest,user_id):
                     age_group=request.POST['age_group'],
                                )
                 program.save()
-            return render(request,"add_program.html")
+            return render(request,"academy/add_program.html")
     return HttpResponse("Not authraized")
 
 

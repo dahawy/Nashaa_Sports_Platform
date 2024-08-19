@@ -21,8 +21,13 @@ def moderator_dashboard_view(request:HttpRequest):
 
 
 
-def customers_queries_view(request: HttpRequest):
-    queries = CustomerQuery.objects.all().order_by('-created_at') 
+def customers_queries_view(request: HttpRequest, status):
+    if status == 'Open':
+        queries = CustomerQuery.objects.filter(status='Open').order_by('-created_at') 
+    elif status == 'Closed':
+        queries = CustomerQuery.objects.filter(status='Closed').order_by('-created_at') 
+    elif status == 'all':
+        queries = CustomerQuery.objects.all().order_by('-created_at') 
 
     return render(request, 'moderator/customers_queries.html', {'queries': queries})
 
