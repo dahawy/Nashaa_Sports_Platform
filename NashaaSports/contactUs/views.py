@@ -14,11 +14,13 @@ def customer_query_view(request: HttpRequest):
         try:
             customerQuery_form = CustomerQueryForm(request.POST)
             if customerQuery_form.is_valid():
-                customerQuery_form.save()
+                query = customerQuery_form.save(commit=False)  # Don't save to the database just yet
+                query.status = 'Open'  # Explicitly set the status to 'open'
+                query.save()  # Now save the instance
                 messages.success(request, "Your message sent successfully", extra_tags="alert-success")
                 return redirect('main:home_view')
         except Exception as e:
-            print(e)  
+            print(e)
     else:
         messages.error(request, "Message can't be sent", extra_tags="alert-danger")
         

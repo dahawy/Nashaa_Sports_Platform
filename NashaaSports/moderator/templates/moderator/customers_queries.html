@@ -9,9 +9,10 @@
     <table class="min-w-full bg-white">
         <thead>
             <tr>
-                <th class="py-2 px-4 border-b-2 border-gray-200 bg-gray-100 text-left text-sm leading-4 font-medium text-gray-600 uppercase tracking-wider">الاسم</th>
-                <th class="py-2 px-4 border-b-2 border-gray-200 bg-gray-100 text-left text-sm leading-4 font-medium text-gray-600 uppercase tracking-wider">العنوان</th>
-                <th class="py-2 px-4 border-b-2 border-gray-200 bg-gray-100 text-left text-sm leading-4 font-medium text-gray-600 uppercase tracking-wider">التاريخ</th>
+                <th class="py-2 px-4 border-b-2 border-gray-200 bg-gray-100 text-right text-sm leading-4 font-medium text-gray-600 uppercase tracking-wider">الاسم</th>
+                <th class="py-2 px-4 border-b-2 border-gray-200 bg-gray-100 text-right text-sm leading-4 font-medium text-gray-600 uppercase tracking-wider">العنوان</th>
+                <th class="py-2 px-4 border-b-2 border-gray-200 bg-gray-100 text-right text-sm leading-4 font-medium text-gray-600 uppercase tracking-wider"> الحالة</th>
+                <th class="py-2 px-4 border-b-2 border-gray-200 bg-gray-100 text-right text-sm leading-4 font-medium text-gray-600 uppercase tracking-wider">التاريخ</th>
             </tr>
         </thead>
         <tbody>
@@ -21,6 +22,11 @@
                 <td class="py-2 px-4 border-b border-gray-200">
                     <a href="{% url 'moderator:query_detail_view' query.id %}" class="text-blue-600 hover:text-blue-800">{{ query.subject }}</a>
                 </td>
+            {% if query.status == 'Open' %}
+                <td class="py-2 px-4 border-b border-gray-200 text-red-500">مفتوح</td>
+            {% else %}
+                <td class="py-2 px-4 border-b border-gray-200 text-green-500">مغلق</td>
+            {% endif %}
                 <td class="py-2 px-4 border-b border-gray-200">{{ query.created_at|date:"M d, Y H:i" }}</td>
             </tr>
             {% empty %}

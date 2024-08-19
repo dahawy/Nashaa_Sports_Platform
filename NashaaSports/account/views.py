@@ -59,7 +59,7 @@ def log_in(request: HttpRequest):
         if user:
             #login the user
             login(request, user)
-            messages.success(request, "You are Logged in successfully", "alert-success")
+            messages.success(request, "You are logged in successfully", "alert-success")
             return redirect(request.GET.get("next", "/"))
         else:
             messages.error(request, "Please try again. You credentials are wrong", "alert-danger")
@@ -71,15 +71,15 @@ def log_out(request:HttpRequest):
     return redirect(request.GET.get("next", "main:home_view"))
 
 @login_required(login_url="account:log_in")
-def profile_view(request:HttpRequest, user_name):
+def profile_view(request:HttpRequest, user_id):
     try:
-        user = User.objects.get(username=user_name)
+        user = User.objects.get(pk=user_id)
         profile = UserProfile.objects.filter(user=user).first()
         academyProfile = AcademyProfile.objects.filter(user=user).first()
         
         if not profile:
             # Redirect to create_profile_view if profile doesn't exist
-            return redirect('account:create_profile_view', user_name=user_name)
+            return redirect('account:create_profile_view', user_id=user_id)
         
     except Exception as e:
         print(f"An error occurred: {e}")
@@ -87,8 +87,8 @@ def profile_view(request:HttpRequest, user_name):
     return render(request, "profile.html", {'profile': profile,"AcademyProfile":academyProfile})
 
 @login_required(login_url="account:log_in")
-def create_profile_view(request:HttpRequest, user_name):
-    user = get_object_or_404(User, username=user_name)
+def create_profile_view(request:HttpRequest, user_id):
+    user = get_object_or_404(User, pk=user_id)
     if request.method == "POST":
         try:
             new_profile = UserProfile(
@@ -104,7 +104,7 @@ def create_profile_view(request:HttpRequest, user_name):
                 new_profile.avatar = request.FILES["avatar"]
             new_profile.save()
             messages.success(request, "Profile Created Successfully")
-            return redirect('account:profile_view', user_name=user_name)
+            return redirect('account:profile_view', user_id=user_id)
         except IntegrityError:
             messages.error(request, "An error occurred during Creating profile.", "alert-danger")
         except Exception as e:
@@ -154,14 +154,14 @@ def sing_up_asAcademy_view(request: HttpRequest):
     return render(request, "academy_sign_up.html")
 
 @login_required(login_url="account:log_in")
-def academy_profile_view(request:HttpRequest, user_name):
+def academy_profile_view(request:HttpRequest, user_id):
     try:
-        user = User.objects.get(username=user_name)
+        user = User.objects.get(pk=user_id)
         profile = AcademyProfile.objects.filter(user=user).first()
         
         if not profile:
             # Redirect to create_profile_view if profile doesn't exist
-            return redirect('account:create_academy_profile_view', user_name=user_name)
+            return redirect('account:create_academy_profile_view', user_id=user_id)
         
     except Exception as e:
         print(f"An error occurred: {e}")
@@ -169,8 +169,8 @@ def academy_profile_view(request:HttpRequest, user_name):
     return render(request, "profile.html", {'profile': profile})
 
 @login_required(login_url="account:log_in")
-def create_academy_profile_view(request:HttpRequest, user_name):
-    user = get_object_or_404(User, username=user_name)
+def create_academy_profile_view(request:HttpRequest, user_id):
+    user = get_object_or_404(User, pk=user_id)
     if request.method == "POST":
         try:
             new_profile = AcademyProfile(
@@ -182,7 +182,7 @@ def create_academy_profile_view(request:HttpRequest, user_name):
                 new_profile.logo = request.FILES["logo"]
             new_profile.save()
             messages.success(request, "Academy profile Created Successfully")
-            return redirect('account:academy_profile_view', user_name=user_name)
+            return redirect('account:academy_profile_view', user_id=user_id)
         except IntegrityError:
             messages.error(request, "An error occurred during Creating profile.", "alert-danger")
         except Exception as e:

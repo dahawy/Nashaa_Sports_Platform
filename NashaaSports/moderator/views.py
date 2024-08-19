@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpRequest,HttpResponse
 from contactUs.models import CustomerQuery
 from django.contrib import messages
@@ -7,6 +7,17 @@ from django.template.loader import render_to_string
 from .forms import ReplyForm
 import os
 from django.conf import settings
+from account.models import User,UserProfile
+
+
+def moderator_dashboard_view(request:HttpRequest):
+    if request.user.is_superuser:
+        #user=UserProfile.objects.filter(user=User.objects.get(pk=user_id)).first()
+        # user=User.objects.get(pk=user_id)
+        # print(user, "+++++++########++++++##############0000000000000000000")
+        return render(request,"moderator/moderator_dashboard.html")
+    else:
+        return HttpResponse("You are not authorized!")
 
 
 
@@ -17,9 +28,12 @@ def customers_queries_view(request: HttpRequest):
 
 
 def query_detail_view(request, query_id):
-    query = CustomerQuery.objects.get(pk=query_id)
+    #query = CustomerQuery.objects.get(pk=query_id)
+    query = get_object_or_404(CustomerQuery, pk=query_id)
     if request.method == 'POST':
         try:
+            query.status = 'Closed'
+            query.save()
             form = ReplyForm(request.POST)
             if form.is_valid():
                 subject = form.cleaned_data['subject']
