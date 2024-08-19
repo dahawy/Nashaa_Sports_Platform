@@ -116,7 +116,7 @@
             </button>
             <!-- Dropdown menu -->
             <div
-              class="hidden z-50 my-4 w-56 text-base list-none bg-white rounded divide-y divide-gray-100 shadow light:bg-gray-700 light:divide-gray-600 rounded-xl"
+              class="hidden z-50 my-4 w-56 text-base list-none bg-white divide-y divide-gray-100 shadow light:bg-gray-700 light:divide-gray-600 rounded-xl"
               id="dropdown"
             >
               <div class="py-3 px-4">
@@ -133,7 +133,7 @@
                 class="py-1 text-gray-700 light:text-gray-300"
                 aria-labelledby="dropdown"
               > 
-              {% if request.user.is_staff %}
+              {% if request.user.is_staff and not request.user.is_superuser %}
                   <li>
                   <a
                     href="{%url 'account:academy_profile_view' user.username%}"
@@ -141,7 +141,7 @@
                     >حسابي الشخصي</a
                   >
                 </li>
-                  {%else%}
+                  {%elif not request.user.is_superuser %}
                     <a
                     href="{%url 'account:profile_view' user.username%}"
                     class="block py-2 px-4 text-sm hover:bg-gray-100 light:hover:bg-gray-600 light:text-gray-400 light:hover:text-white"
