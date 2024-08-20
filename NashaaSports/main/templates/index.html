@@ -5,7 +5,7 @@
 {% block content %}
 
 <section
-      class="pt-8 lg:pt-32 bg-[url('https://pagedone.io/asset/uploads/1691055810.png')] bg-center bg-cover"
+      class="pt-8 lg:pt-32 bg-[url('https://pagedone.io/asset/uploads/1691055810.png')] h-screen bg-center bg-cover"
     >
       <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative text-center">
       
@@ -44,10 +44,37 @@
         </a>
         <div class="flex justify-center">
           <img
-            src="https://pagedone.io/asset/uploads/1691054543.png"
+            src=""
             alt="Dashboard image" class="rounded-t-3xl"
           />
         </div>
       </div>
+</section>
+<section>
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+    {% for program in programs %}
+    <a href="{%url 'main:program_detail_view' program.id %}"> 
+      <div class="bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300 hover:scale-105">
+        {% with first_image=program.programimage_set.first %}
+          {% if first_image %}
+            <img src="{{ first_image.image.url }}" alt="{{ program.program_name }}" class="w-full h-48 object-contain">
+          {% else %}
+            <div class="w-full h-48 bg-gray-200 flex items-center justify-center">No Image Available</div>
+          {% endif %}
+        {% endwith %}
+        <div class="p-4">
+          <h3 class="text-lg font-semibold mb-2">{{program.program_name}} </h3>
+          <p class="text-gray-700">سعر الأشتراك  :{{program.fees}}</p>
+          <p class="text-gray-700"> :المدة  {{program.start_date}} - {{program.end_date}}</p>
+          <p class="text-gray-700">{{program.sport_category}}</p>
+          <p class="text-red-700"> ينتهي التسجيل     :{{program.registration_end_date}}</p>
+          <div class="mt-4">
+            <button class="bg-indigo-500 hover:bg-indigo-600 text-white py-2 px-4 rounded-md transition-colors duration-300">Buy Now</button>
+          </div>
+        </div>
+      </div>
+    </a>
+{% endfor %}
+</div>
 </section>
 {% endblock %}
