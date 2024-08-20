@@ -31,7 +31,7 @@ def add_program_view(request:HttpRequest,user_id):
 
 
     academy=AcademyProfile.objects.filter(user=User.objects.get(pk=user_id)).first()
-    if  request.user.id==int(user_id) and academy.approved==False: #should be True. False just for testing 
+    if  request.user.id==int(user_id) and academy.approved==True: #should be True. False just for testing 
             branches=Branch.objects.filter(academy=academy)
             context={"branches":branches,"programs_list":Program.SportChoices.choices}
             if request.method=="POST":
