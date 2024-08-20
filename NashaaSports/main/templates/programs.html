@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="">
+    <div class="flex justify-center pt-40 mr-5">
+        <h1 class="text-4xl self-start">برامج الأكاديميات و الأندية الرياضية</h1>
+    </div>
+    <div>
+        <form class="max-w-md mx-auto mt-10">   
+            <label for="default-search" class="mb-2 text-sm font-medium text-gray-900 sr-only">Search</label>
+            <div class="relative">
+                <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                    <svg class="w-4 h-4 text-gray-500 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                    </svg>
+                </div>
+                <input type="search" id="default-search" class="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 " placeholder="Search Mockups, Logos..." required />
+                <button type="submit" class="text-white absolute end-2.5 bottom-2.5 bg-indigo-700 hover:bg-indigo-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 ">Search</button>
+            </div>
+            <div class="flex justify-center flex-wrap mt-3 gap-x-5 gap-y-0">
+            
+                <div class="mb-5 w-32">
+                    <select id="branch" name="branch"
+                    class="bg-gray-50 border  border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 light:bg-gray-700 light:border-gray-600 light:placeholder-gray-400 light:text-white light:focus:ring-blue-500 light:focus:border-blue-500">
+                    <option selected>السعر</option>
+                    {% for branch in branches %}
+                    <option name="" id="" value="{{branch.id}}">{{branch.branch_name}}</option>
+                    {% endfor %}
+                  </select>
+            </div>
+            <div class="mb-5 w-32">
+                <select id="branch" name="branch"
+                class="bg-gray-50 border  border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 light:bg-gray-700 light:border-gray-600 light:placeholder-gray-400 light:text-white light:focus:ring-blue-500 light:focus:border-blue-500">
+                <option selected>العمر</option>
+                {% for branch in branches %}
+                <option name="" id="" value="{{branch.id}}">{{branch.branch_name}}</option>
+                {% endfor %}
+              </select>
+        </div>
+
+    <div class="mb-5 w-32">
+        <select id="branch" name="branch"
+        class="bg-gray-50 border  border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 light:bg-gray-700 light:border-gray-600 light:placeholder-gray-400 light:text-white light:focus:ring-blue-500 light:focus:border-blue-500">
+        <option selected>مدة البرنامج</option>
+        {% for branch in branches %}
+        <option name="" id="" value="{{branch.id}}">{{branch.branch_name}}</option>
+        {% endfor %}
+      </select>
+</div>
+<div class="mb-5 w-32">
+    <select id="branch" name="branch"
+    class="bg-gray-50 border  border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 light:bg-gray-700 light:border-gray-600 light:placeholder-gray-400 light:text-white light:focus:ring-blue-500 light:focus:border-blue-500">
+    <option selected> المدينة</option>
+    {% for branch in branches %}
+    <option name="" id="" value="{{branch.id}}">{{branch.branch_name}}</option>
+    {% endfor %}
+  </select>
+</div>
+<div class="mb-5 w-32">
+    <select id="branch" name="branch"
+    class="bg-gray-50 border  border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 light:bg-gray-700 light:border-gray-600 light:placeholder-gray-400 light:text-white light:focus:ring-blue-500 light:focus:border-blue-500">
+    <option selected> نوع البرنامج</option>
+    {% for branch in branches %}
+    <option name="" id="" value="{{branch.id}}">{{branch.branch_name}}</option>
+    {% endfor %}
+  </select>
+</div>
+        </div>
+            </form>
+        </div>  <!-- end of form  -->
+
+<div class="">
+
+    {% include 'program_card.html'%}
+</div>
+        </div>
+        
+            
+            
+            <!-- component -->
+{% endblock %}
