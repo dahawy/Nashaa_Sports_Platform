@@ -11,6 +11,5 @@ urlpatterns = [
     path('add/program/<user_id>/',views.add_program_view,name="add_program_view"),
     path('add/coach/<user_id>/',views.add_coach_view,name="add_coach_view"),
     path('add/program/media/<program_id>',views.upload_media_view,name="upload_media_view"),
-
-
+    path("program/detail/",views.program_detail_view,name="program_detail_view"),
 ]

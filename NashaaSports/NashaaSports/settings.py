@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'contactUs',
     'enrollment',
     'moderator',
+    'django_social_share',
     
 ]
 

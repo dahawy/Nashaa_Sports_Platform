@@ -210,3 +210,18 @@ def add_coach_view(request:HttpRequest,user_id):
         return render(request,'academy/add_coach.html',context)
     else:
         return HttpResponse("not authraized")
+
+def program_detail_view(request:HttpRequest):
+    # programs=Program.objects.annotate(
+    #     images=
+    # )
+
+    # branch = Branch.objects.get(id=branch_id)
+    # # Extract the coordinates from the saved URL
+    # location_url = branch.location  # This is the saved URL
+    # coordinates = location_url.split("q=")[-1]  # Get the lat,lng part after "q="
+    # google_maps_url = f"https://www.google.com/maps/embed/v1/view?key={settings.GOOGLE_API_KEY}&center={coordinates}&zoom=14"'
+    print(settings.GOOGLE_API_KEY)
+    google_maps_url = f"https://www.google.com/maps/embed/v1/place?key={settings.GOOGLE_API_KEY}&q=24.715720754425423,46.65161072998045&zoom=14"
+
+    return render(request,"academy/program_detail.html",{'google_maps_url':google_maps_url})
