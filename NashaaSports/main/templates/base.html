@@ -83,6 +83,13 @@
               </li>
               <li>
                 <a
+                  href="{% url 'main:programs_view' %}"
+                  class="text-gray-500 text-sm font-medium hover:text-prime-blue-700 transition-all duration-500 mb-2 block lg:mr-6 lg:text-base md:mb-0 md:mr-3 hover:text-gray-900"
+                  >البرامج</a
+                >
+              </li>
+              <li>
+                <a
                   href="{%url 'contactUs:customer_query_view'%}"
                   class="text-gray-500 text-sm font-medium hover:text-prime-blue-700 transition-all duration-500 mb-2 block lg:mr-6 lg:text-base md:mb-0 md:mr-3 hover:text-gray-900"
                   >تواصل معنا</a
@@ -109,7 +116,7 @@
             <img src="{{ profile.avatar.url}}"
             class="w-8 h-8 rounded-full"
             />
-            {%elif profile.logo %}
+            {% elif profile.logo %}
             <img src="{{profile.logo.url}}"
             class="w-8 h-8 rounded-full"
             />
@@ -144,28 +151,28 @@
               {% if request.user.is_staff and not request.user.is_superuser %}
                   <li>
                   <a
-                    href="{%url 'account:academy_profile_view' user.username%}"
+                    href="{% url 'account:academy_profile_view' user.id %}"
                     class="block py-2 px-4 text-sm hover:bg-gray-100 light:hover:bg-gray-600 light:text-gray-400 light:hover:text-white"
-                    >حسابي الشخصي</a
+                    >حساب الأكاديمية</a
                   >
+                  <a href="{% url 'academy:academy_dashboard_view' user.id %}" class="block py-2 px-4 text-sm hover:bg-gray-100 light:hover:bg-gray-600 light:text-gray-400 light:hover:text-white">لوحة التحكم</a>
                 </li>
+
                   {%elif not request.user.is_superuser %}
+
                     <a
-                    href="{%url 'account:profile_view' user.username%}"
+                    href="{% url 'account:profile_view' user.id %}"
                     class="block py-2 px-4 text-sm hover:bg-gray-100 light:hover:bg-gray-600 light:text-gray-400 light:hover:text-white"
                     >حسابي الشخصي</a
                   >
-                  {%endif%}
-                {% if request.user.is_staff %}
+                {% else %}
                 <li>
-                      <a
-                        href="{%url 'academy:academy_dashboard_view' user.id %}"
-                        class="block py-2 px-4 text-sm hover:bg-gray-100 light:hover:bg-gray-600 light:text-gray-400 light:hover:text-white"
-                        >لوحة التحكم</a
-                      >
-                    </li>
-                    {%endif%}
+                    <a href="{% url 'account:profile_view' user.id %}" class="block py-2 px-4 text-sm hover:bg-gray-100 light:hover:bg-gray-600 light:text-gray-400 light:hover:text-white">حسابي الشخصي</a>
+                    <a href="{% url 'moderator:moderator_dashboard_view'  %}" class="block py-2 px-4 text-sm hover:bg-gray-100 light:hover:bg-gray-600 light:text-gray-400 light:hover:text-white">لوحة التحكم</a>
+                </li>
+                    {% endif %}
                     <li>
+
                 </li>
                 <li>
                   <a

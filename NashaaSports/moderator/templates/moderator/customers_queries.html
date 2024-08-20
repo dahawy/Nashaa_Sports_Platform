@@ -3,15 +3,16 @@
 
 
 {% block content %}
-
+<div class="pt-36">
 <div class="max-w-4xl mx-auto mt-10 bg-white p-8 rounded-lg shadow-lg">
     <h1 class="text-2xl font-bold mb-6">رسائل العملاء</h1>
     <table class="min-w-full bg-white">
         <thead>
-            <tr>
-                <th class="py-2 px-4 border-b-2 border-gray-200 bg-gray-100 text-left text-sm leading-4 font-medium text-gray-600 uppercase tracking-wider">الاسم</th>
-                <th class="py-2 px-4 border-b-2 border-gray-200 bg-gray-100 text-left text-sm leading-4 font-medium text-gray-600 uppercase tracking-wider">العنوان</th>
-                <th class="py-2 px-4 border-b-2 border-gray-200 bg-gray-100 text-left text-sm leading-4 font-medium text-gray-600 uppercase tracking-wider">التاريخ</th>
+            <tr class="bg-gradient-to-r from-pink-200 via-blue-200 to-pink-20">
+                <th class="py-2 px-4 border-b-2 border-gray-200 text-right text-sm leading-4 font-medium text-gray-600 uppercase tracking-wider">الاسم</th>
+                <th class="py-2 px-4 border-b-2 border-gray-200 text-right text-sm leading-4 font-medium text-gray-600 uppercase tracking-wider">العنوان</th>
+                <th class="py-2 px-4 border-b-2 border-gray-200 text-right text-sm leading-4 font-medium text-gray-600 uppercase tracking-wider"> الحالة</th>
+                <th class="py-2 px-4 border-b-2 border-gray-200 text-right text-sm leading-4 font-medium text-gray-600 uppercase tracking-wider">التاريخ</th>
             </tr>
         </thead>
         <tbody>
@@ -21,15 +22,21 @@
                 <td class="py-2 px-4 border-b border-gray-200">
                     <a href="{% url 'moderator:query_detail_view' query.id %}" class="text-blue-600 hover:text-blue-800">{{ query.subject }}</a>
                 </td>
+            {% if query.status == 'Open' %}
+                <td class="py-2 px-4 border-b border-gray-200 text-red-500">مفتوح</td>
+            {% else %}
+                <td class="py-2 px-4 border-b border-gray-200 text-green-500">مغلق</td>
+            {% endif %}
                 <td class="py-2 px-4 border-b border-gray-200">{{ query.created_at|date:"M d, Y H:i" }}</td>
             </tr>
             {% empty %}
             <tr>
-                <td colspan="3" class="py-4 px-4 text-center text-gray-500">No customer queries found.</td>
+                <td colspan="3" class="py-4 px-4 text-center text-gray-500">لا يوجد رسائل للعملاء</td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
+</div>
 </div>
 
 {% endblock %}

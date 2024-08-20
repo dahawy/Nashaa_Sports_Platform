@@ -34,7 +34,7 @@
           </div>
           {% endfor %}{%endif%}
       <div class="w-full flex-col justify-start items-start gap-6 flex">
-          <form  action="{%url 'account:create_profile_view' user.username %}{% if 'next' in request.GET %}?next={{request.GET.next}}{% endif %}"
+          <form  action="{%url 'account:create_profile_view' user.id %}{% if 'next' in request.GET %}?next={{request.GET.next}}{% endif %}"
           method="POST"
                       enctype="multipart/form-data"
                       class="lg:p-11 p-7 mx-auto">
