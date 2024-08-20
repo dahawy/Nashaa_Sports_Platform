@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block title %} نموذج إلتحاق  {% endblock %}
+
+{% block content %}
+<section class="pt-36">
+    <div class="max-w-md mx-auto bg-white  rounded-lg shadow-md overflow-hidden">
+      <div class="px-6 py-4">
+        <h2 class="text-2xl font-bold mb-4">Enrollment Form</h2>
+        <form>
+          <div class="mb-4">
+            <label class="block text-gray-700 font-semibold mb-2" for="name">
+              Full Name
+            </label>
+            <input
+              class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              id="name"
+              type="text"
+              placeholder="Enter your full name"
+            />
+          </div>
+          <div class="mb-4">
+            <label class="block text-gray-700 font-semibold mb-2" for="email">
+              Email
+            </label>
+            <input
+              class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              id="email"
+              type="email"
+              placeholder="Enter your email address"
+            />
+          </div>
+          <div class="mb-4">
+            <label class="block text-gray-700 font-semibold mb-2" for="course">
+              Course
+            </label>
+            <select
+              class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              id="course"
+            >
+              <option value="">Select a course</option>
+              <option value="web-development">Web Development</option>
+              <option value="data-science">Data Science</option>
+              <option value="cybersecurity">Cybersecurity</option>
+            </select>
+          </div>
+          <div class="flex items-center justify-between">
+            <button
+              class="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+              type="submit"
+            >
+              Submit
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+</section>
+{% endblock %}
