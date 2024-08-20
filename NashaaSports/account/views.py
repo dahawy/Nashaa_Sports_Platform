@@ -136,7 +136,7 @@ def sing_up_asAcademy_view(request: HttpRequest):
         
     if request.method == "POST":
         try:
-            new_user = User.objects.create_user(username = request.POST["username"], first_name=request.POST["first_name"], last_name=request.POST["last_name"], password=request.POST["password"], email=request.POST["email"])
+            new_user = User.objects.create_user(username = request.POST["username"], first_name=request.POST["first_name"], last_name=request.POST["last_name"], password=request.POST["password"], email=request.POST["email"],is_staff=True)
             new_user.save()
             messages.success(request, "You have been Registered Successfully", "alert-success")
             #send confirmation email

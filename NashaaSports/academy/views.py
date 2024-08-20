@@ -11,14 +11,17 @@ from datetime import datetime
 def acadmey_dashboard_view(request:HttpRequest,user_id):
     if request.user.is_authenticated:
         acadmey=AcademyProfile.objects.filter(user=User.objects.get(pk=user_id)).first()
-        if  request.user.id==int(user_id) and acadmey.approved==True: #should be True. False just for testing 
-            context={"acadmey":acadmey}
-            return render(request,"academy/dashboard.html",context)
+        if acadmey:
+            if  request.user.id==int(user_id) and acadmey.approved==True: 
+                context={"acadmey":acadmey}
+                return render(request,"academy/dashboard.html",context)
+            else:
+                return HttpResponse(f"غير مصرح لك")
         else:
-            return HttpResponse(f"not authraized ")
+            return HttpResponse(f"لم يتم اعتمادك من قبل منصة نشء! فضلا أنشئ ملف أكاديميتك وانتظر الاعتماد.")
         
     else:
-        return HttpResponse("not authraized")
+        return HttpResponse("غير مصرح لك")
 
 def add_program_view(request:HttpRequest,user_id):
 # branch
@@ -44,7 +47,7 @@ def add_program_view(request:HttpRequest,user_id):
                                )
                 program.save()
             return render(request,"academy/add_program.html")
-    return HttpResponse("Not authraized")
+    return HttpResponse("غير مصرح لك")
 
 
 def add_branch_view(request,user_id):
@@ -52,7 +55,7 @@ def add_branch_view(request,user_id):
     # f"https://maps.googleapis.com/maps/api/geocode/json?address={branch.location}&key={settings.GOOGLE_API_KEY}"
     try: 
         acadmey=AcademyProfile.objects.filter(user=User.objects.get(pk=user_id)).first()
-        if acadmey.approved==False and request.user.id==int(user_id): #should be True/ 
+        if acadmey.approved==True and request.user.id==int(user_id): #should be True/ 
             if request.method == "POST":
                 location = request.POST.get('location')
                 branch_city = request.POST.get('branch_city')
@@ -71,7 +74,7 @@ def add_branch_view(request,user_id):
                     return redirect("academy:academy_dashboard_view", user_id=request.user.id)
             return render(request,"academy/add_branch.html",{'google_maps_api_key': settings.GOOGLE_API_KEY,"cities":Branch.Cities.choices})   
         else:
-            return HttpResponse("Not authraized")
+            return HttpResponse("غير مصرح لك")
             
     except Exception as e:
         print(e)
@@ -80,7 +83,7 @@ def add_branch_view(request,user_id):
              
 def add_coach_view(request:HttpRequest,user_id):
     academy=AcademyProfile.objects.filter(user=User.objects.get(pk=user_id)).first()
-    if request.user.id==int(user_id)and academy.approved==False:    #should be True .. for testig it's false
+    if request.user.id==int(user_id)and academy.approved==True:    #should be True .. for testig it's false
         try:
             branches=Branch.objects.filter(academy=academy) #the user should select one of the branches to add the coach to it.
             if request.method=="POST":
@@ -106,4 +109,4 @@ def add_coach_view(request:HttpRequest,user_id):
         context={"genders":Coach.Gender.choices,"nationality":Coach.Nationality.choices,"branches":branches}
         return render(request,'academy/add_coach.html',context)
     else:
-        return HttpResponse("not authraized")
+        return HttpResponse("غير مصرح لك")

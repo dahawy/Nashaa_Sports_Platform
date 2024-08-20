@@ -20,10 +20,8 @@ def customer_query_view(request: HttpRequest):
                 messages.success(request, "Your message sent successfully", extra_tags="alert-success")
                 return redirect('main:home_view')
         except Exception as e:
-            print(e)
+            messages.error(request, "Message can't be sent! Error: {e}", extra_tags="alert-danger")
     else:
-        messages.error(request, "Message can't be sent", extra_tags="alert-danger")
-        
         customerQuery_form = CustomerQueryForm()
    
 
