@@ -52,9 +52,7 @@ INSTALLED_APPS = [
     'client',
     'contactUs',
     'enrollment',
-    'moderator',
-    'django_social_share',
-    
+    'moderator',    
 ]
 
 MIDDLEWARE = [
