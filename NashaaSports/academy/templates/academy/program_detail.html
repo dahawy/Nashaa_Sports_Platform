@@ -1,19 +1,18 @@
 {% extends 'base.html' %}
-
 {% block content %}
 <div class="pt-40  ">
 
     <div class="flex flex-col justify-center md:items-start  items-center mb-3 md:mr-72">
-        <h2 class="text-4xl font-semibold ">رمي السهام</h2>
-        <h2 class="mt-2 text-xl">نادي العين</h2>
+        <h2 class="text-4xl font-semibold ">{{program.program_name}}</h2>
+        <h2 class="mt-2 text-xl">{{program.branch.academy.academy_name}}</h2>
     </div>
 
 
 
     <div class="flex md:flex-row flex-col justify-center gap-4 ">
-        <div class="flex justify-center h-[30rem] ">
+        <div class="flex justify-center w-fit ">
 
-            <div class="block max-w-sm p-6  bg-white border border-gray-200 rounded-lg shadow pb-48">
+            <div class="block  p-6  bg-white border border-gray-200 rounded-lg shadow w-fit">
                 <div class="flex justify-start items-center gap-1">
                     <div class="flex flex-row gap-2 ">
                         <a href="" class="cursor-pointer"><span class="material-symbols-outlined">
@@ -22,8 +21,7 @@
                         <div
                             class="flex flex-row justify-around px-2 items-center mr-64  bg-blue-100/50  rounded w-fit gap-1 ">
 
-                            <span class=" text-blue-800 text-xs font-semibold   rounded  order-2">{{ programs.avg_rating
-                                }}</span>
+                            <span class=" text-blue-800 text-xs font-semibold   rounded  order-2">{{ program.avg_rating }}</span>
                             <svg width="12" height="12" viewBox="0 0 12 10" fill="#82AE04"
                                 xmlns="http://www.w3.org/2000/svg">
                                 <path
@@ -95,12 +93,17 @@
                 <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 ">وصف البرنامج</h5>
 
 
-                <p class="font-normal text-gray-700 ">تُلعب الكرة الطائرة من قبل فريقين من ستة لاعبين في ملعب داخلي طوله
-                    18 مترًا وعرضه 9 أمتار. تُلعب المباريات بنظام الأفضل في خمس مجموعات. يتم تسجيل نقطة عندما تسقط الكرة
-                    في جهة الخصم أو في حال ارتكاب خطأً. يفوز بالمجموعة أول فريقٍ يسجل 25 نقطة والمتقدم بفارق نقطتين، حيث
-                    تتبع كل مباراة نظام الأفضل في خمس مجموعات</p>
+                <p class="font-normal text-gray-700 ">{{program.description}}</p>
                 <br>
-                <p class="font-normal text-gray-700 ">فترات البرنامج : الاحد ,الاثنين ,الثلاثاء . من 10-4 </p>
+                <p class="font-normal text-gray-700 ">فترات البرنامج :  </p>
+                {% for time_slot in time_slots %}
+                <div class="flex bg-gray-50 rounded mb-1 w-fit justify-center items-center gap-2 ">
+                    <span class="material-symbols-outlined text-sm">
+                        schedule
+                        </span> <p> {{time_slot.start_time}}</p>-<p>{{time_slot.end_time}}</p>
+            </div>
+                {% endfor %}
+               
                 <p class="font-normal text-gray-700 ">الاعمار : 12 -5</p>
                 <p class="font-normal text-gray-700 ">مدة البرنامج : 3 أسابيع</p>
                 <p class="font-normal text-gray-700 ">قيمة البرنامج : 400 ريال</p>
@@ -179,84 +182,9 @@
         <section class="py-24 relative">
             <div class="w-full max-w-7xl px-4 md:px-5 lg-6 mx-auto">
                 <div class="w-full">
-                    <h2 class="font-manrope font-bold text-4xl text-black mb-8 text-center">customer reviews
+                    <h2 class="font-manrope font-bold text-4xl text-black mb-8 md:text-start">تعليقات المستخدمين
                     </h2>
-                    <div class="grid grid-cols-1 xl:grid-cols-2 gap-11 pb-11 border-b  border-gray-100 max-xl:max-w-2xl max-xl:mx-auto">
-                        <div class="flex mr-14 md:mr-[27rem]">
-                        <div class="p-8 bg-amber-50 rounded-3xl flex items-center justify-center flex-col">
-                            <h2 class="font-manrope font-bold text-5xl text-amber-400 mb-6">
-                                4.3</h2>
-                            <div class="flex items-center justify-center gap-2 sm:gap-6 mb-4">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" viewBox="0 0 44 44"
-                                    fill="none">
-                                    <g clip-path="url(#clip0_13624_2608)">
-                                        <path
-                                            d="M21.1033 2.9166C21.4701 2.17335 22.5299 2.17335 22.8967 2.9166L28.233 13.729C28.3786 14.0241 28.6602 14.2287 28.9859 14.276L40.9181 16.0099C41.7383 16.1291 42.0658 17.137 41.4723 17.7156L32.8381 26.1318C32.6024 26.3616 32.4949 26.6926 32.5505 27.017L34.5888 38.9009C34.7289 39.7178 33.8714 40.3408 33.1378 39.9551L22.4653 34.3443C22.174 34.1911 21.826 34.1911 21.5347 34.3443L10.8622 39.9551C10.1286 40.3408 9.27114 39.7178 9.41125 38.9009L11.4495 27.017C11.5051 26.6926 11.3976 26.3616 11.1619 26.1318L2.52771 17.7156C1.93419 17.137 2.2617 16.1291 3.08192 16.0099L15.0141 14.276C15.3398 14.2287 15.6214 14.0241 15.767 13.729L21.1033 2.9166Z"
-                                            fill="#FBBF24" />
-                                    </g>
-                                    <defs>
-                                        <clipPath id="clip0_13624_2608">
-                                            <rect width="44" height="44" fill="white" />
-                                        </clipPath>
-                                    </defs>
-                                </svg>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" viewBox="0 0 44 44"
-                                    fill="none">
-                                    <g clip-path="url(#clip0_13624_2608)">
-                                        <path
-                                            d="M21.1033 2.9166C21.4701 2.17335 22.5299 2.17335 22.8967 2.9166L28.233 13.729C28.3786 14.0241 28.6602 14.2287 28.9859 14.276L40.9181 16.0099C41.7383 16.1291 42.0658 17.137 41.4723 17.7156L32.8381 26.1318C32.6024 26.3616 32.4949 26.6926 32.5505 27.017L34.5888 38.9009C34.7289 39.7178 33.8714 40.3408 33.1378 39.9551L22.4653 34.3443C22.174 34.1911 21.826 34.1911 21.5347 34.3443L10.8622 39.9551C10.1286 40.3408 9.27114 39.7178 9.41125 38.9009L11.4495 27.017C11.5051 26.6926 11.3976 26.3616 11.1619 26.1318L2.52771 17.7156C1.93419 17.137 2.2617 16.1291 3.08192 16.0099L15.0141 14.276C15.3398 14.2287 15.6214 14.0241 15.767 13.729L21.1033 2.9166Z"
-                                            fill="#FBBF24" />
-                                    </g>
-                                    <defs>
-                                        <clipPath id="clip0_13624_2608">
-                                            <rect width="44" height="44" fill="white" />
-                                        </clipPath>
-                                    </defs>
-                                </svg>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" viewBox="0 0 44 44"
-                                    fill="none">
-                                    <g clip-path="url(#clip0_13624_2608)">
-                                        <path
-                                            d="M21.1033 2.9166C21.4701 2.17335 22.5299 2.17335 22.8967 2.9166L28.233 13.729C28.3786 14.0241 28.6602 14.2287 28.9859 14.276L40.9181 16.0099C41.7383 16.1291 42.0658 17.137 41.4723 17.7156L32.8381 26.1318C32.6024 26.3616 32.4949 26.6926 32.5505 27.017L34.5888 38.9009C34.7289 39.7178 33.8714 40.3408 33.1378 39.9551L22.4653 34.3443C22.174 34.1911 21.826 34.1911 21.5347 34.3443L10.8622 39.9551C10.1286 40.3408 9.27114 39.7178 9.41125 38.9009L11.4495 27.017C11.5051 26.6926 11.3976 26.3616 11.1619 26.1318L2.52771 17.7156C1.93419 17.137 2.2617 16.1291 3.08192 16.0099L15.0141 14.276C15.3398 14.2287 15.6214 14.0241 15.767 13.729L21.1033 2.9166Z"
-                                            fill="#FBBF24" />
-                                    </g>
-                                    <defs>
-                                        <clipPath id="clip0_13624_2608">
-                                            <rect width="44" height="44" fill="white" />
-                                        </clipPath>
-                                    </defs>
-                                </svg>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" viewBox="0 0 44 44"
-                                    fill="none">
-                                    <g clip-path="url(#clip0_13624_2608)">
-                                        <path
-                                            d="M21.1033 2.9166C21.4701 2.17335 22.5299 2.17335 22.8967 2.9166L28.233 13.729C28.3786 14.0241 28.6602 14.2287 28.9859 14.276L40.9181 16.0099C41.7383 16.1291 42.0658 17.137 41.4723 17.7156L32.8381 26.1318C32.6024 26.3616 32.4949 26.6926 32.5505 27.017L34.5888 38.9009C34.7289 39.7178 33.8714 40.3408 33.1378 39.9551L22.4653 34.3443C22.174 34.1911 21.826 34.1911 21.5347 34.3443L10.8622 39.9551C10.1286 40.3408 9.27114 39.7178 9.41125 38.9009L11.4495 27.017C11.5051 26.6926 11.3976 26.3616 11.1619 26.1318L2.52771 17.7156C1.93419 17.137 2.2617 16.1291 3.08192 16.0099L15.0141 14.276C15.3398 14.2287 15.6214 14.0241 15.767 13.729L21.1033 2.9166Z"
-                                            fill="#FBBF24" />
-                                    </g>
-                                    <defs>
-                                        <clipPath id="clip0_13624_2608">
-                                            <rect width="44" height="44" fill="white" />
-                                        </clipPath>
-                                    </defs>
-                                </svg>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" viewBox="0 0 44 44"
-                                    fill="none">
-                                    <g clip-path="url(#clip0_13624_2608)">
-                                        <path
-                                            d="M21.1033 2.9166C21.4701 2.17335 22.5299 2.17335 22.8967 2.9166L28.233 13.729C28.3786 14.0241 28.6602 14.2287 28.9859 14.276L40.9181 16.0099C41.7383 16.1291 42.0658 17.137 41.4723 17.7156L32.8381 26.1318C32.6024 26.3616 32.4949 26.6926 32.5505 27.017L34.5888 38.9009C34.7289 39.7178 33.8714 40.3408 33.1378 39.9551L22.4653 34.3443C22.174 34.1911 21.826 34.1911 21.5347 34.3443L10.8622 39.9551C10.1286 40.3408 9.27114 39.7178 9.41125 38.9009L11.4495 27.017C11.5051 26.6926 11.3976 26.3616 11.1619 26.1318L2.52771 17.7156C1.93419 17.137 2.2617 16.1291 3.08192 16.0099L15.0141 14.276C15.3398 14.2287 15.6214 14.0241 15.767 13.729L21.1033 2.9166Z"
-                                            fill="#FBBF24" />
-                                    </g>
-                                    <defs>
-                                        <clipPath id="clip0_13624_2608">
-                                            <rect width="44" height="44" fill="white" />
-                                        </clipPath>
-                                    </defs>
-                                </svg>
-                            </div>
-                            <p class="font-medium text-xl leading-8 text-gray-900 text-center">46 Ratings</p>
-                        </div>
-                    </div>
-                    </div>
+
     
                     <div class="pt-11 pb-8 border-b border-gray-100 max-xl:max-w-2xl max-xl:mx-auto">
                         <div class="flex items-center gap-3 mb-4">
@@ -422,9 +350,9 @@
         Alpine.data("imageSlider", () => ({
             currentIndex: 1,
             images: [
-                "https://unsplash.it/640/425?image=30",
-                "https://unsplash.it/640/425?image=40",
-                "{{i}}",
+                {% for image in images %}
+                    "{{image.image.url}}",
+                {% endfor %}
             ],
             previous() {
                 if (this.currentIndex > 1) {
