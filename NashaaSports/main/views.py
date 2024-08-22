@@ -7,7 +7,8 @@ from django.db.models.functions import Cast
 from django.db.models import F, ExpressionWrapper, DecimalField
 from django.db.models.functions import ExtractDay, ExtractWeekDay
 import math
-
+from account.models import AcademyProfile
+from django.db.models import F, Q
 def home_view(request:HttpRequest):
     programs = Program.objects.all()
 
@@ -42,4 +43,14 @@ def program_detail_view(request:HttpRequest , program_id):
         "user":user,
     }
     return render(request, "program_detail.html",context)
+def academies_view(request:HttpRequest):
+    search_query = request.GET.get('search', '').strip()  
+
+    if search_query:  
+        Academies = AcademyProfile.objects.filter(
+            Q(academy_name__icontains=search_query) & Q(approved=True)
+        )
+    else:  
+        Academies = AcademyProfile.objects.filter(approved=True)
+    return render(request,'academies.html',{"academies":Academies})
 

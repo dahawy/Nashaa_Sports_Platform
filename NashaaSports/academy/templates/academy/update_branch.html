@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<script src="https://maps.googleapis.com/maps/api/js?key={{ google_maps_api_key }}&libraries=places"></script>
+
+<form class="max-w-sm pt-36 mx-auto" method="post" >
+    <h1>Update Branch Location: {{ branch.name }}</h1>
+      
+    {% csrf_token %}
+    <div class="mb-5">
+      <label for="branch_name" class="block mb-2 text-sm font-medium text-gray-900 light:text-white">اسم الفرع</label>
+      <input type="text" name="branch_name" value="{{branch.branch_name}}" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 light:bg-gray-700 light:border-gray-600 light:placeholder-gray-400 light:text-white light:focus:ring-blue-500 light:focus:border-blue-500 light:shadow-sm-light" placeholder="name@flowbite.com" required />
+    </div>
+    <div class="mb-5">
+        
+
+        <label for="branch_city" class="block mb-2 text-sm font-medium text-gray-900 light:text-white">المدينة</label>
+    <select id="countries" name="branch_city"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 light:bg-gray-700 light:border-gray-600 light:placeholder-gray-400 light:text-white light:focus:ring-blue-500 light:focus:border-blue-500">
+      <option selected value="{{branch.branch_city}}">{{branch.branch_city}}</option>
+      {% for key , value in cities %}
+      <option value="{{value}}">{{value}}</option>
+      {% endfor %}
+    </select>
+  
+      <!-- 
+      <input type="text" name="branch_city" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 light:bg-gray-700 light:border-gray-600 light:placeholder-gray-400 light:text-white light:focus:ring-blue-500 light:focus:border-blue-500 light:shadow-sm-light" required /> -->
+    </div>
+    <div class="mb-5">
+      <label for="register_no" class="block mb-2 text-sm font-medium text-gray-900 light:text-white">رقم السجل التجاري</label>
+      <input type="text" name="register_no" value="{{branch.register_no}}" id="repeat-password" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 light:bg-gray-700 light:border-gray-600 light:placeholder-gray-400 light:text-white light:focus:ring-blue-500 light:focus:border-blue-500 light:shadow-sm-light" required />
+    </div>
+
+
+    <!--  -->
+    <div class="mb-5">
+        <input id="pac-input" class="controls shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 mb-3" type="text" placeholder="Search for a location">
+        <div id="map" style="height: 500px; width: 100%;"></div>  
+    </div>
+    <!-- Hidden input fields for latitude and longitude -->
+    <input type="hidden" id="latitude" name="latitude">
+    <input type="hidden" id="longitude" name="longitude">
+    <input type="hidden" id="map-url" name="map_url">
+
+    <!-- Existing Form Fields -->
+
+    <!--  -->
+
+    <button data-modal-target="popup-modal" data-modal-toggle="popup-modal" type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center light:bg-blue-600 light:hover:bg-blue-700 light:focus:ring-blue-800">اضف الفرع</button>
+  </form>
+<script>
+    function initMap() {
+    var initialLocation = {lat: parseFloat('{{ lat }}'), lng: parseFloat('{{ lng }}')};
+
+    var map = new google.maps.Map(document.getElementById('map'), {
+        zoom: 15,
+        center: initialLocation
+    });
+
+    var marker = new google.maps.Marker({
+        position: initialLocation,
+        map: map,
+        draggable: true
+    });
+
+    // Search Box
+    var input = document.getElementById('pac-input');
+    var searchBox = new google.maps.places.SearchBox(input);
+    map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+
+    // Bias the SearchBox results towards current map's viewport.
+    map.addListener('bounds_changed', function() {
+        searchBox.setBounds(map.getBounds());
+    });
+
+    searchBox.addListener('places_changed', function() {
+        var places = searchBox.getPlaces();
+
+        if (places.length === 0) {
+            return;
+        }
+
+        // Clear out the old markers.
+        marker.setMap(null);
+
+        // For each place, get the icon, name and location.
+        var bounds = new google.maps.LatLngBounds();
+        places.forEach(function(place) {
+            if (!place.geometry || !place.geometry.location) {
+                console.log("Returned place contains no geometry");
+                return;
+            }
+
+            // Create a new marker for the selected place.
+            marker = new google.maps.Marker({
+                map: map,
+                title: place.name,
+                position: place.geometry.location,
+                draggable: true
+            });
+
+            // Update hidden input fields and marker location when dragged.
+            google.maps.event.addListener(marker, 'dragend', function() {
+                var position = marker.getPosition();
+                document.getElementById('latitude').value = position.lat();
+                document.getElementById('longitude').value = position.lng();
+            });
+
+            if (place.geometry.viewport) {
+                // Only geocodes have viewport.
+                bounds.union(place.geometry.viewport);
+            } else {
+                bounds.extend(place.geometry.location);
+            }
+        });
+        map.fitBounds(bounds);
+    });
+
+    // Handle marker drag events.
+    google.maps.event.addListener(marker, 'dragend', function() {
+        var position = marker.getPosition();
+        document.getElementById('latitude').value = position.lat();
+        document.getElementById('longitude').value = position.lng();
+    });
+}
+
+window.onload = initMap;
+
+</script>
+
+
+{% endblock %}

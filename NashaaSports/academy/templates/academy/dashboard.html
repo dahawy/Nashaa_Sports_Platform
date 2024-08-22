@@ -41,11 +41,9 @@
                    <li>
                       <a href="{% url 'academy:add_program_view' request.user.id %}" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 light:text-white light:hover:bg-gray-700">اضف برنامج</a>
                    </li>
+
                    <li>
-                      <a href="#" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 light:text-white light:hover:bg-gray-700">عدل على برنامج</a>
-                   </li>
-                   <li>
-                      <a href="#" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 light:text-white light:hover:bg-gray-700">قائمة البرامج</a>
+                      <a href="{% url 'academy:programs_list_view' %}" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 light:text-white light:hover:bg-gray-700">قائمة البرامج</a>
                    </li>
              </ul>
           </li>
@@ -64,10 +62,7 @@
                      <a href="{% url 'academy:add_branch_view' request.user.id %}" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 light:text-white light:hover:bg-gray-700">اضف فرع</a>
                   </li>
                   <li>
-                     <a href="#" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 light:text-white light:hover:bg-gray-700">عدل على فرع</a>
-                  </li>
-                  <li>
-                     <a href="#" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 light:text-white light:hover:bg-gray-700">قائمة الفروع</a>
+                     <a href="{% url 'academy:branches_list_view' request.user.id %}" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 light:text-white light:hover:bg-gray-700">قائمة الفروع</a>
                   </li>
             </ul>
          </li>
