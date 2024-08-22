@@ -6,7 +6,11 @@
 <div class="pt-36 bg-gray-100 min-h-screen">
     <div class="max-w-6xl mx-auto mt-10 px-8"> <!-- Increased padding here -->
         <div class="bg-gradient-to-r from-green-400 via-blue-500 to-purple-600 p-12 rounded-xl shadow-xl text-white text-center transform transition-transform hover:scale-105">
-            <h1 class="text-5xl font-extrabold mb-4">أكاديميات تنتظر الاعتماد</h1>
+            <h1 class="text-5xl font-extrabold mb-4">الأكاديميات المعتمدة من نشء</h1>
+            <h3 class="text-4xl font-bold text-yellow-300">عدد الأكاديميات المعتمدة: 
+                <span class="inline-flex items-center justify-center text-lg font-bold text-gray-900 bg-yellow-300 rounded-full w-12 h-12">{{ academies.count }}</span>
+                <span class="text-lg text-white"> أكاديمية</span>
+            </h3>
         </div>
         
         <div class="mt-12 bg-white rounded-lg shadow-lg overflow-hidden">
@@ -26,12 +30,12 @@
                             <a href="{% url 'moderator:academy_detail_view' academy.id %}" class="text-blue-700 hover:text-blue-900 font-semibold text-lg">{{ academy.academy_name }}</a>
                         </td>
                         <td class="py-4 px-8 border-b border-gray-200">{{ academy.user.last_name }}</td>
-                        <td class="py-4 px-8 border-b border-gray-200 {% if not academy.approved %}text-red-500{% endif %}">لم يتم الاعتماد</td>
+                        <td class="py-4 px-8 border-b border-gray-200 text-green-500">معتمدة</td>
                         <td class="py-4 px-8 border-b border-gray-200">{{ academy.created_at|date:"Y-m-d" }}</td>
                     </tr>
                     {% empty %}
                     <tr>
-                        <td colspan="4" class="py-4 px-8 text-center text-gray-500">لا يوجد أكاديميات لم يتم اعتمادها</td>
+                        <td colspan="4" class="py-4 px-8 text-center text-gray-500">لا يوجد أكاديميات معتمدة</td>
                     </tr>
                     {% endfor %}
                 </tbody>
