@@ -1,7 +1,8 @@
 from django.shortcuts import render,redirect,get_object_or_404
 from django.http import HttpRequest ,HttpResponse
-from account.models import AcademyProfile
-from .models import Branch ,Coach,Program ,TimeSlot ,ProgramImage,ProgramVideo
+from account.models import AcademyProfile, UserProfile
+from .models import Branch, Coach, Program, TimeSlot, ProgramImage, ProgramVideo
+from bookmark.models import ProgramBookmark
 import NashaaSports.settings as settings 
 from django.contrib.auth.models import User
 from datetime import datetime, timedelta
@@ -223,6 +224,9 @@ def add_coach_view(request:HttpRequest,user_id):
 
 def program_detail_view(request:HttpRequest,program_id):
     
+
+    program = Program.objects.get(pk=program_id)
+    review = program.review_set.all()  # Assuming a ForeignKey relationship named 'review_set'
     program= Program.objects.filter(pk=program_id).annotate(
         avg_review=Avg(Cast("review__rating", IntegerField()))
           ).first()
@@ -234,6 +238,7 @@ def program_detail_view(request:HttpRequest,program_id):
     location_url = branch.branch_location  
     coordinates = location_url.split("q=")[-1]  
     google_maps_url = f"https://www.google.com/maps/embed/v1/place?key={settings.GOOGLE_API_KEY}&q={coordinates}&zoom=14"
+
 
     return render(request,"academy/program_detail.html",{'google_maps_url':google_maps_url,"program":program,"time_slots":time_slot,"images":images,"videos":videos})
 
@@ -391,3 +396,10 @@ def update_branch_view(request, branch_id):
         'lng': lng,
         'google_maps_api_key': settings.GOOGLE_API_KEY,
     })
+
+    user_profile=UserProfile.objects.filter(user=User.objects.get(pk=request.user.id)).first()
+
+    is_bookmarked = ProgramBookmark.objects.filter(program=program, user=user_profile).exists() if request.user.is_authenticated else False
+
+    return render(request,"academy/program_detail.html",{'google_maps_url':google_maps_url,"program":program,"time_slots":time_slot,"images":images,"videos":videos, "is_bookmarked":is_bookmarked})
+
