@@ -1,0 +1,142 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<script src="https://maps.googleapis.com/maps/api/js?key={{ google_maps_api_key }}&libraries=places"></script>
+
+<form class="max-w-sm pt-36 mx-auto" method="post" >
+    <h1>Update Branch Location: {{ branch.name }}</h1>
+      
+    {% csrf_token %}
+    <div class="mb-5">
+      <label for="branch_name" class="block mb-2 text-sm font-medium text-gray-900 light:text-white">اسم الفرع</label>
+      <input type="text" name="branch_name" value="{{branch.branch_name}}" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 light:bg-gray-700 light:border-gray-600 light:placeholder-gray-400 light:text-white light:focus:ring-blue-500 light:focus:border-blue-500 light:shadow-sm-light" placeholder="name@flowbite.com" required />
+    </div>
+    <div class="mb-5">
+        
+
+        <label for="branch_city" class="block mb-2 text-sm font-medium text-gray-900 light:text-white">المدينة</label>
+    <select id="countries" name="branch_city"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 light:bg-gray-700 light:border-gray-600 light:placeholder-gray-400 light:text-white light:focus:ring-blue-500 light:focus:border-blue-500">
+      <option selected value="{{branch.branch_city}}">{{branch.branch_city}}</option>
+      {% for key , value in cities %}
+      <option value="{{value}}">{{value}}</option>
+      {% endfor %}
+    </select>
+  
+      <!-- 
+      <input type="text" name="branch_city" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 light:bg-gray-700 light:border-gray-600 light:placeholder-gray-400 light:text-white light:focus:ring-blue-500 light:focus:border-blue-500 light:shadow-sm-light" required /> -->
+    </div>
+    <div class="mb-5">
+      <label for="register_no" class="block mb-2 text-sm font-medium text-gray-900 light:text-white">رقم السجل التجاري</label>
+      <input type="text" name="register_no" value="{{branch.register_no}}" id="repeat-password" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 light:bg-gray-700 light:border-gray-600 light:placeholder-gray-400 light:text-white light:focus:ring-blue-500 light:focus:border-blue-500 light:shadow-sm-light" required />
+    </div>
+
+
+    <!--  -->
+    <h1>Update Branch Location: {{ branch.branch_name }}</h1>
+    <div id="map" style="height: 500px; width: 100%;"></div>
+    <input id="search-box" class="controls" type="text" placeholder="Search Box">
+    <input type="hidden" id="map-url" name="map_url" value="{{ branch.branch_location }}">
+    
+
+    <!-- Existing Form Fields -->
+
+    <!--  -->
+
+    <button data-modal-target="popup-modal" data-modal-toggle="popup-modal" type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center light:bg-blue-600 light:hover:bg-blue-700 light:focus:ring-blue-800">اضف الفرع</button>
+  </form>
+  <script>
+    let map;
+    let marker;
+
+    function initMap() {
+        const initialLocation = {
+            lat: parseFloat('{{ lat }}') || 24.7136, // Default to Riyadh if no location
+            lng: parseFloat('{{ lng }}') || 46.6753 // Default to Riyadh if no location
+        };
+
+        map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 15,
+            center: initialLocation
+        });
+
+        marker = new google.maps.Marker({
+            position: initialLocation,
+            map: map,
+            draggable: true
+        });
+
+        // Set up SearchBox
+        const input = document.getElementById('search-box');
+        const searchBox = new google.maps.places.SearchBox(input);
+        map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+
+        map.addListener('bounds_changed', function () {
+            searchBox.setBounds(map.getBounds());
+        });
+
+        searchBox.addListener('places_changed', function () {
+            const places = searchBox.getPlaces();
+            if (places.length === 0) {
+                return;
+            }
+
+            if (marker) {
+                marker.setMap(null);
+            }
+
+            const bounds = new google.maps.LatLngBounds();
+            places.forEach(function (place) {
+                if (!place.geometry) {
+                    console.log("Returned place contains no geometry");
+                    return;
+                }
+
+                marker = new google.maps.Marker({
+                    map: map,
+                    position: place.geometry.location
+                });
+
+                const mapUrl = `https://www.google.com/maps/?q=${place.geometry.location.lat()},${place.geometry.location.lng()}`;
+                document.getElementById('map-url').value = mapUrl;
+
+                if (place.geometry.viewport) {
+                    bounds.union(place.geometry.viewport);
+                } else {
+                    bounds.extend(place.geometry.location);
+                }
+            });
+            map.fitBounds(bounds);
+        });
+
+        map.addListener('click', function (event) {
+            placeMarker(event.latLng);
+        });
+    }
+
+    function placeMarker(location) {
+        if (marker) {
+            marker.setPosition(location);
+        } else {
+            marker = new google.maps.Marker({
+                position: location,
+                map: map
+            });
+        }
+        const mapUrl = `https://www.google.com/maps/?q=${location.lat()},${location.lng()}`;
+        document.getElementById('map-url').value = mapUrl;
+    }
+
+    function saveLocation() {
+        const mapUrl = document.getElementById('map-url').value;
+        if (mapUrl) {
+            alert('Location saved: ' + mapUrl);
+        } else {
+            alert('Please select a location first.');
+        }
+    }
+
+    window.onload = initMap;
+</script>
+
+
+{% endblock %}

@@ -10,6 +10,7 @@ from django.contrib import messages
 from django.db import transaction
 from django.db.models.functions import Cast
 from django.db.models import Avg ,IntegerField
+from django.http import JsonResponse
 
 
 
@@ -32,7 +33,7 @@ def add_program_view(request:HttpRequest,user_id):
 
 
     academy=AcademyProfile.objects.filter(user=User.objects.get(pk=user_id)).first()
-    if  request.user.id==int(user_id) and academy.approved==False: #should be True. False just for testing 
+    if  request.user.id==int(user_id) and academy.approved==True: #should be True. False just for testing 
             branches=Branch.objects.filter(academy=academy)
             context={"branches":branches,"programs_list":Program.SportChoices.choices}
             if request.method=="POST":
@@ -237,9 +238,169 @@ def program_detail_view(request:HttpRequest,program_id):
     location_url = branch.branch_location  
     coordinates = location_url.split("q=")[-1]  
     google_maps_url = f"https://www.google.com/maps/embed/v1/place?key={settings.GOOGLE_API_KEY}&q={coordinates}&zoom=14"
-
-    user_profile=UserProfile.objects.filter(user=User.objects.get(pk=request.user.id)).first()
+    if request.user.is_authenticated:
+        user_profile=UserProfile.objects.filter(user=User.objects.get(pk=request.user.id)).first()
 
     is_bookmarked = ProgramBookmark.objects.filter(program=program, user=user_profile).exists() if request.user.is_authenticated else False
 
+
+
     return render(request,"academy/program_detail.html",{'google_maps_url':google_maps_url,"program":program,"time_slots":time_slot,"images":images,"videos":videos, "is_bookmarked":is_bookmarked})
+
+
+def academies_profile_view(request:HttpRequest,academy_id):
+    academy=AcademyProfile.objects.get(pk=academy_id)
+    branches=Branch.objects.filter(academy=academy)
+    programs = Program.objects.filter(branch__in=branches)[:3]
+    coach=Coach.objects.filter(branch__in=branches)
+    return render(request,'academy/academies_profile.html',{"academy":academy,'branches':branches,"programs":programs,'coaches':coach})
+def programs_list_view(request:HttpRequest):
+    academy=AcademyProfile.objects.filter(user=request.user).first()
+    branches=Branch.objects.filter(academy=academy)
+    programs = Program.objects.filter(branch__in=branches)
+    return render(request,'academy/programs_list.html',{'programs':programs})
+def delete_program_view(request:HttpRequest, program_id):
+        program=Program.objects.get(pk=program_id)
+        program.delete()
+        messages.success(request,"deleted successfully")
+        return redirect(request.GET.get('next','/'))
+def update_programs_info_view(request:HttpRequest,program_id):
+    program=Program.objects.get(pk=program_id)
+    academy=AcademyProfile.objects.filter(user=User.objects.get(pk=request.user.id)).first()
+    branches=Branch.objects.filter(academy=academy)
+    context={"branches":branches,"programs_list":Program.SportChoices.choices,'program':program}
+    if request.method=="POST":
+                
+                if 'registration_end_date' not in request.POST or not request.POST['registration_end_date'].strip():
+                    
+                    start_date = datetime.strptime(request.POST['start_date'], '%Y-%m-%d')
+                    registration_end_date = start_date - timedelta(days=1)
+                else:
+                    
+                    registration_end_date = datetime.strptime(request.POST['registration_end_date'], '%Y-%m-%d')
+                is_available = True if 'is_available' in request.POST else False
+
+                min_age = int(request.POST['min_age'])
+                max_age = int(request.POST['max_age'])
+                start_date = datetime.strptime(request.POST['start_date'], '%Y-%m-%d')
+                end_date = datetime.strptime(request.POST['end_date'], '%Y-%m-%d')
+
+                if max_age < min_age:
+                    messages.error(request, "يجب أن يكون الحد الأقصى للعمر مساويًا أو أكبر من الحد الأدنى للعمر.", "red")
+                elif start_date >= end_date:
+                    messages.error(request, "يجب أن يكون تاريخ البدء قبل تاريخ الانتهاء.", "red")
+                elif registration_end_date > end_date:
+                    messages.error(request, "يجب أن يكون تاريخ انتهاء التسجيل مساويًا أو قبل تاريخ الانتهاء.", "red")
+                else:
+
+                 try:
+                    
+                        
+                            program.branch=Branch.objects.filter(id=request.POST['branch']).first()
+                            program.program_name=request.POST['program_name']
+                            program.description=request.POST['description']
+                            program.fees=request.POST['fees']
+                            program.start_date=start_date
+                            program.end_date=end_date
+                            program.min_age=min_age
+                            program.max_age=max_age
+                            program.sport_category=request.POST['sport_category']
+                            program.is_available=is_available
+                            program.registration_end_date=registration_end_date
+                        
+                            program.save()
+                            messages.success(request, "تم إنشاء البرنامج بنجاح!", "green")
+                            return redirect("academy:update_time_slot_view",program_id=program.id)
+                 except Exception as e:
+                     messages.error(request, f"Error creating program: {str(e)}", "red")
+
+
+    return render(request,'academy/update_info.html',context)
+
+def update_time_slot_view(request:HttpRequest,program_id):
+    program=Program.objects.get(pk=program_id)
+    academy=program.branch.academy
+    status=True
+    context={"program":program,"academy":academy,"days":TimeSlot.DayChoices.choices,"status":status}
+
+    if request.method == "POST":
+        start_time = request.POST.get('start_time')
+        end_time = request.POST.get('end_time')
+        days = request.POST.getlist('days') 
+        days_str = ''
+        if start_time and end_time:
+            # Ensure times are properly compared and not None
+            if start_time >= end_time:
+                messages.error(request, "بداية وقت البرنامج يجب أن تكون أقل من نهاية وقت البرنامج.")
+            elif not days :
+                 messages.error(request, "الرجاء تعبئة ايام عمل البرنامج", "red")
+            else:
+              days_str = ', '.join(days)  
+              print(days_str)
+                # Create the time slot for the program
+              time_slot = TimeSlot(
+                program=Program.objects.get(id=program_id),
+                start_time=start_time,
+                end_time=end_time,
+                no_of_seats=request.POST['no_of_seats'],
+                days=days_str
+        )
+              time_slot.save() 
+              messages.success(request, "تم إضافة فترة البرنامج بنجاح.","green")
+
+
+    
+    return render(request,'academy/update_time_slot.html',context)
+    
+def branches_list_view(request:HttpRequest,user_id):
+    if request.user.is_authenticated:
+        academy=AcademyProfile.objects.get(user=User.objects.get(pk=user_id))
+        branches=Branch.objects.filter(academy=AcademyProfile.objects.get(pk=academy.id))
+
+
+    
+    return render(request,'academy/branches_list.html',{"branches":branches})
+def delete_branch_view(request:HttpRequest,branch_id):
+    try:
+        branch=Branch.objects.get(pk=branch_id)
+        branch.delete()
+        messages.success(request,"تم الحذف بنجاح")
+        return redirect(request.GET.get('next','/'))
+    except Exception as e:
+        messages.error(request,"هناك مشكلة في الحذف حاول مرة اخرى")
+
+def update_branch_view(request, branch_id):
+    branch = get_object_or_404(Branch, pk=branch_id)
+
+    if request.method == "POST":
+        branch.branch_city = request.POST.get('branch_city')
+        branch.branch_name = request.POST.get('branch_name')
+        branch.register_no = request.POST.get('register_no')
+        
+        # Get the full Google Maps URL from the form
+        map_url = request.POST.get('map_url')
+        
+        if map_url:
+            branch.branch_location = map_url
+        
+        branch.save()
+        messages.success(request, 'تم تحديث الفرع بنجاح')
+        
+
+    # Extract coordinates from the current URL if it exists
+    lat, lng = 0.0, 0.0
+    if branch.branch_location:
+        try:
+            query = branch.branch_location.split('?q=')[-1]
+            lat, lng = map(float, query.split(','))
+        except (ValueError, IndexError):
+            lat, lng = 0.0, 0.0
+
+    return render(request, 'academy/update_branch.html', {
+        'branch': branch,
+        'lat': lat,
+        'lng': lng,
+        'google_maps_api_key': settings.GOOGLE_API_KEY,
+    })
+
+    
