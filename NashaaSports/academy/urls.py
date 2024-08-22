@@ -11,6 +11,16 @@ urlpatterns = [
     path('add/program/<user_id>/',views.add_program_view,name="add_program_view"),
     path('add/coach/<user_id>/',views.add_coach_view,name="add_coach_view"),
     path('add/program/media/<program_id>',views.upload_media_view,name="upload_media_view"),
-
-
+    path("program/detail/<program_id>",views.program_detail_view,name="program_detail_view"),
+    path('profile/<academy_id>',views.academies_profile_view,name="academies_profile_view"),
+    path('programs/list',views.programs_list_view,name="programs_list_view"),
+    path('program/delete/<program_id>',views.delete_program_view,name='delete_program_view'),
+    path('update/program/<program_id>',views.update_programs_info_view,name="update_programs_info_view"),
+    path('update/time-slot/<program_id>',views.update_time_slot_view,name='update_time_slot_view'),
+    path('branches/<user_id>',views.branches_list_view,name="branches_list_view"),
+    path('branch/delete/<branch_id>',views.delete_branch_view,name="delete_branch_view"),
+    path('branch/update/<branch_id>',views.update_branch_view,name="update_branch_view"),
+    path('coaches/list/<academy_id>',views.coach_list_view,name="coach_list_view"),
+    path('coach/delete/<coach_id>',views.delete_coach_view,name="delete_coach_view"),
+    path('coach/update/<coach_id>',views.update_coach_view,name="update_coach_view"),
 ]

@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block title %} Academies For Approval  {% endblock %}
+
+
+{% block content %}
+<div class="pt-36 bg-gray-100 min-h-screen">
+    <div class="max-w-6xl mx-auto mt-10 px-8"> <!-- Increased padding here -->
+        <div class="bg-gradient-to-r from-green-400 via-blue-500 to-purple-600 p-12 rounded-xl shadow-xl text-white text-center transform transition-transform hover:scale-105">
+            <h1 class="text-5xl font-extrabold mb-4">أكاديميات تنتظر الاعتماد</h1>
+        </div>
+        
+        <div class="mt-12 bg-white rounded-lg shadow-lg overflow-hidden">
+            <table class="min-w-full bg-white">
+                <thead>
+                    <tr class="bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 text-white">
+                        <th class="py-4 px-8 border-b-2 border-gray-200 text-right text-lg leading-5 font-semibold uppercase tracking-wider">اسم الأكاديمية</th>
+                        <th class="py-4 px-8 border-b-2 border-gray-200 text-right text-lg leading-5 font-semibold uppercase tracking-wider">السجل التجاري</th>
+                        <th class="py-4 px-8 border-b-2 border-gray-200 text-right text-lg leading-5 font-semibold uppercase tracking-wider"> الحالة</th>
+                        <th class="py-4 px-8 border-b-2 border-gray-200 text-right text-lg leading-5 font-semibold uppercase tracking-wider">تاريخ التسجيل</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white">
+                    {% for academy in academies %}
+                    <tr class="hover:bg-gray-100 transform transition-transform hover:scale-105 mx-2">
+                        <td class="py-4 px-8 border-b border-gray-200">
+                            <a href="{% url 'moderator:academy_detail_view' academy.id %}" class="text-blue-700 hover:text-blue-900 font-semibold text-lg">{{ academy.academy_name }}</a>
+                        </td>
+                        <td class="py-4 px-8 border-b border-gray-200">{{ academy.user.last_name }}</td>
+                        <td class="py-4 px-8 border-b border-gray-200 {% if not academy.approved %}text-red-500{% endif %}">لم يتم الاعتماد</td>
+                        <td class="py-4 px-8 border-b border-gray-200">{{ academy.created_at|date:"Y-m-d" }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4" class="py-4 px-8 text-center text-gray-500">لا يوجد أكاديميات لم يتم اعتمادها</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

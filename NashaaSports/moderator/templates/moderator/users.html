@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+{% block title %} Academies For Approval  {% endblock %}
+
+
+{% block content %}
+<div class="pt-36 bg-gray-100 min-h-screen">
+    <div class="max-w-6xl mx-auto mt-10 px-8"> <!-- Increased padding here -->
+        <div class="bg-gradient-to-r from-green-400 via-blue-500 to-purple-600 p-12 rounded-xl shadow-xl text-white text-center transform transition-transform hover:scale-105">
+            {% if user_type == 'academy' %}
+                <h1 class="text-5xl font-extrabold mb-4">مستخدمو الأكاديميات: <span class="bg-yellow-300 text-gray-900 px-4 py-2 rounded-full inline-block">{{ users.count }}</span> مستخدم</h1>
+            {% elif user_type == 'individual' %}
+                <h1 class="text-5xl font-extrabold mb-4">المستخدمون الأفراد: <span class="bg-yellow-300 text-gray-900 px-4 py-2 rounded-full inline-block">{{ users.count }}</span> مستخدم</h1>
+            {% elif user_type == 'all' %}
+                <h1 class="text-5xl font-extrabold mb-4">جميع المستخدمين: <span class="bg-yellow-300 text-gray-900 px-4 py-2 rounded-full inline-block">{{ users.count }}</span> مستخدم</h1>
+            {% endif %}
+        </div>
+        
+        <div class="mt-12 bg-white rounded-lg shadow-lg overflow-hidden">
+            <table class="min-w-full bg-white">
+                <thead>
+                    <tr class="bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 text-white">
+                        <th class="py-4 px-8 border-b-2 border-gray-200 text-right text-lg leading-5 font-semibold uppercase tracking-wider">الاسم</th>
+                        <th class="py-4 px-8 border-b-2 border-gray-200 text-right text-lg leading-5 font-semibold uppercase tracking-wider">المعرف</th>
+                        <th class="py-4 px-8 border-b-2 border-gray-200 text-right text-lg leading-5 font-semibold uppercase tracking-wider">الإيميل</th>
+                        {% if user_type == 'individual' %}
+                        <th class="py-4 px-8 border-b-2 border-gray-200 text-right text-lg leading-5 font-semibold uppercase tracking-wider">الهوية </th>
+                        {% endif %}
+                        {% if user_type == 'academy' %}
+                        <th class="py-4 px-8 border-b-2 border-gray-200 text-right text-lg leading-5 font-semibold uppercase tracking-wider">السجل التجاري</th>
+                        {% endif %}
+                        {% if user_type == 'all' %}
+                        <th class="py-4 px-8 border-b-2 border-gray-200 text-right text-lg leading-5 font-semibold uppercase tracking-wider">السجل </th>
+                        {% endif %}
+                        <th class="py-4 px-8 border-b-2 border-gray-200 text-right text-lg leading-5 font-semibold uppercase tracking-wider">تاريخ التسجيل</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white">
+                    {% for user in users %}
+                    <tr class="hover:bg-gray-100 transform transition-transform hover:scale-105 mx-2">
+                        <td class="py-4 px-8 border-b border-gray-200">
+                            {% if user_type == 'academy' %}
+                            <a href="{% url 'moderator:academy_detail_view' user.id %}" class="text-blue-700 hover:text-blue-900 font-semibold text-lg">{{ user.academy_name }}</a>
+                            {% elif user_type == 'individual' %}
+                            <a href="#" class="text-blue-700 hover:text-blue-900 font-semibold text-lg">{{ user.name }}</a>
+                            {% elif user_type == 'all' %}
+                                {% if user.academyprofile %}
+                                <a href="#" class="text-blue-700 hover:text-blue-900 font-semibold text-lg">{{ user.academyprofile.academy_name }}</a>
+                                {% elif user.userprofile %}
+                                <a href="#" class="text-blue-700 hover:text-blue-900 font-semibold text-lg">{{ user.userprofile.name }}</a>
+                                {% endif %}
+                            {% endif %}
+                        </td>
+                        {% if user_type != 'all' %}
+                        <td class="py-4 px-8 border-b border-gray-200">{{ user.user.username }}</td>
+                        <td class="py-4 px-8 border-b border-gray-200">{{ user.user.email }}</td>
+                        {% else %}
+                        <td class="py-4 px-8 border-b border-gray-200">{{ user.username }}</td>
+                        <td class="py-4 px-8 border-b border-gray-200">{{ user.email }}</td>
+                        {% endif %}
+
+                        {% if user_type == 'academy' %}
+                        <td class="py-4 px-8 border-b border-gray-200">{{ user.user.last_name }}</td>
+                        {% elif user_type == 'individual' %}
+                        <td class="py-4 px-8 border-b border-gray-200">{{ user.id_number }}</td>
+                        {% elif user_type == 'all' %}
+                        {% if user.academyprofile %}
+                        <td class="py-4 px-8 border-b border-gray-200">{{ user.last_name }}</td>
+                        {% elif user.userprofile %}
+                        <td class="py-4 px-8 border-b border-gray-200">{{ user.userprofile.id_number }}</td>
+                        {% endif %}
+                        {% endif %}
+                        {% if not user.userprofile and not user.academyprofile and user_type != 'academy' and user_type != 'individual' %}
+                        <td class="py-4 px-8 border-b border-gray-200"></td>
+                        {% endif %}
+                        {% if user_type == 'academy' or user_type == 'individual' %}
+                        <td class="py-4 px-8 border-b border-gray-200">{{ user.created_at|date:"Y-m-d" }}</td>
+                        {% endif %}
+                        {% if user_type == 'all' and user.academyprofile %}
+                        <td class="py-4 px-8 border-b border-gray-200">{{ user.academyprofile.created_at|date:"Y-m-d" }}</td>
+                        {% elif user_type == 'all' and user.userprofile %}
+                        <td class="py-4 px-8 border-b border-gray-200">{{ user.userprofile.created_at|date:"Y-m-d" }}</td>
+                        {% endif %}
+                        {% if not user.userprofile and not user.academyprofile  %}
+                        <td class="py-4 px-8 border-b border-gray-200"></td>
+                        {% endif %}
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="3" class="py-4 px-8 text-center text-gray-500">لا يوجد مستخدمين لعرضهم</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

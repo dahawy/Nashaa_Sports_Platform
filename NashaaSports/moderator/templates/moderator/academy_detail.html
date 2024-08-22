@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block title %} Academy Profile  {% endblock %}
+
+
+{% block content %}
+<div class="pt-36">
+<div class="max-w-4xl mx-auto mt-12 p-8 bg-gradient-to-r from-green-200 via-blue-200 to-purple-200 rounded-3xl shadow-xl transform transition-transform hover:scale-105">
+    <div class="flex flex-col md:flex-row items-center space-y-6 md:space-y-0 md:space-x-6 mb-8 ">
+        <div class="w-full md:w-1/3 flex justify-center">
+            <img src="{{ academy.logo.url }}" alt="{{ academy.academy_name }} Logo" class="w-40 h-40 rounded-full border-8 border-white shadow-xl transform transition-transform hover:rotate-6 hover:scale-110">
+        </div>
+        <div class="w-full md:w-2/3 text-center md:text-right">
+            <h1 class="text-5xl font-extrabold text-gray-900">{{ academy.academy_name }}</h1>
+            <p class="mt-2 text-lg text-gray-700 italic font-bold">انضمت لنشء بتاريخ: {{ academy.created_at|date:"Y-m-d" }}</p>
+            <div class="mt-4">
+                {% if academy.approved %}
+                    <span class="inline-block px-8 py-3 text-lg font-bold text-white bg-green-600 rounded-full shadow-lg transform transition-transform hover:scale-110">معتمدة</span>
+                {% else %}
+                    <span class="inline-block px-8 py-3 text-lg font-bold text-white bg-red-600 rounded-full shadow-lg transform transition-transform hover:scale-110">لم تعتمد</span>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-white p-8 rounded-3xl shadow-xl transform transition-transform hover:scale-105 mb-8">
+        <h2 class="text-4xl font-semibold text-purple-800 mb-6">الوصف</h2>
+        <p class="text-xl text-gray-800 leading-loose">{{ academy.description }}</p>
+    </div>
+    {% if academy.approved == False %}
+    <div class="flex justify-center mt-8">
+        <a href="{% url 'moderator:approve_academy_view' academy.id %}" class="inline-block px-12 py-4 bg-green-600 text-white text-lg font-semibold rounded-full shadow-lg transform transition-transform hover:bg-red-700 hover:scale-110 focus:outline-none focus:ring-4 focus:ring-blue-300">
+            اعتمد
+        </a>
+    {% else %}
+    <a href="{% url 'moderator:programs_view' academy.id %}" class="inline-block px-12 py-4 bg-green-600 text-white text-lg font-semibold rounded-full shadow-lg transform transition-transform hover:bg-red-700 hover:scale-110 focus:outline-none focus:ring-4 focus:ring-blue-300">
+        استعراض البرامج
+    </a>
+    </div>
+    {% endif %}
+</div>
+</div>
+{% endblock %}
