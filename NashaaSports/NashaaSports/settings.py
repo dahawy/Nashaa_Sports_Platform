@@ -54,7 +54,6 @@ INSTALLED_APPS = [
     'enrollment',
     'moderator',
     'payment',    
-
 ]
 
 MIDDLEWARE = [
