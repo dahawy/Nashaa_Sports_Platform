@@ -52,7 +52,8 @@ INSTALLED_APPS = [
     'client',
     'contactUs',
     'enrollment',
-    'moderator',    
+    'moderator',
+    'payment',    
 
 ]
 
