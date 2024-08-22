@@ -403,4 +403,67 @@ def update_branch_view(request, branch_id):
         'google_maps_api_key': settings.GOOGLE_API_KEY,
     })
 
-    
+def coach_list_view(request:HttpRequest, academy_id):
+    if request.user.is_authenticated:
+        academy=AcademyProfile.objects.filter(user=User.objects.get(pk=academy_id)).first()
+        if academy:
+            coaches = Coach.objects.filter(branch__academy=academy).all()
+            return render(request,'academy/coaches_list.html',{'coaches':coaches})
+        else:
+           return HttpResponse("غير مصرح لك بالدخول الى هذه الصفحة")
+    else:
+        return HttpResponse("غير مصرح لك")
+def delete_coach_view(request: HttpRequest, coach_id: int):
+    if request.user.is_authenticated:
+       
+        user_academy = AcademyProfile.objects.filter(user=request.user).first()
+        
+        # Fetch the coach object
+        coach = get_object_or_404(Coach, id=coach_id)
+        
+        # Check if the coach belongs to the user's academy
+        if coach.branch.academy == user_academy:
+            # Perform the deletion
+            coach.delete()
+            messages.success(request,'تم الحذف بنجاح') 
+            return redirect(request.GET.get('next','/'))
+        else:
+            return HttpResponse("You are not allowed to delete this coach.")
+    else:
+        return messages.error('لست مصرحا تحتاج الى تسجيل الدخول')
+
+def update_coach_view(request:HttpResponse,coach_id):
+    if request.user.is_authenticated:
+       
+        user_academy = AcademyProfile.objects.filter(user=request.user).first()
+        
+        # Fetch the coach object
+        coach = get_object_or_404(Coach, id=coach_id)
+        
+        # Check if the coach belongs to the user's academy
+        if coach.branch.academy == user_academy:
+            coach=get_object_or_404(Coach,pk=coach_id)
+            branches=Branch.objects.filter(academy=user_academy)
+
+            if request.method=="POST":
+                date_str = request.POST.get('birth_date')
+                birth_date = datetime.strptime(date_str, '%m/%d/%Y').date()
+                coach.name = request.POST['name']
+                coach.birth_date = birth_date
+                coach.email = request.POST['email']
+                coach.phone = request.POST['phone']
+                coach.experience = request.POST['experience']
+                coach.nationality = request.POST['nationality']
+                coach.gender = request.POST['gender']
+                coach.avatar = request.FILES['avatar']
+                coach.save()
+                messages.success(request,"تم التحديث بنجاح","green")
+                return redirect(request.GET.get('next','/'))
+            return render(request,'academy/update_coach.html',{'coach':coach,"genders":Coach.Gender.choices,"nationality":Coach.Nationality.choices,"branches":branches})
+        else:
+            return HttpResponse("غير مصرح لك")
+    else:
+            return HttpResponse("غير مصرح لك")
+
+
+

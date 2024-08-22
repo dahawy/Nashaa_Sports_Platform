@@ -63,6 +63,13 @@
               </svg>
             </button>
           </div>
+          <a href="/" class="flex items-center  rtl:space-x-reverse">
+            <img
+              src="/media/logos/NLogo.png"
+              class="h-10"
+              alt="Nashaa Logo"
+            />
+          </a>
           <div class="hidden w-full lg:flex justify-between  max-lg:bg-white py-5 max-lg:mt-1 max-lg:px-4 max-lg:shadow-lg max-lg:shadow-gray-200 max-lg:h-auto max-lg:overflow-auto transition-all duration-500 delay-200 " id="navbar">
             <ul
               class="flex lg:items-center max-lg:gap-4 max-lg:mb-4 flex-col mt-4 lg:flex-1 md:mt-0 lg:flex-row"
@@ -204,7 +211,10 @@
               </a>
             {%endif%}
             </div>
-          </div>
+            {% block cart_items %}
+            
+            {% endblock%}        <!-- Cart Button -->
+       
         </div>
       </div>
 </nav>

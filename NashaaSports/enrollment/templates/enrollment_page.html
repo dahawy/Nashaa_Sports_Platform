@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block title %} نموذج إلتحاق  {% endblock %}
+
+{% block content %}
+<section class="pt-36 flex justify-center relative ">
+        <div class="rounded-2xl bg-white shadow-xl">
+          <form action="{% url 'enrollment:enroll_in_program_view' programs.id user.id%}"
+              method="POST"
+              class="lg:p-11 p-7 mx-auto"
+              id="enroll_form">
+            {% csrf_token %}
+                  <div class="mb-11">
+                      <h1 class="text-gray-900 text-center font-manrope text-3xl font-bold leading-10 mb-2">نموذج إلتحاق</h1>
+                      <p class="text-gray-500 text-center text-base font-medium leading-6">برنامج {{programs.program_name}}</p>
+                  </div>
+                  <input type="text" name="first_name" 
+                        class="w-full h-12 text-gray-900 placeholder:text-gray-400 text-lg font-normal leading-7 rounded-full border-gray-300 border shadow-sm focus:outline-none px-4 mb-6"
+                        placeholder="إسم المشترك" required  >
+                        <input type="text" name="father_name" id="first_name"
+                        class="w-full h-12 text-gray-900 placeholder:text-gray-400 text-lg font-normal leading-7 rounded-full border-gray-300 border shadow-sm focus:outline-none px-4 mb-6"
+                        placeholder="إسم الأب" required  pattern="^[\w.@+-]+$">
+                        <input type="text" name="last_name" 
+                        class="w-full h-12 text-gray-900 placeholder:text-gray-400 text-lg font-normal leading-7 rounded-full border-gray-300 border shadow-sm focus:outline-none px-4 mb-6"
+                        placeholder="ألأسم الأخير" required  >
+                        <input type="number" name="id_number"
+                              class="w-full h-12 text-gray-900 placeholder:text-gray-400 text-lg font-normal leading-7 rounded-full border-gray-300 border shadow-sm focus:outline-none px-4 mb-6"
+                              placeholder="رقم الهوية" required minlength="10">
+                        
+                        <label for="health_condition" class="block mb-2 text-sm font-medium  dark:text-black">هل لديك أي اعراض صحية؟</label>
+                        <textarea id="health_condition" name="health_condition" rows="4" class="block p-2.5 mb-6 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 " placeholder="أعراضك الصحية"></textarea>
+
+                  <button type="submit" 
+                          class="w-full h-12 text-white text-center text-base font-semibold leading-6 rounded-full hover:bg-indigo-800 transition-all duration-700 bg-indigo-600 shadow-sm mb-11">
+                    حفظ
+                  </button>
+        </form>
+        </div>
+      </div>
+</section>
+{% endblock %}
