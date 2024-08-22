@@ -57,26 +57,26 @@ def query_detail_view(request, query_id):
             if form.is_valid():
                 subject = form.cleaned_data['subject']
                 message = form.cleaned_data['message']
+                content_html = render_to_string("moderator/customer_care_reply.html",{'query':query, 'message':message}) 
                 recipient = query.email
 
                 email = EmailMessage(
                     subject,
-                    message,
+                    content_html,
                     settings.EMAIL_HOST_USER,
                     [recipient],
                 )
+                email.content_subtype = "html"
                 email.send()
-                #email.send(fail_silently=False)
                 messages.success(request, "تم إغلاق الحالة وإرسال إيميل للعميل بنجاح", extra_tags="alert-success")
                 return redirect('moderator:customers_queries_view',status= 'Open')
         except Exception as e:
             print(e)
-            messages.error(request, "لم يتم إسال الرد.", extra_tags="alert-danger")
+            messages.error(request, "لم يتم إرسال الرد.", extra_tags="alert-danger")
     else:
         form = ReplyForm(initial={'subject': f"Re: {query.subject}"})
     return render(request, 'moderator/query_detail.html', {'query': query, 'form': form})
-
-
+    
 @superuser_required
 def academies_for_approval_view(request: HttpRequest):
     
