@@ -15,9 +15,21 @@
             <div class="block  p-6  bg-white border border-gray-200 rounded-lg shadow w-fit">
                 <div class="flex justify-start items-center gap-1">
                     <div class="flex flex-row gap-2 ">
-                        <a href="" class="cursor-pointer"><span class="material-symbols-outlined">
+                        <!-- <a href="{% url 'bookmark:add_bookmark_view' program.id %}" class="cursor-pointer"><span class="material-symbols-outlined">
                                 favorite
-                            </span></a>
+                            </span></a> -->
+                            
+                            <a href="{% url 'bookmark:add_bookmark_view' program.id %}">
+                                {% if is_bookmarked %}
+                                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#ef4444"><path d="m480-120-58-52q-101-91-167-157T150-447.5Q111-500 95.5-544T80-634q0-94 63-157t157-63q52 0 99 22t81 62q34-40 81-62t99-22q94 0 157 63t63 157q0 46-15.5 90T810-447.5Q771-395 705-329T538-172l-58 52Z"/></svg>
+                                {% else %}
+                                <span class="material-symbols-outlined ">
+                                    favorite
+                                    </span>
+                                {% endif %}
+                            </a>
+
+
                         <div
                             class="flex flex-row justify-around px-2 items-center mr-64  bg-blue-100/50  rounded w-fit gap-1 ">
 
@@ -338,6 +350,60 @@
                 </div>
             </div>
             </div>
+
+        <div class="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 gap-4">
+                {% for review in program.review_set.all %}
+                  <div class="shadow-sm rounded-lg border p-4 flex flex-col">
+                    <div class="flex items-center mb-2">
+                     
+                      
+                        {{ review.user.name }} 
+                      </a>
+                    </div>
+                    <div class="flex items-center">
+                      <span class="material-symbols-outlined text-yellow-500 mr-2">star</span>
+                      <h5 class="text-gray-800">{{ review.rating }}</h5>
+                      {% if review.user == request.user or perms.programs.delete_review %}
+                        <a href="{% url 'review:delete_review_view' review.id %}" class="ml-auto text-red-500 hover:text-red-700">
+                          Delete
+                        </a>
+                      {% endif %}
+                    </div>
+                    <p class="text-gray-700 mt-2">{{ review.comment }}</p>
+                    <p class="text-gray-500 text-sm">{{ review.created_at }}</p>
+                  </div>
+                {% endfor %}
+              
+                {% if request.user.is_authenticated %}
+                  <div class="mt-6">
+                    <h2 class="text-lg font-semibold mb-2">أضف تعليقك</h2>
+                    <form action="{% url 'review:add_review_view' program.id %}?next={{ request.path }} " method="post" class="space-y-2">
+                      {% csrf_token %}
+                      <textarea name="comment" class="rounded-md border p-2 w-full focus:outline-blue-500 resize-none" required minlength="3" placeholder="تعليقك...."></textarea>
+                      <select name="rating" class="rounded-md border p-2 w-36 focus:outline-blue-500" required>
+                        <option value="">التقييم</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>   
+              
+                      </select>
+                      <button type="submit"   
+               class="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none">إرسال</button>
+                    </form>
+                  </div>
+                {% else %}
+                  <div class="text-center text-gray-500 mt-6">
+                    <p>فقط الأعضاء المسجلون يمكنهم التعليق</p>
+                  </div>
+                {% endif %}
+              </div>
+            </div>
+
+
+
         </section>
                                                 
     </div>
@@ -367,6 +433,8 @@
         }));
     });
 </script>
+
+
 
 
 

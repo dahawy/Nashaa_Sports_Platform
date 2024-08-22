@@ -64,10 +64,14 @@ class Program(models.Model):
     is_available=models.BooleanField(default=True)
     registration_end_date = models.DateField(default='2024-12-31')
     is_active=models.BooleanField(default=False)
+
+
 class Coach(models.Model):
+
     class Gender(models.TextChoices):
         Male = 'Male', 'ذكر'
         Female = 'Female' , 'أنثى'
+
     class Nationality(models.TextChoices):
         EGYPTIAN = 'EG', 'مصري'
         SAUDI = 'SA', 'سعودي'
@@ -104,6 +108,7 @@ class Coach(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
 class TimeSlot(models.Model):
+
     class DayChoices(models.TextChoices):
         SUNDAY = 'sun', 'الأحد'
         MONDAY = 'mon', 'الاثنين'
@@ -130,5 +135,7 @@ class ProgramImage(models.Model):
 class ProgramVideo(models.Model):
     program = models.ForeignKey(Program, on_delete=models.CASCADE)
     video = models.FileField(upload_to='program_videos/')
+
+
 
 
