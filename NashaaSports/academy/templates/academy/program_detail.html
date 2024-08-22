@@ -370,7 +370,7 @@
                         </a>
                       {% endif %}
                     </div>
-                    <p class="text-gray-700 mt-2">{{ review.comment }}</p>
+                    <p class="text-gray-700 mt-2">{{ review.review }}</p>
                     <p class="text-gray-500 text-sm">{{ review.created_at }}</p>
                   </div>
                 {% endfor %}
@@ -411,6 +411,7 @@
     <br><br>
     <br><br>
 </div>
+
 <script>
     document.addEventListener("alpine:init", () => {
         Alpine.data("imageSlider", () => ({
