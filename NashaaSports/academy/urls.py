@@ -20,4 +20,7 @@ urlpatterns = [
     path('branches/<user_id>',views.branches_list_view,name="branches_list_view"),
     path('branch/delete/<branch_id>',views.delete_branch_view,name="delete_branch_view"),
     path('branch/update/<branch_id>',views.update_branch_view,name="update_branch_view"),
+    path('coaches/list/<academy_id>',views.coach_list_view,name="coach_list_view"),
+    path('coach/delete/<coach_id>',views.delete_coach_view,name="delete_coach_view"),
+    path('coach/update/<coach_id>',views.update_coach_view,name="update_coach_view"),
 ]
