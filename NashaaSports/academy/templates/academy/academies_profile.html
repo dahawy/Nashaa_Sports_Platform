@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+{% block content %}
+<style>
+    .container {
+        display: flex;
+        justify-content: space-between;
+        /* Ensure space between items */
+        align-items: center;
+        /* Center items vertically */
+        width: 100%;
+        /* Full width of parent container */
+        /* Optional padding */
+        /* Background color for visibility */
+    }
+</style>
+<div class="md:pt-40 flex-col flex justify-center items-center ">
+    <div class="shadow-lg rounded-lg flex flex-col h-full w-3/4 pb-20 ">
+        <div class=" flex justify-start flex-col items-start mr-5">
+            <div class=" flex flex-row  justify-center self-center items-center">
+                <div class="flex flex-col  items-center">
+                    <img src="https://upload.wikimedia.org/wikipedia/sco/thumb/5/53/Arsenal_FC.svg/484px-Arsenal_FC.svg.png?20150531200615" class="w-36   " alt="">
+
+                </div>
+                <div>
+
+                </div>
+            </div>
+            <div class="flex flex-col gap-4 mt-10">
+                <h2 class="text-3xl font-semibold">عن الاكاديمية</h2>
+                <p class="text-gray-600 ">{{academy.description}}</p>
+            </div>
+            <!--  -->
+            <div class="flex flex-col gap-4 mt-10">
+                <h2 class="text-3xl font-semibold">انواع الرياضات </h2>
+                <div class="bg-gray-50 rounded-lg flex flex-row gap-1 justify-center items-center w-fit px-5">
+                    <i class="fa-solid fa-medal"></i>
+                    <a class="text-gray-600 ">كرة القدم </a>
+
+                </div>
+            </div>
+            <!--  -->
+            <!--  -->
+            <div class="flex flex-col gap-4 mt-10">
+                <h2 class="text-3xl font-semibold">فروعها </h2>
+                <div class="bg-gray-50 rounded-lg flex flex-col gap-1 justify-center px-2 items-center">
+                    <div class="flex flex-row gap-1 justify-center items-center">
+                        <span class="material-symbols-outlined text-lg">
+                            location_on
+                        </span>
+                        <a class="text-gray-600 ">الرياض </a>
+                    </div>
+                    <div class="flex flex-row gap-1 items-center">
+                        <span class="material-symbols-outlined text-lg ">
+                            app_registration
+                        </span>
+                        <p data-tooltip-target="tooltip-default" type="button"
+                            class="text-gray-600  font-medium text-xs  text-center ">44550598989898</p>
+
+
+                        <div id="tooltip-default" role="tooltip"
+                            class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900/90 rounded-lg shadow-sm opacity-0 tooltip ">
+                            رقم السجل التجاري
+                            <div class="tooltip-arrow" data-popper-arrow></div>
+                        </div>
+                    </div>
+
+                </div>
+
+
+            </div>
+            {% if programs %}
+            <div class="container mt-10 ">
+                <div class="item1">
+                    <h2 class="text-3xl font-semibold">ابرز برامج الاكاديمية </h2>
+                </div>
+                <div class="item md:ml-9 ml-5"><a class="text-xl font-semibold cursor-pointer"> المزيد</a></div>
+            </div>
+
+            <div class="flex flex-col gap-10 mt-10 self-center">
+
+
+                {% include 'program_card.html' with programs=programs %}
+
+
+
+            </div>
+            {% endif %}
+
+            {% if coaches %}
+            <div class="flex flex-col gap-4 mt-10">
+
+                <h2 class="text-3xl font-semibold">طاقم التدريب</h2>
+                
+                <div class="flex md:flex-row flex-wrap justify-center md:mt-10  gap-10 ">
+                {% for coach in coaches %}
+                <div class="flex flex-col shadow-md w-48 h-52 rounded-lg justify-center  items-center hover:scale-110 duration-300 ease-linear">
+                    <img src="{{coach.avatar.url}}" class="w-28 h-28 rounded-full object-cover" alt="">
+                    <h2 class=" font-semibold">{{coach.name}}</h2>
+                    <h2 class="text-[0.75rem] font-semibold">{{coach.nationality}}</h2>
+                    <h2 class="text-[0.75rem] font-semibold">خبرة {{coach.experience}} سنوات</h2>
+
+
+                </div>
+                {% endfor %}
+                                
+
+            </div>
+            </div>
+            {% endif %}
+
+
+        </div>
+        <!--  -->
+
+
+    </div>
+</div>
+
+</div>
+{% endblock %}
