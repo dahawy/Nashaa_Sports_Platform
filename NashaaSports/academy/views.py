@@ -357,49 +357,37 @@ def delete_branch_view(request:HttpRequest,branch_id):
         return redirect(request.GET.get('next','/'))
     except Exception as e:
         messages.error(request,"هناك مشكلة في الحذف حاول مرة اخرى")
-def update_branch_view(request:HttpRequest,branch_id):
-    # Get the branch object
+
+def update_branch_view(request, branch_id):
     branch = get_object_or_404(Branch, pk=branch_id)
-    
+
     if request.method == "POST":
-        # Update branch details from the form submission
         branch.branch_city = request.POST.get('branch_city')
         branch.branch_name = request.POST.get('branch_name')
         branch.register_no = request.POST.get('register_no')
         
-        # Retrieve latitude and longitude from hidden input fields
-        latitude = request.POST.get('latitude')
-        longitude = request.POST.get('longitude')
-        print(latitude,longitude)
+        # Get the full Google Maps URL from the form
+        map_url = request.POST.get('map_url')
         
-        # Check if latitude and longitude are provided and valid
-        if latitude and longitude:
-            try:
-                lat = float(latitude)
-                lng = float(longitude)
-                # Construct the Google Maps URL
-                branch.branch_location = f"https://www.google.com/maps/?q={lat},{lng}"
-            except ValueError:
-                # Handle the case where latitude or longitude is not valid
-                messages.error(request, 'Invalid latitude or longitude value.')
-                return render(request, 'academy/update_branch.html', {
-                    'branch': branch,
-                    'google_maps_api_key': settings.GOOGLE_API_KEY,
-                })
+        if map_url:
+            branch.branch_location = map_url
         
-        # Save updated branch details
         branch.save()
         messages.success(request, 'تم تحديث الفرع بنجاح')
         
-        # Redirect to a success page or the branch detail page
-        
 
-    # Render the update branch form if it's not a POST request
+    # Extract coordinates from the current URL if it exists
+    lat, lng = 0.0, 0.0
+    if branch.branch_location:
+        try:
+            query = branch.branch_location.split('?q=')[-1]
+            lat, lng = map(float, query.split(','))
+        except (ValueError, IndexError):
+            lat, lng = 0.0, 0.0
+
     return render(request, 'academy/update_branch.html', {
         'branch': branch,
-        'lat': branch.branch_location.split('q=')[-1].split(',')[0] if branch.branch_location else 0.0,
-        'lng': branch.branch_location.split('q=')[-1].split(',')[1] if branch.branch_location else 0.0,
+        'lat': lat,
+        'lng': lng,
         'google_maps_api_key': settings.GOOGLE_API_KEY,
     })
-    
-    

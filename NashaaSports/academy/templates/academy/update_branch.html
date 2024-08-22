@@ -32,14 +32,11 @@
 
 
     <!--  -->
-    <div class="mb-5">
-        <input id="pac-input" class="controls shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 mb-3" type="text" placeholder="Search for a location">
-        <div id="map" style="height: 500px; width: 100%;"></div>  
-    </div>
-    <!-- Hidden input fields for latitude and longitude -->
-    <input type="hidden" id="latitude" name="latitude">
-    <input type="hidden" id="longitude" name="longitude">
-    <input type="hidden" id="map-url" name="map_url">
+    <h1>Update Branch Location: {{ branch.branch_name }}</h1>
+    <div id="map" style="height: 500px; width: 100%;"></div>
+    <input id="search-box" class="controls" type="text" placeholder="Search Box">
+    <input type="hidden" id="map-url" name="map_url" value="{{ branch.branch_location }}">
+    
 
     <!-- Existing Form Fields -->
 
@@ -47,84 +44,98 @@
 
     <button data-modal-target="popup-modal" data-modal-toggle="popup-modal" type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center light:bg-blue-600 light:hover:bg-blue-700 light:focus:ring-blue-800">اضف الفرع</button>
   </form>
-<script>
+  <script>
+    let map;
+    let marker;
+
     function initMap() {
-    var initialLocation = {lat: parseFloat('{{ lat }}'), lng: parseFloat('{{ lng }}')};
+        const initialLocation = {
+            lat: parseFloat('{{ lat }}') || 24.7136, // Default to Riyadh if no location
+            lng: parseFloat('{{ lng }}') || 46.6753 // Default to Riyadh if no location
+        };
 
-    var map = new google.maps.Map(document.getElementById('map'), {
-        zoom: 15,
-        center: initialLocation
-    });
+        map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 15,
+            center: initialLocation
+        });
 
-    var marker = new google.maps.Marker({
-        position: initialLocation,
-        map: map,
-        draggable: true
-    });
+        marker = new google.maps.Marker({
+            position: initialLocation,
+            map: map,
+            draggable: true
+        });
 
-    // Search Box
-    var input = document.getElementById('pac-input');
-    var searchBox = new google.maps.places.SearchBox(input);
-    map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+        // Set up SearchBox
+        const input = document.getElementById('search-box');
+        const searchBox = new google.maps.places.SearchBox(input);
+        map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
 
-    // Bias the SearchBox results towards current map's viewport.
-    map.addListener('bounds_changed', function() {
-        searchBox.setBounds(map.getBounds());
-    });
+        map.addListener('bounds_changed', function () {
+            searchBox.setBounds(map.getBounds());
+        });
 
-    searchBox.addListener('places_changed', function() {
-        var places = searchBox.getPlaces();
-
-        if (places.length === 0) {
-            return;
-        }
-
-        // Clear out the old markers.
-        marker.setMap(null);
-
-        // For each place, get the icon, name and location.
-        var bounds = new google.maps.LatLngBounds();
-        places.forEach(function(place) {
-            if (!place.geometry || !place.geometry.location) {
-                console.log("Returned place contains no geometry");
+        searchBox.addListener('places_changed', function () {
+            const places = searchBox.getPlaces();
+            if (places.length === 0) {
                 return;
             }
 
-            // Create a new marker for the selected place.
-            marker = new google.maps.Marker({
-                map: map,
-                title: place.name,
-                position: place.geometry.location,
-                draggable: true
-            });
-
-            // Update hidden input fields and marker location when dragged.
-            google.maps.event.addListener(marker, 'dragend', function() {
-                var position = marker.getPosition();
-                document.getElementById('latitude').value = position.lat();
-                document.getElementById('longitude').value = position.lng();
-            });
-
-            if (place.geometry.viewport) {
-                // Only geocodes have viewport.
-                bounds.union(place.geometry.viewport);
-            } else {
-                bounds.extend(place.geometry.location);
+            if (marker) {
+                marker.setMap(null);
             }
+
+            const bounds = new google.maps.LatLngBounds();
+            places.forEach(function (place) {
+                if (!place.geometry) {
+                    console.log("Returned place contains no geometry");
+                    return;
+                }
+
+                marker = new google.maps.Marker({
+                    map: map,
+                    position: place.geometry.location
+                });
+
+                const mapUrl = `https://www.google.com/maps/?q=${place.geometry.location.lat()},${place.geometry.location.lng()}`;
+                document.getElementById('map-url').value = mapUrl;
+
+                if (place.geometry.viewport) {
+                    bounds.union(place.geometry.viewport);
+                } else {
+                    bounds.extend(place.geometry.location);
+                }
+            });
+            map.fitBounds(bounds);
         });
-        map.fitBounds(bounds);
-    });
 
-    // Handle marker drag events.
-    google.maps.event.addListener(marker, 'dragend', function() {
-        var position = marker.getPosition();
-        document.getElementById('latitude').value = position.lat();
-        document.getElementById('longitude').value = position.lng();
-    });
-}
+        map.addListener('click', function (event) {
+            placeMarker(event.latLng);
+        });
+    }
 
-window.onload = initMap;
+    function placeMarker(location) {
+        if (marker) {
+            marker.setPosition(location);
+        } else {
+            marker = new google.maps.Marker({
+                position: location,
+                map: map
+            });
+        }
+        const mapUrl = `https://www.google.com/maps/?q=${location.lat()},${location.lng()}`;
+        document.getElementById('map-url').value = mapUrl;
+    }
 
+    function saveLocation() {
+        const mapUrl = document.getElementById('map-url').value;
+        if (mapUrl) {
+            alert('Location saved: ' + mapUrl);
+        } else {
+            alert('Please select a location first.');
+        }
+    }
+
+    window.onload = initMap;
 </script>
 
 
