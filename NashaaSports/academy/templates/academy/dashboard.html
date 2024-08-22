@@ -80,11 +80,9 @@
                   <li>
                      <a href="{% url 'academy:add_coach_view' request.user.id %}" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 light:text-white light:hover:bg-gray-700">اضف مدرب</a>
                   </li>
+
                   <li>
-                     <a href="#" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 light:text-white light:hover:bg-gray-700">عدل على معلومات مدرب</a>
-                  </li>
-                  <li>
-                     <a href="#" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 light:text-white light:hover:bg-gray-700">قائمة المدربين</a>
+                     <a href="{% url 'academy:coach_list_view' request.user.id %}" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 light:text-white light:hover:bg-gray-700">قائمة المدربين</a>
                   </li>
             </ul>
          </li>
