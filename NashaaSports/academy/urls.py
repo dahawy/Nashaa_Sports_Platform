@@ -17,6 +17,7 @@ urlpatterns = [
     path('program/delete/<program_id>',views.delete_program_view,name='delete_program_view'),
     path('update/program/<program_id>',views.update_programs_info_view,name="update_programs_info_view"),
     path('update/time-slot/<program_id>',views.update_time_slot_view,name='update_time_slot_view'),
+    path('update/media/<program_id>',views.update_media_view,name="update_media_view"),
     path('branches/<user_id>',views.branches_list_view,name="branches_list_view"),
     path('branch/delete/<branch_id>',views.delete_branch_view,name="delete_branch_view"),
     path('branch/update/<branch_id>',views.update_branch_view,name="update_branch_view"),
