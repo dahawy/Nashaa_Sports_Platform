@@ -18,12 +18,21 @@
                     <label for="program_name" class="block mb-2 text-sm font-medium text-gray-900">الملفات المرفقة</label>
                     {% for image_url in image_urls %}
                     {% if image_url %}
-                    <p class="text-gray-400 text-sm">{{image_url}}</p>
+                    <div class="shadow-lg w-fit flex ">
+                        <span class="material-symbols-outlined">
+                            delete
+                            </span>
+                    <p class="text-gray-400 text-sm">
+                        {{ image_url|slice:":30" }}{% if image_url|length > 30 %}...{% endif %}
+                    </p>
+                </div>
                     {% endif %}
                     {% endfor %}
                     {% for video_url in video_urls %}
                     {% if video_url %}
-                    <p class="text-gray-400 text-sm">{{video_url}}</p>
+                    <p class="text-gray-400 text-sm">
+                        {{ video_url|slice:":30" }}{% if video_url|length > 30 %}...{% endif %}
+                    </p>
                     {% endif %}
                     {% endfor %}
 

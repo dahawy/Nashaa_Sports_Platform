@@ -8,9 +8,10 @@ from django.contrib.auth.models import User
 from datetime import datetime, timedelta
 from django.contrib import messages
 from django.db import transaction
-from django.db.models.functions import Cast
-from django.db.models import Avg ,IntegerField
-from django.http import JsonResponse
+from django.db.models.functions import Cast ,Round
+from django.db.models import Avg ,IntegerField,FloatField
+from django.db.models.functions import ExtractDay
+from django.db.models import F, ExpressionWrapper
 
 
 
@@ -72,12 +73,11 @@ def add_program_view(request:HttpRequest,user_id):
                             min_age=min_age,
                             max_age=max_age,
                             sport_category=request.POST['sport_category'],
-                            is_available=is_available,
+                            is_available= not is_available,
                             registration_end_date=registration_end_date,
                             is_active=False
                         )
                         program.save()
-                        messages.success(request, "تم إنشاء البرنامج بنجاح!", "green")
                         return redirect("academy:add_program_time_slot_view",program_id=program.id)
                     
                  except Exception as e:
@@ -155,7 +155,7 @@ def upload_media_view(request, program_id):
         images_str = ', '.join(image_urls) if image_urls else None
         videos_str = ', '.join(video_urls) if video_urls else None
         print(image_urls,video_urls)
-        messages.success(request, f"تم رفع الصور والفيديوهات بنجاح", extra_tags="green")
+        messages.success(request, f"تم انشاء البرنامج بنجاح", extra_tags="green")
         if 'save_project' in request.POST:
             return redirect('academy_dashboard_view',user_id=request.user)  
     return render(request, 'academy/add_media.html', {'program_id': program_id,"status":status,"image_urls":image_urls,"video_urls":video_urls})
@@ -227,9 +227,10 @@ def program_detail_view(request:HttpRequest,program_id):
 
     program = Program.objects.get(pk=program_id)
     review = program.review_set.all()  # Assuming a ForeignKey relationship named 'review_set'
-    program= Program.objects.filter(pk=program_id).annotate(
-        avg_review=Avg(Cast("review__rating", IntegerField()))
-          ).first()
+    
+    program = Program.objects.filter(pk=program_id).annotate(
+    avg_rating=Round(Avg(Cast('review__rating', FloatField())), 1)  # Round to one decimal place
+    ).first()
     time_slot=TimeSlot.objects.filter(program=Program.objects.get(pk=program_id))
     images=ProgramImage.objects.filter(program=Program.objects.get(pk=program_id))
     videos=ProgramVideo.objects.filter(program=Program.objects.get(pk=program_id))
@@ -258,11 +259,21 @@ def programs_list_view(request:HttpRequest):
     academy=AcademyProfile.objects.filter(user=request.user).first()
     branches=Branch.objects.filter(academy=academy)
     programs = Program.objects.filter(branch__in=branches)
+    programs = programs.annotate(
+    avg_rating=Round(Avg(Cast('review__rating', FloatField())), 1), # Calculate the average rating for each program
+    start_days=ExtractDay(F('start_date')),
+    end_days=ExtractDay(F('end_date'))
+        ).annotate(
+    duration =ExpressionWrapper(
+    ExtractDay(F('end_date') - F('start_date')) / 7,
+    output_field=IntegerField()
+            )
+    )
     return render(request,'academy/programs_list.html',{'programs':programs})
 def delete_program_view(request:HttpRequest, program_id):
         program=Program.objects.get(pk=program_id)
         program.delete()
-        messages.success(request,"deleted successfully")
+        messages.success(request,"deleted successfully") 
         return redirect(request.GET.get('next','/'))
 def update_programs_info_view(request:HttpRequest,program_id):
     program=Program.objects.get(pk=program_id)
@@ -305,7 +316,7 @@ def update_programs_info_view(request:HttpRequest,program_id):
                             program.min_age=min_age
                             program.max_age=max_age
                             program.sport_category=request.POST['sport_category']
-                            program.is_available=is_available
+                            program.is_available= not is_available
                             program.registration_end_date=registration_end_date
                         
                             program.save()
@@ -351,7 +362,39 @@ def update_time_slot_view(request:HttpRequest,program_id):
 
     
     return render(request,'academy/update_time_slot.html',context)
-    
+def update_media_view(request:HttpResponse,program_id):
+    program=Program.objects.filter(id=program_id).first()
+    images=ProgramImage.objects.filter(program=program)
+    videos=ProgramVideo.objects.filter(program=program)
+    status=False
+    image_urls = []
+    video_urls = []
+    if request.method == 'POST':
+        images = request.FILES.getlist('images')  
+        videos = request.FILES.getlist('videos')  
+
+        if not images and not videos:
+            messages.error(request, "يرجى رفع ملفات الصور أو الفيديو.","red")
+        program = get_object_or_404(Program, id=program_id)
+
+        with transaction.atomic():
+
+            for image in images:
+                img_instance = ProgramImage.objects.create(program=program, image=image)
+                image_urls.append(img_instance.image.url)
+            for video in videos:
+                vid_instance = ProgramVideo.objects.create(program=program, video=video)
+                video_urls.append(vid_instance.video.url)
+                status=True
+                
+
+        images_str = ', '.join(image_urls) if image_urls else None
+        videos_str = ', '.join(video_urls) if video_urls else None
+        print(image_urls,video_urls)
+        messages.success(request, f"تم انشاء البرنامج بنجاح", extra_tags="green")
+        if 'save_project' in request.POST:
+            return redirect('academy_dashboard_view',user_id=request.user)  
+    return render(request, 'academy/add_media.html', {'program_id': program_id,"status":status,"image_urls":image_urls,"video_urls":video_urls,'videos':videos,'images':images} )
 def branches_list_view(request:HttpRequest,user_id):
     if request.user.is_authenticated:
         academy=AcademyProfile.objects.get(user=User.objects.get(pk=user_id))
