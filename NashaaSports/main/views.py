@@ -98,19 +98,21 @@ def programs_view(request:HttpRequest):
         ('long', '13 فأكثر'),
     ]
     context={'age_choices':age_choices,'length_choices':length_choices,'price_choices':price_choices,'programs':programs,"sport_choices":Program.SportChoices.choices,'cities':Branch.Cities.choices}
-    return render(request,"programs.html",context)
+    return render(request,"programs.html")
 
 
 def program_detail_view(request:HttpRequest , program_id):
     user = request.user
-    programs = Program.objects.filter(id=program_id)
+    programs = Program.objects.get(id=program_id)
     images = programs.programimage_set.all()
+    
     context ={
         "programs":programs,
         "image":images,
         "user":user,
     }
     return render(request, "program_detail.html",context)
+
 def academies_view(request:HttpRequest):
     search_query = request.GET.get('search', '').strip()  
 
