@@ -26,6 +26,7 @@ def home_view(request:HttpRequest):
     }
     return render(request, "index.html",context)
 
+
 def programs_view(request:HttpRequest):
     search_query = request.GET.get('search', '')
     price_filter = request.GET.get('price', '')
@@ -105,6 +106,7 @@ def program_detail_view(request:HttpRequest , program_id):
     user = request.user
     programs = Program.objects.get(id=program_id)
     images = programs.programimage_set.all()
+
     context ={
         "programs":programs,
         "image":images,
