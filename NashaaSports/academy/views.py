@@ -378,7 +378,6 @@ def update_media_view(request:HttpResponse,program_id):
         program = get_object_or_404(Program, id=program_id)
 
         with transaction.atomic():
-
             for image in images:
                 img_instance = ProgramImage.objects.create(program=program, image=image)
                 image_urls.append(img_instance.image.url)

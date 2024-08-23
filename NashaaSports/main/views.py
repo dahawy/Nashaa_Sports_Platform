@@ -111,6 +111,7 @@ def program_detail_view(request:HttpRequest , program_id):
         "user":user,
     }
     return render(request, "program_detail.html",context)
+
 def academies_view(request:HttpRequest):
     search_query = request.GET.get('search', '').strip()  
 
