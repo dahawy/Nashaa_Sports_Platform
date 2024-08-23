@@ -103,7 +103,7 @@ def programs_view(request:HttpRequest):
 
 def program_detail_view(request:HttpRequest , program_id):
     user = request.user
-    programs = Program.objects.filter(id=program_id)
+    programs = Program.objects.get(id=program_id)
     images = programs.programimage_set.all()
     context ={
         "programs":programs,
