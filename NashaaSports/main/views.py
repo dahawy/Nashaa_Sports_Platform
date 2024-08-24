@@ -1,24 +1,31 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpRequest
 from academy.models import Program,Branch
 from cart.models import Cart
+from account.models import User, UserProfile, AcademyProfile
 from django.db.models import Avg
 from django.db.models import Avg, IntegerField,FloatField
 from django.db.models.functions import Cast ,Round
 from django.db.models import F, ExpressionWrapper
 from django.db.models.functions import ExtractDay
 import math
-from account.models import AcademyProfile
 from django.db.models import F, Q
 
 
 
 
 def home_view(request:HttpRequest):
+
     programs = Program.objects.all()
-    carts = Cart.objects.filter(user=request.user.id, status='Active').first()
-    enrollments = carts.enrollments.all() if carts else []
-    print(carts)
+    if request.user.is_authenticated:
+        user = UserProfile.objects.get(user_id=request.user.id)
+        carts = Cart.objects.filter(user=user, status='Active').first()
+        enrollments = carts.enrollments.all() if carts else []
+    else:
+        carts = Cart.objects.filter(user=request.user.id, status='Active').first()
+        enrollments = carts.enrollments.all() if carts else []
+
+
     context ={
         "programs":programs,
         "carts":carts,
@@ -103,6 +110,7 @@ def programs_view(request:HttpRequest):
 
 
 def program_detail_view(request:HttpRequest , program_id):
+
     user = request.user
     programs = Program.objects.get(id=program_id)
     images = programs.programimage_set.all()
