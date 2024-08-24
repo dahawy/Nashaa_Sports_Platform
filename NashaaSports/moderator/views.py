@@ -10,7 +10,14 @@ from django.conf import settings
 from account.models import User,UserProfile,AcademyProfile
 from academy.models import Program
 from django.contrib.auth.decorators import login_required, user_passes_test
-
+from enrollment.models import Enrollment
+from payment.models import Payment
+from django.db.models import Sum
+from django.utils import timezone
+from datetime import timedelta
+from babel.dates import format_date
+from django.utils.safestring import mark_safe
+import json
 
 # def superuser_required(view_func):
 #     return login_required(user_passes_test(lambda u: u.is_superuser))
@@ -28,8 +35,9 @@ def moderator_dashboard_view(request:HttpRequest):
     if request.user.is_superuser:
         academies = AcademyProfile.objects.filter(approved=True)
         programs = Program.objects.all()
+        subscribers = Enrollment.objects.all()
         users = User.objects.all()
-        return render(request,"moderator/moderator_dashboard.html",{'academies': academies, 'programs': programs, 'users': users})
+        return render(request,"moderator/moderator_dashboard.html",{'academies': academies, 'programs': programs,'subscribers':subscribers, 'users': users})
     else:
         return HttpResponse("You are not authorized!")
 
@@ -153,3 +161,35 @@ def deactivate_program_view(request: HttpRequest,academy_id):
             return redirect('moderator:programs_view', academy_id=academy_id)
         except Program.DoesNotExist:
             return redirect('moderator:programs_view', academy_id=academy_id)
+        
+
+@superuser_required
+def sales_view(request: HttpRequest, days_ago: int):
+    # Get today's date and calculate the date 30 days ago
+    today = timezone.now().date()
+    date_days_ago = today - timedelta(days=days_ago)
+
+    # Query to get enrollments for the football category in the last 30 days with associated payments
+    football_payments = Enrollment.objects.filter(
+        program__sport_category=Program.SportChoices.FOOTBALL,
+        cart__payment__status=True,  #status=True means payment completed
+        cart__payment__payment_date__range=[date_days_ago, today]
+    )
+
+    # Aggregate fees by payment date
+    aggregated_payments = football_payments.values('cart__payment__payment_date').annotate(total_sales=Sum('program__fees')).order_by('cart__payment__payment_date')
+
+    # Prepare the salesList and datesList
+    salesList = [float(item['total_sales']) for item in aggregated_payments]
+    datesList = [format_date(item['cart__payment__payment_date'], format='dd MMMM', locale='ar') for item in aggregated_payments]
+
+
+    context = {
+        'salesList': mark_safe(json.dumps(salesList)),
+        'datesList': mark_safe(json.dumps(datesList)), 
+    }
+    print(salesList)
+    print(datesList)
+    # Now salesList contains the summed fees for each day, and datesList contains the corresponding dates in Arabic.
+
+    return render(request, 'moderator/moderator_dashboard.html', context)

@@ -13,6 +13,7 @@ urlpatterns = [
     path('users/<user_type>',views.users_view, name='users_view'),
     path('programs/<academy_id>',views.programs_view, name='programs_view'),
     path('deactivate_program/<academy_id>',views.deactivate_program_view, name='deactivate_program_view'),
+    path('moderator_dashboard/<int:days_ago>',views.sales_view, name='sales_view'),
     path('query_detail/<query_id>/', views.query_detail_view, name='query_detail_view'),
 ]
 

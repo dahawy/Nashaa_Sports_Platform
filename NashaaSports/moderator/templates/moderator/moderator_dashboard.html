@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<head>
 <style>
     /* Default styling for smaller screens */
 .my-element {
@@ -13,9 +14,12 @@
         margin-right: 16rem;
     }
 }
+
+
 </style>
+</head>
 <section class="pt-8 lg:pt-32" >
-<aside  id="sidebar-multi-level-sidebar" class="fixed top-0  right-0 z-40 w-64 h-screen transition-transform translate-x-full sm:translate-x-0" aria-label="Sidebar">
+<aside  id="sidebar-multi-level-sidebar" class="fixed top-24  right-0 z-40 w-64 h-screen transition-transform translate-x-full sm:translate-x-0" aria-label="Sidebar">
     <div class="h-full px-3 py-4 overflow-y-auto bg-gray-50 light:bg-gray-800">
        <ul class="space-y-2 font-medium">
           <li>
@@ -104,7 +108,7 @@
                   <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 light:text-gray-400 light:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 21">
                      <path d="M15 12a1 1 0 0 0 .962-.726l2-7A1 1 0 0 0 17 3H3.77L3.175.745A1 1 0 0 0 2.208 0H1a1 1 0 0 0 0 2h.438l.6 2.255v.019l2 7 .746 2.986A3 3 0 1 0 9 17a2.966 2.966 0 0 0-.184-1h2.368c-.118.32-.18.659-.184 1a3 3 0 1 0 3-3H6.78l-.5-2H15Z"/>
                   </svg>
-                  <span class="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">تقارير</span>
+                  <span class="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">المشتركون</span>
                  
             </button>
            
@@ -116,44 +120,188 @@
     </div>
  </aside>
  
- <div class="p-4 my-element" >
-    <div class="p-4 border-2 border-gray-200  rounded-lg light:border-gray-700">
-       <div class=" md:grid md:grid-cols-3 gap-4 mb-4 min-sm:flex min-sm:flex-col" >
-          <div class="flex  mb-1 flex-col items-center justify-center h-24 rounded bg-gray-50 light:bg-gray-800">
-             <p class="text-2xl text-blue-600 light:text-gray-500">
-                عدد الأكاديميات والنوادي 
-             </p>
-             <span class="text-2xl text-orange-600 light:text-gray-500">+ {{academies.count}}</span>
-          </div>
-          <div class="flex mb-1 flex-col  items-center justify-center h-24 rounded bg-gray-50 light:bg-gray-800">
-            <p class="text-2xl   text-purple-600 light:text-gray-500">
-                عدد البرامج 
-             </p>
-             <span class="text-2xl text-orange-600  light:text-gray-500">+ {{programs.count}}</span>
-          </div>
-          <div class="flex  mb-1 flex-col items-center justify-center h-24 rounded bg-gray-50 light:bg-gray-800">
-            <p class="text-2xl text-green-600 light:text-gray-500">
-                عدد المستخدمين 
-             </p>
-             <span class="text-2xl text-orange-600 light:text-gray-500">+ {{users.count}}</span>
-          </div>
-       </div>
-       <div class="flex items-center justify-center h-48 mb-4 rounded bg-gray-50 light:bg-gray-800">
-          <p class="text-2xl text-gray-400 light:text-gray-500">
-             <svg class="w-3.5 h-3.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 1v16M1 9h16"/>
-             </svg>
-          </p>
-       </div>
-       
-       <div class="flex items-center justify-center h-48 mb-4 rounded bg-gray-50 light:bg-gray-800">
-         
-       </div>
-     
-    </div>
+ <div class="mx-auto max-w-screen-lg py-8 sm:px-6 sm:py-12 lg:px-8">
+   
+ 
+   <dl class="mt-6 grid grid-cols-1 gap-4 sm:mt-8 sm:grid-cols-2 lg:grid-cols-4">
+     <div class="flex flex-col rounded-lg bg-blue-50 px-4 py-8 text-center">
+       <dt class="order-last text-lg font-medium text-gray-500">أكاديمية ونادي</dt>
+       <dd class="text-4xl font-extrabold text-blue-600 md:text-5xl" data-target={{academies.count}}>0</dd>
+     </div>
+ 
+     <div class="flex flex-col rounded-lg bg-blue-50 px-4 py-8 text-center">
+       <dt class="order-last text-lg font-medium text-gray-500">برنامج</dt>
+       <dd class="text-4xl font-extrabold text-blue-600 md:text-5xl" data-target={{programs.count}}>0</dd>
+     </div>
+ 
+     <div class="flex flex-col rounded-lg bg-blue-50 px-4 py-8 text-center">
+       <dt class="order-last text-lg font-medium text-gray-500">مشترك</dt>
+       <dd class="text-4xl font-extrabold text-blue-600 md:text-5xl" data-target={{subscribers.count}}>0</dd>
+     </div>
+ 
+     <div class="flex flex-col rounded-lg bg-blue-50 px-4 py-8 text-center">
+       <dt class="order-last text-lg font-medium text-gray-500">مستخدم</dt>
+       <dd class="text-4xl font-extrabold text-blue-600 md:text-5xl" data-target={{users.count}}>0</dd>
+     </div>
+   </dl>
  </div>
 
-</section>
+ 
+ 
+<div class="max-w-sm mx-auto w-full bg-white rounded-lg shadow  p-4 md:p-6">
+  <div class="flex justify-between mb-5">
+    <div>
+      <h5 class="leading-none text-3xl font-bold text-gray-900  pb-2">12,423 ريال</h5>
+      <p class="text-base font-normal text-gray-500 ">مبيعات هذا الشهر</p>
+    </div>
+    <div
+      class="flex items-center px-2.5 py-0.5 text-base font-semibold text-green-500  text-center">
+      23%
+      <svg class="w-3 h-3 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 14">
+        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13V1m0 0L1 5m4-4 4 4"/>
+      </svg>
+    </div>
+  </div>
+  <div id="tooltip-chart"></div>
+  <div class="grid grid-cols-1 items-center border-gray-200 border-t  justify-between mt-5">
+    <div class="flex justify-between items-center pt-5">
+      <!-- Button -->
+      <button
+        id="dropdownDefaultButton"
+        data-dropdown-toggle="lastDaysdropdown"
+        data-dropdown-placement="bottom"
+        class="text-sm font-medium text-gray-500  hover:text-gray-900 text-center inline-flex items-center "
+        type="button">
+        آخر 30 يوم
+        <svg class="w-2.5 m-2.5 ms-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+        </svg>
+      </button>
+      <!-- Dropdown menu -->
+      <div id="lastDaysdropdown" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 ">
+          <ul class="py-2 text-sm text-gray-700 " aria-labelledby="dropdownDefaultButton">
+            
+            <li>
+              <a href="{% url 'moderator:sales_view' 30 %}" class="block px-4 py-2 hover:bg-gray-100  ">آخر 30 يوم</a>
+            </li>
+            <li>
+              <a href="{% url 'moderator:sales_view' 90 %}" class="block px-4 py-2 hover:bg-gray-100  ">آخر 90 يوم</a>
+            </li>
+          </ul>
+      </div>
+      <a
+        href="#"
+        class="uppercase text-sm font-semibold inline-flex items-center rounded-lg text-blue-600 hover:text-blue-700 px-3 py-2">
+        تقرير المبيعات
+        <svg class="w-2.5 h-2.5 ms-1.5 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
+        </svg>
+      </a>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+<script>
+  window.onload = function() {//document.addEventListener('DOMContentLoaded', function () {
+      const options = {
+          tooltip: {
+              enabled: true,
+              x: { show: true },
+              y: { show: true },
+          },
+          grid: {
+              show: false,
+              strokeDashArray: 4,
+              padding: { left: 2, right: 2, top: -26 },
+          },
+          series: [
+              {
+                  name: "رياضة كرة القدم",
+                  data:  JSON.parse('{{salesList}}'), //sales durning the period of time specified.
+                  color: "#1A56DB",
+              },
+              {
+                  name: "رياضة كرة الطائرة",
+                  data: [2000, 1567, 3211],
+                  color: "#7E3BF2",
+              },
+          ],
+          chart: {
+              height: "100%",
+              maxWidth: "100%",
+              type: "area",
+              fontFamily: "Inter, sans-serif",
+              dropShadow: { enabled: false },
+              toolbar: { show: false },
+          },
+          legend: { show: true },
+          fill: {
+              type: "gradient",
+              gradient: {
+                  opacityFrom: 0.55,
+                  opacityTo: 0,
+                  shade: "#1C64F2",
+                  gradientToColors: ["#1C64F2"],
+              },
+          },
+          dataLabels: { enabled: false },
+          stroke: { width: 6 },
+          xaxis: {
+              categories: JSON.parse('{{datesList}}') , //payments dates durning the period of time specified.
+              labels: { show: false },
+              axisBorder: { show: false },
+              axisTicks: { show: false },
+          },
+          yaxis: {
+              show: false,
+              labels: {
+                  formatter: function (value) {
+                      return  value + ' ريال';
+                  }
+              }
+          },
+      };
+
+      const chart = new ApexCharts(document.getElementById("tooltip-chart"), options);
+      chart.render();
+  };
+  
+</script>
+ 
+   
+   
+   <script>
+     // Function to animate the numbers
+     function animateNumbers() {
+       const counters = document.querySelectorAll('dd[data-target]');
+       
+       counters.forEach(counter => {
+         const updateCount = () => {
+           const target = +counter.getAttribute('data-target');
+           const count = +counter.innerText.replace(/\D/g, '');
+   
+           // Define the speed of the counter
+           const speed = target / 200;
+   
+           // Increment the counter value
+           if (count < target) {
+             counter.innerText = count + Math.ceil(speed);
+             setTimeout(updateCount, 1);
+           } else {
+             counter.innerText = target.toLocaleString();
+           }
+         };
+         
+         updateCount();
+       });
+     }
+   
+     // Trigger the animation when the page loads
+     window.addEventListener('load', animateNumbers);
+  
+   </script>
+
  
  
  
