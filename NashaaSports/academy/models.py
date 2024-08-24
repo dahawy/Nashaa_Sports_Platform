@@ -65,6 +65,7 @@ class Program(models.Model):
     admin_activtion=models.BooleanField(default=True) # Admin can set it to 'False' to deactivate a program
     registration_end_date = models.DateField(default='2024-12-31')
     is_active=models.BooleanField(default=False) #for compliting the program registration 
+    created_at = models.DateTimeField(auto_now_add=True)
 
 class Coach(models.Model):
 
