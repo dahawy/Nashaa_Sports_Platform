@@ -514,7 +514,7 @@ def subscribers_view(request:HttpResponse,user_id):
     if request.user.is_authenticated:
         academy=AcademyProfile.objects.filter(user=User.objects.get(pk=user_id)).first()
         if academy:
-            if  request.user.id==int(user_id) and academy.approved==True: 
+            if  request.user.id==int(academy.user.id) and academy.approved==True: 
                 subscribers = Enrollment.objects.filter(Q(time_slot__program__branch__academy=academy) & Q(cart__status='Paid'))
                 
                 return render(request,"academy/subscribers.html",{'subscribers':subscribers})
