@@ -84,3 +84,11 @@ def add_enrollment_view(request:HttpRequest):
             messages.error(request, f"حدث خطأ: {str(e)}")
     return render(request,"enrollment_page.html")
 
+@login_required(login_url="account:log_in")
+def my_enrollment_view(request:HttpRequest, user_id):
+    enrollment = Enrollment.objects.filter(user_id=user_id)
+    
+    context={
+        "enrollments":enrollment,
+    }
+    return render(request, 'my_enrollment_view.html', context)

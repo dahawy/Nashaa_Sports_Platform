@@ -179,12 +179,12 @@
                     <a href="{% url 'account:profile_view' user.id %}" class="block py-2 px-4 text-sm hover:bg-gray-100 light:hover:bg-gray-600 light:text-gray-400 light:hover:text-white">حسابي الشخصي</a>
                     <a href="{% url 'moderator:moderator_dashboard_view'  %}" class="block py-2 px-4 text-sm hover:bg-gray-100 light:hover:bg-gray-600 light:text-gray-400 light:hover:text-white">لوحة التحكم</a>
                 </li>
-                    {% endif %}
+                {% endif %}
                     <li>
                 </li>
                 <li>
                   <a
-                    href=""
+                    href="{% url 'enrollment:my_enrollment_view' user.id%}"
                     class="block py-2 px-4 text-sm hover:bg-gray-100 light:hover:bg-gray-600 light:text-gray-400 light:hover:text-white"
                     >اشتراكاتي</a
                   >
