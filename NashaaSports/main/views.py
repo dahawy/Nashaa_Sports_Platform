@@ -31,6 +31,7 @@ def home_view(request: HttpRequest):
             elif hasattr(request.user, 'academyprofile'):
                 academy_profile = AcademyProfile.objects.get(user_id=request.user.id)
                 # return redirect(request,"academy:acadmey_dashboard_view")
+
             else:
                 # Handle any other types of profiles, if necessary
                 pass
@@ -46,7 +47,6 @@ def home_view(request: HttpRequest):
         # Add any other context data needed for the academy
     }
     return render(request, "index.html", context)
-
 
 def programs_view(request:HttpRequest):
     search_query = request.GET.get('search', '')
