@@ -9,9 +9,10 @@ from datetime import datetime, timedelta
 from django.contrib import messages
 from django.db import transaction
 from django.db.models.functions import Cast ,Round
-from django.db.models import Avg ,IntegerField,FloatField
+from django.db.models import Avg ,IntegerField,FloatField ,Q
 from django.db.models.functions import ExtractDay
 from django.db.models import F, ExpressionWrapper
+from enrollment.models import Enrollment
 
 
 
@@ -509,3 +510,19 @@ def update_coach_view(request:HttpResponse,coach_id):
 
 
 
+def subscribers_view(request:HttpResponse,user_id):
+    if request.user.is_authenticated:
+        academy=AcademyProfile.objects.filter(user=User.objects.get(pk=user_id)).first()
+        if academy:
+            if  request.user.id==int(academy.user.id) and academy.approved==True: 
+                subscribers = Enrollment.objects.filter(Q(time_slot__program__branch__academy=academy) & Q(cart__status='Paid'))
+                
+                return render(request,"academy/subscribers.html",{'subscribers':subscribers})
+            else:
+                return HttpResponse(f"غير مصرح لك")
+        else:
+            return HttpResponse(f"لم يتم اعتمادك من قبل منصة نشء! فضلا أنشئ ملف أكاديميتك وانتظر الاعتماد.")
+        
+    else:
+        return HttpResponse("غير مصرح لك")
+    
