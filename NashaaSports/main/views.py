@@ -132,3 +132,15 @@ def academies_view(request:HttpRequest):
     else:  
         Academies = AcademyProfile.objects.filter(approved=True)
     return render(request,'academies.html',{"academies":Academies})
+
+
+
+def mode_view(request:HttpRequest, mode):
+
+    response = redirect(request.GET.get("next", "/"))
+
+    if mode == "light":
+        response.set_cookie("mode", "light")
+    elif mode == "dark":
+        response.set_cookie("mode", "dark")
+    return response
