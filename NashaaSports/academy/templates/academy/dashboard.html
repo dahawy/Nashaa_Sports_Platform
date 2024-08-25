@@ -7,6 +7,7 @@
       href="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.css"
       rel="stylesheet"
     />
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@40,400,0,0" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -45,16 +46,16 @@
 <section class="pt-8 lg:pt-32 " >
 <aside  id="sidebar-multi-level-sidebar" class="fixed top-0 gray  right-0 z-40 w-64 h-screen transition-transform translate-x-full sm:translate-x-0" aria-label="Sidebar">
     
-   <div class="h-full px-3 py-4 overflow-y-auto shadow-lg " style="">
+   <div class="h-full px-3 py-4 overflow-y-auto shadow-lg bg-gray-50 " style="">
       <div class="flex justify-center">
-         <a href="{% url 'main:home_view' %}">
-      <img
+         <a href="{% url 'main:home_view' %}" class="cursor-pointer">
+         <img
               src="/media/logos/NLogo.png"
               class="h-10"
               alt="Nashaa Logo"
-            />
-         </a></div>
-       <ul class="space-y-2 font-medium pt-10">
+            /></a>
+      </div>
+       <ul class="space-y-2 font-medium pt-20">
           <li class="">
              <a href="#" class="flex items-center p-2 text-gray-900 rounded-lg light:text-white hover:bg-gray-100 light:hover:bg-gray-700 group">
                 <svg class="w-5 h-5 text-[#cd7868] transition duration-75   " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="#cd7868" viewBox="0 0 22 21">
@@ -147,6 +148,41 @@
           
           
        </ul>
+       <ul class="pt-4 mt-4 space-y-2 font-medium border-t border-gray-200 dark:border-gray-700">
+         <li >
+            <a href="#" class="flex items-center p-2 text-gray-900 transition duration-75 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white group">
+               <div class="flex items-center">
+                  <span class="material-symbols-outlined text-[#cd7868]" style="font-size: 28px; color: #cd7868;">
+                     help
+                     </span>
+                     <span class="ms-3">تواصل معنا</span>
+                 </div>
+               
+            </a>
+         </li> 
+         <li >
+            <a href="#" class="flex items-center p-2 text-gray-900 transition duration-75 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white group">
+               <div class="flex items-center">
+                  <span class="material-symbols-outlined text-[#cd7868]" style="font-size: 28px; color: #cd7868;">
+                     info
+                     </span>
+                     <span class="ms-3"> من نحن </span>
+                 </div>
+               
+            </a>
+         </li> 
+         <li >
+            <a href="#" class="flex items-center p-2 text-gray-900 transition duration-75 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white group">
+               <div class="flex items-center">
+                  <span class="material-symbols-outlined text-[#cd6868]" style="font-size: 28px; color: #cd7868;">
+                     logout
+                     </span>
+                     <span class="ms-3">تسجيل خروج</span>
+                 </div>
+               
+            </a>
+         </li> 
+         </ul>
 
     </div>
  </aside>
@@ -232,10 +268,119 @@
             </div>
           </div>
        </div>
-       <div class=" rounded bg-white light:bg-gray-800">
-         
-       </div>
-       <div class=" rounded bg-white light:bg-gray-800">
+       <div class=" rounded-lg shadow-md flex flex-row w-full justify-center gap-5 py-3">
+
+            
+         <div class="max-w-sm w-full bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6">
+            <div class="flex justify-between">
+              <div>
+                <h5 class="leading-none text-3xl font-bold text-gray-900 dark:text-white pb-2">32.4k</h5>
+                <p class="text-base font-normal text-gray-500 dark:text-gray-400">Users this week</p>
+              </div>
+              <div class="flex items-center px-2.5 py-0.5 text-base font-semibold text-green-500 dark:text-green-500 text-center">
+                12%
+                <svg class="w-3 h-3 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 14">
+                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13V1m0 0L1 5m4-4 4 4" />
+                </svg>
+              </div>
+            </div>
+            <div id="area-chart"></div>
+            <div class="grid grid-cols-1 items-center border-gray-200 border-t dark:border-gray-700 justify-between">
+              <div class="flex justify-between items-center pt-5">
+                <button id="dropdownDefaultButton" data-dropdown-toggle="lastDaysdropdown" data-dropdown-placement="bottom"
+                  class="text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-gray-900 text-center inline-flex items-center dark:hover:text-white"
+                  type="button">
+                  Last 7 days
+                  <svg class="w-2.5 m-2.5 ms-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4" />
+                  </svg>
+                </button>
+                <div id="lastDaysdropdown" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
+                  <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton">
+                    <li>
+                      <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Yesterday</a>
+                    </li>
+                    <li>
+                      <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Today</a>
+                    </li>
+                    <li>
+                      <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Last 7 days</a>
+                    </li>
+                    <li>
+                      <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Last 30 days</a>
+                    </li>
+                    <li>
+                      <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Last 90 days</a>
+                    </li>
+                  </ul>
+                </div>
+                <a href="#" class="uppercase text-sm font-semibold inline-flex items-center rounded-lg text-blue-600 hover:text-blue-700 dark:hover:text-blue-500  hover:bg-gray-100 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700 px-3 py-2">
+                  Users Report
+                  <svg class="w-2.5 h-2.5 ms-1.5 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4" />
+                  </svg>
+                </a>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Duplicate of the first card -->
+          <div class="max-w-sm w-full bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6 mt-4">
+            <div class="flex justify-between">
+              <div>
+                <h5 class="leading-none text-3xl font-bold text-gray-900 dark:text-white pb-2">15.2k</h5>
+                <p class="text-base font-normal text-gray-500 dark:text-gray-400">New Visitors</p>
+              </div>
+              <div class="flex items-center px-2.5 py-0.5 text-base font-semibold text-red-500 dark:text-red-500 text-center">
+                -8%
+                <svg class="w-3 h-3 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 14">
+                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 1v12M5 1l4 4M5 1L1 5" />
+                </svg>
+              </div>
+            </div>
+            <div id="area-chart-2"></div>
+            <div class="grid grid-cols-1 items-center border-gray-200 border-t dark:border-gray-700 justify-between">
+              <div class="flex justify-between items-center pt-5">
+                <button id="dropdownDefaultButton2" data-dropdown-toggle="lastDaysdropdown2" data-dropdown-placement="bottom"
+                  class="text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-gray-900 text-center inline-flex items-center dark:hover:text-white"
+                  type="button">
+                  Last 7 days
+                  <svg class="w-2.5 m-2.5 ms-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4" />
+                  </svg>
+                </button>
+                <div id="lastDaysdropdown2" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
+                  <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton2">
+                    <li>
+                      <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Yesterday</a>
+                    </li>
+                    <li>
+                      <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Today</a>
+                    </li>
+                    <li>
+                      <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Last 7 days</a>
+                    </li>
+                    <li>
+                      <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Last 30 days</a>
+                    </li>
+                    <li>
+                      <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Last 90 days</a>
+                    </li>
+                  </ul>
+                </div>
+                <a href="#" class="uppercase text-sm font-semibold inline-flex items-center rounded-lg text-blue-600 hover:text-blue-700 dark:hover:text-blue-500  hover:bg-gray-100 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700 px-3 py-2">
+                  Visitors Report 
+                  <svg class="w-2.5 h-2.5 ms-1.5 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4" />
+                  </svg>
+                </a>
+              </div>
+            </div>
+          </div>
+          
+          
+                  </div>
+       <div class=" rounded-lg shadow-md">
         <div class="flex justify-center mb-2 mt-2">
          <h2 class="text-2xl text-gray-400">حالة برامج المشتركين</h2>
         </div>
@@ -245,6 +390,7 @@
             <canvas id="myChart" class="w-72" height="85px" ></canvas>
          </div>
          </div>
+
         
          
        </div>
@@ -263,6 +409,142 @@
  
 
 </div>  
+
+<script>
+   const options1 = {
+     chart: {
+       height: "100%",
+       maxWidth: "100%",
+       type: "area",
+       fontFamily: "Inter, sans-serif",
+       dropShadow: {
+         enabled: false,
+       },
+       toolbar: {
+         show: false,
+       },
+     },
+     tooltip: {
+       enabled: true,
+       x: {
+         show: false,
+       },
+     },
+     fill: {
+       type: "gradient",
+       gradient: {
+         opacityFrom: 0.6,
+         opacityTo: 0,
+         shadeIntensity: 0,
+         stops: [20, 100],
+       },
+     },
+     dataLabels: {
+       enabled: false,
+     },
+     markers: {
+       size: 0,
+     },
+     xaxis: {
+       type: "datetime",
+       categories: ["2023-07-19", "2023-07-20", "2023-07-21", "2023-07-22", "2023-07-23", "2023-07-24", "2023-07-25"],
+       axisBorder: {
+         show: false,
+       },
+       labels: {
+         style: {
+           colors: "#97a3b9",
+         },
+       },
+     },
+     yaxis: {
+       show: false,
+       tickAmount: 3,
+     },
+     grid: {
+       strokeDashArray: 4,
+     },
+     stroke: {
+       curve: "smooth",
+       width: 2,
+     },
+     series: [{
+       name: "Users",
+       data: [30, 40, 60, 20, 50, 90, 50],
+     }, ],
+     colors: ["#4FD1C5"],
+   };
+   
+   const chart1 = new ApexCharts(document.getElementById("area-chart"), options1);
+   chart1.render();
+   
+   const options2 = {
+     chart: {
+       height: "100%",
+       maxWidth: "100%",
+       type: "area",
+       fontFamily: "Inter, sans-serif",
+       dropShadow: {
+         enabled: false,
+       },
+       toolbar: {
+         show: false,
+       },
+     },
+     tooltip: {
+       enabled: true,
+       x: {
+         show: false,
+       },
+     },
+     fill: {
+       type: "gradient",
+       gradient: {
+         opacityFrom: 0.6,
+         opacityTo: 0,
+         shadeIntensity: 0,
+         stops: [20, 100],
+       },
+     },
+     dataLabels: {
+       enabled: false,
+     },
+     markers: {
+       size: 0,
+     },
+     xaxis: {
+       type: "datetime",
+       categories: ["2023-07-19", "2023-07-20", "2023-07-21", "2023-07-22", "2023-07-23", "2023-07-24", "2023-07-25"],
+       axisBorder: {
+         show: false,
+       },
+       labels: {
+         style: {
+           colors: "#97a3b9",
+         },
+       },
+     },
+     yaxis: {
+       show: false,
+       tickAmount: 3,
+     },
+     grid: {
+       strokeDashArray: 4,
+     },
+     stroke: {
+       curve: "smooth",
+       width: 2,
+     },
+     series: [{
+       name: "Visitors",
+       data: [15, 25, 40, 18, 38, 70, 45],
+     }, ],
+     colors: ["#F56565"],
+   };
+   
+   const chart2 = new ApexCharts(document.getElementById("area-chart-2"), options2);
+   chart2.render();
+   </script>
 <script>
    // JavaScript code for Chart.js
 
