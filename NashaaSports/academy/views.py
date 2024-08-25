@@ -372,17 +372,16 @@ def update_time_slot_view(request:HttpRequest,program_id):
     return render(request,'academy/update_time_slot.html',context)
 def update_media_view(request:HttpResponse,program_id):
     program=Program.objects.filter(id=program_id).first()
-    images=ProgramImage.objects.filter(program=program)
-    videos=ProgramVideo.objects.filter(program=program)
     status=False
     image_urls = []
     video_urls = []
     prev_imgs=ProgramImage.objects.filter(program=program)
     prev_vids=ProgramVideo.objects.filter(program=program)
     for image in prev_imgs:
-                image_urls.append(image.image.url)
+                image_urls.append(image)
     for vide in prev_vids:
-                image_urls.append(vide.video.url)
+                video_urls.append(vide)
+                
     if request.method == 'POST':
         images = request.FILES.getlist('images')  
         videos = request.FILES.getlist('videos')  
@@ -395,22 +394,18 @@ def update_media_view(request:HttpResponse,program_id):
             
             for image in images:
                 img_instance = ProgramImage.objects.create(program=program, image=image)
-                image_urls.append(img_instance.image.url)
+                image_urls.append(img_instance)
             for video in videos:
                 vid_instance = ProgramVideo.objects.create(program=program, video=video)
-                video_urls.append(vid_instance.video.url)
+                video_urls.append(vid_instance)
                 status=True
-                
-
-        images_str = ', '.join(image_urls) if image_urls else None
-        videos_str = ', '.join(video_urls) if video_urls else None
-        print(image_urls,video_urls)
+            
         
         if 'save_project' in request.POST:
             messages.success(request, f"تم انشاء البرنامج بنجاح", extra_tags="green")
             return redirect('academy_dashboard_view',user_id=request.user)  
 
-    return render(request, 'academy/update_media.html', {'program_id': program_id,"status":status,"image_urls":image_urls,"video_urls":video_urls,'videos':videos,'images':images} )
+    return render(request, 'academy/update_media.html', {'program_id': program_id,"status":status,"image_urls":image_urls,"video_urls":video_urls} )
 def branches_list_view(request:HttpRequest,user_id):
     if request.user.is_authenticated:
         academy=AcademyProfile.objects.get(user=User.objects.get(pk=user_id))
@@ -565,3 +560,12 @@ def subscribers_view(request, user_id):
             return HttpResponse("لم يتم اعتمادك من قبل منصة نشء! فضلا أنشئ ملف أكاديميتك وانتظر الاعتماد.")
     else:
         return HttpResponse("غير مصرح لك")
+    
+def delete_video(request:HttpRequest,video_id):
+    video=ProgramVideo.objects.get(pk=video_id)
+    video.delete()
+    return redirect(request.GET.get('next','/'))
+def delete_image(request:HttpRequest,image_id):
+    image=ProgramImage.objects.get(pk=image_id)
+    image.delete()
+    return redirect(request.GET.get('next','/'))
