@@ -529,6 +529,7 @@ def subscribers_view(request, user_id):
     if request.user.is_authenticated:
         academy = AcademyProfile.objects.filter(user=User.objects.get(pk=user_id)).first()
         if academy:
+
             if request.user.id == int(user_id) and academy.approved:
                 # Get search term and status from GET parameters
                 search_term = request.GET.get('search', '')
@@ -540,6 +541,10 @@ def subscribers_view(request, user_id):
                 # Apply status filter if it's not 'all'
                 if selected_status and selected_status != 'all':
                     query &= Q(status=selected_status)
+
+            if  request.user.id==int(academy.user.id) and academy.approved==True: 
+                subscribers = Enrollment.objects.filter(Q(time_slot__program__branch__academy=academy) & Q(cart__status='Paid'))
+
                 
                 # Apply search filter if search term is provided
                 if search_term:

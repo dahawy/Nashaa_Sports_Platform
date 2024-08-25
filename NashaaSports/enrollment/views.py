@@ -3,7 +3,7 @@ from django.contrib.auth import authenticate
 from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest
 from academy.models import Program 
-from account.models import UserProfile
+from account.models import UserProfile, AcademyProfile
 from academy.models import TimeSlot
 from enrollment.models import Enrollment
 from django.contrib import messages
@@ -14,7 +14,7 @@ from django.core.mail import EmailMessage
 @login_required(login_url="account:log_in")
 def enroll_in_program_view(request:HttpRequest, program_id, user_id):
     programs = Program.objects.get(id=program_id)
-    user = UserProfile.objects.get(id=user_id)
+    user = UserProfile.objects.get(user_id=user_id)
     time_slots = TimeSlot.objects.filter(program=programs)
     if not request.user.is_authenticated:
         messages.error(request, "نرجوا منك التسجيل لإكمال الاشتراك")
