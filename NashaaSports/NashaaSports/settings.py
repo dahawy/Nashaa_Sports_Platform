@@ -79,6 +79,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'main.context_processors.cart_data',
             ],
         },
     },
@@ -102,7 +103,7 @@ DATABASES = {
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'nashaa_db',
+#         'NAME': 'nashaa_sport_db',
 #         'USER': 'postgres', 
 #         'PASSWORD': '',
 #         'HOST': 'localhost'

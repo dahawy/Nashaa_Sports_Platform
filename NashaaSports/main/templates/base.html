@@ -35,10 +35,12 @@
           </div>
           {% endfor %}{%endif%}
     <nav
-      class="py-5 border-b-default border-solid border-gray-200 z-10 w-full bg-inherit lg:fixed"
+      class="py-5 border-b-default border-solid  border-gray-200 z-20 w-full bg-inherit lg:fixed"
       id="topnav"
     >
-      <div class="mx-auto max-w-7xl  lg:px-8">
+      <div 
+       style="background-color: #fffcfc;"
+      class="mx-auto max-w-7xl  lg:px-8">
         <div class="w-full flex flex-col lg:flex-row">
           <div class="flex justify-between lg:hidden px-4">
             <button
@@ -84,13 +86,6 @@
               </li>
               <li>
                 <a
-                  href="javascript:;"
-                  class="text-gray-500 text-sm font-medium hover:text-prime-blue-700 transition-all duration-500 mb-2 block lg:mr-6 lg:text-base md:mb-0 md:mr-3 hover:text-gray-900"
-                  >من نحن</a
-                >
-              </li>
-              <li>
-                <a
                   href="{% url 'main:programs_view' %}"
                   class="text-gray-500 text-sm font-medium hover:text-prime-blue-700 transition-all duration-500 mb-2 block lg:mr-6 lg:text-base md:mb-0 md:mr-3 hover:text-gray-900"
                   >البرامج</a
@@ -101,6 +96,13 @@
                   href="{%url 'contactUs:customer_query_view'%}"
                   class="text-gray-500 text-sm font-medium hover:text-prime-blue-700 transition-all duration-500 mb-2 block lg:mr-6 lg:text-base md:mb-0 md:mr-3 hover:text-gray-900"
                   >تواصل معنا</a
+                >
+              </li>
+              <li>
+                <a
+                  href="javascript:;"
+                  class="text-gray-500 text-sm font-medium hover:text-prime-blue-700 transition-all duration-500 mb-2 block lg:mr-6 lg:text-base md:mb-0 md:mr-3 hover:text-gray-900"
+                  >من نحن</a
                 >
               </li>
               <li class="relative">
@@ -176,11 +178,10 @@
                 {% else %}
                 <li>
                     <a href="{% url 'account:profile_view' user.id %}" class="block py-2 px-4 text-sm hover:bg-gray-100 light:hover:bg-gray-600 light:text-gray-400 light:hover:text-white">حسابي الشخصي</a>
-                    <a href="{% url 'moderator:moderator_dashboard_view'  %}" class="block py-2 px-4 text-sm hover:bg-gray-100 light:hover:bg-gray-600 light:text-gray-400 light:hover:text-white">لوحة التحكم</a>
+                    <a href="{% url 'moderator:moderator_dashboard_view' 30 %}" class="block py-2 px-4 text-sm hover:bg-gray-100 light:hover:bg-gray-600 light:text-gray-400 light:hover:text-white">لوحة التحكم</a>
                 </li>
                     {% endif %}
                     <li>
-
                 </li>
                 <li>
                   <a
@@ -203,6 +204,7 @@
                   >
                 </li>
               </ul>
+</div>
             </div>
             {%else%}
             <a href="{% url 'account:log_in'%}"
@@ -212,10 +214,96 @@
               </a>
             {%endif%}
             </div>
+            <!-- Cart Button -->
             {% block cart_items %}
-            
-            {% endblock%}        <!-- Cart Button -->
-       
+              <div class="flex items-center lg:space-x-2">
+                <button 
+                  id="myCartDropdownButton1"
+                  data-dropdown-toggle="myCartDropdown1"
+                  type="button"
+                  class="relative z-10 flex items-center p-2 text-black bg-gray-100 border border-transparent rounded-full hover:text-gray-700 focus:outline-none focus:text-gray-700">
+                  {%if request.user.is_authenticated%}
+                  <span class="absolute top-0 right-0 px-2.5 py-1  ml-2  text-xs font-bold leading-none text-white transform translate-x-1/2 -translate-y-1/2 bg-[#ED786A] rounded-full">{{count_item}} </span>
+                  {%else%}
+                  <span class="absolute top-0 right-0 px-2.5 py-1  ml-2  text-xs font-bold leading-none text-white transform translate-x-1/2 -translate-y-1/2 bg-[#ED786A] rounded-full">0</span>
+                  {%endif%}
+                  <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                  </svg>
+                </button>
+                <div
+                  id="myCartDropdown1"
+                  class="hidden z-10  bg-white mx-auto max-w-sm space-y-4 overflow-hidden rounded-lg p-4 antialiased shadow-lg "
+                >
+                  {% if carts %} {% for enrollment in enrollments %}
+                  <div class="flex flex-row items-center">
+                     <div class="ml-5 w-16 h-16 mx-auto border border-gray-200 rounded-md">
+                        <img class="object-cover w-full h-full rounded-md" src="{{ enrollment.program.programimage_set.first.image.url }}" alt="A beautiful and stylish red dress with a floral print, perfect for a summer day or a night out.">
+                      </div>
+                    <div class="flex flex-col">
+                      <a
+                        href="{% url 'main:program_detail_view' enrollment.program.id%}"
+                        class="truncate pb-4 text-sm font-semibold leading-none text-black-900 hover:underline"
+                        >{{ enrollment.program.program_name }}</a
+                      >
+                      <p> الأسم: {{enrollment.first_name}} {{enrollment.last_name}} </p>
+                      <p>رقم الهوية: {{enrollment.id_number}} </p>
+                    </div>
+                    <div class="flex items-center justify-end gap-6">
+                      <p
+                        class="text-sm font-normal leading-none text-gray-500 light:text-gray-400"
+                      >
+                        SR
+                        {{ enrollment.program.fees }}
+                      </p>
+                      <button
+                        data-tooltip-target="tooltipRemoveItem1a"
+                        type="button"
+                        class="text-red-600 hover:text-red-700 light:text-red-500 light:hover:text-red-600"
+                      >
+                        <span class="sr-only"> Remove </span>
+                        <svg
+                          class="h-4 w-4"
+                          aria-hidden="true"
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            fill-rule="evenodd"
+                            d="M2 12a10 10 0 1 1 20 0 10 10 0 0 1-20 0Zm7.7-3.7a1 1 0 0 0-1.4 1.4l2.3 2.3-2.3 2.3a1 1 0 1 0 1.4 1.4l2.3-2.3 2.3 2.3a1 1 0 0 0 1.4-1.4L13.4 12l2.3-2.3a1 1 0 0 0-1.4-1.4L12 10.6 9.7 8.3Z"
+                            clip-rule="evenodd"
+                          />
+                        </svg>
+                      </button>
+                      <div
+                        id="tooltipRemoveItem1a"
+                        role="tooltip"
+                        class="tooltip invisible absolute z-10 inline-block rounded-lg bg-gray-900 px-3 py-2 text-sm font-medium text-white opacity-0 shadow-sm transition-opacity duration-300 light:bg-gray-700"
+                      >
+                        Remove item
+                        <div class="tooltip-arrow" data-popper-arrow></div>
+                      </div>
+                    </div>
+                  </div>
+                  {%endfor%}
+                <hr class="border-gray-400" >
+                  <p>مجموع السلة: {{ total_fees }} SR</p>
+                  <a
+                    href="{% url 'cart:cart_summary_view' carts.id%}"
+                    title=""
+                    class="mb-2 me-2 inline-flex w-full items-center justify-center rounded-lg bg-primary-700 px-5 py-2.5 text-sm font-semibold text-center text-white bg-[#ED786A] hover:bg-[#f05e4e]"
+                    role="button"
+                  >
+                    إتمام عملية الشراء
+                  </a>
+                  {% else %}
+                  <p>السلة فارغة</p>
+                  {% endif %}
+                    
+                </div>
+            </div>
+            {% endblock%}        
         </div>
       </div>
 </nav>

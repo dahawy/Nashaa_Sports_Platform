@@ -30,17 +30,6 @@ def superuser_required(view_func):
         return view_func(request, *args, **kwargs)
     return _wrapped_view_func
 
-superuser_required
-def moderator_dashboard_view(request:HttpRequest):
-    if request.user.is_superuser:
-        academies = AcademyProfile.objects.filter(approved=True)
-        programs = Program.objects.all()
-        subscribers = Enrollment.objects.all()
-        users = User.objects.all()
-        return render(request,"moderator/moderator_dashboard.html",{'academies': academies, 'programs': programs,'subscribers':subscribers, 'users': users})
-    else:
-        return HttpResponse("You are not authorized!")
-
 
 @superuser_required
 def customers_queries_view(request: HttpRequest, status):
@@ -164,32 +153,66 @@ def deactivate_program_view(request: HttpRequest,academy_id):
         
 
 @superuser_required
-def sales_view(request: HttpRequest, days_ago: int):
-    # Get today's date and calculate the date 30 days ago
-    today = timezone.now().date()
-    date_days_ago = today - timedelta(days=days_ago)
+def moderator_dashboard_view(request:HttpRequest, days_ago: int):
+    if request.user.is_superuser:    
+        if int(days_ago) == 30 or 90:
+            academies = AcademyProfile.objects.filter(approved=True)
+            programs = Program.objects.all()
+            subscribers = Enrollment.objects.all()
+            users = User.objects.all()
+            
+            # Get today's date and calculate the date 30 or 90 days ago
+            today = timezone.now().date()
+            date_days_ago = today - timedelta(days=days_ago)
+            # Query to get enrollments for the football category in the specified period with associated payments
+            football_payments = Enrollment.objects.filter(
+                program__sport_category=Program.SportChoices.FOOTBALL,
+                cart__payment__status=True,  #status=True means payment completed
+                cart__payment__payment_date__range=[date_days_ago, today]
+            )
 
-    # Query to get enrollments for the football category in the last 30 days with associated payments
-    football_payments = Enrollment.objects.filter(
-        program__sport_category=Program.SportChoices.FOOTBALL,
-        cart__payment__status=True,  #status=True means payment completed
-        cart__payment__payment_date__range=[date_days_ago, today]
-    )
+            # Query to get enrollments for the volleyball category in the specified period with associated payments
+            volleyball_payments = Enrollment.objects.filter(
+                program__sport_category=Program.SportChoices.VOLLEYBALL,
+                cart__payment__status=True,  #status=True means payment completed
+                cart__payment__payment_date__range=[date_days_ago, today]
+            )
 
-    # Aggregate fees by payment date
-    aggregated_payments = football_payments.values('cart__payment__payment_date').annotate(total_sales=Sum('program__fees')).order_by('cart__payment__payment_date')
+            if football_payments or volleyball_payments:
+                try:
+                    # Aggregate fees by payment date
+                    football_aggregated_payments = football_payments.values('cart__payment__payment_date').annotate(total_sales=Sum('program__fees')).order_by('cart__payment__payment_date')
+                    volleyball_aggregated_payments = volleyball_payments.values('cart__payment__payment_date').annotate(total_sales=Sum('program__fees')).order_by('cart__payment__payment_date')
+                    # Prepare the salesList and datesList
+                    football_salesList = [float(item['total_sales']) for item in football_aggregated_payments]
+                    football_datesList = [format_date(item['cart__payment__payment_date'], format='dd MMMM', locale='ar') for item in football_aggregated_payments]
 
-    # Prepare the salesList and datesList
-    salesList = [float(item['total_sales']) for item in aggregated_payments]
-    datesList = [format_date(item['cart__payment__payment_date'], format='dd MMMM', locale='ar') for item in aggregated_payments]
+                    volleyball_salesList = [float(item['total_sales']) for item in volleyball_aggregated_payments]
+                    volleyball_datesList = [format_date(item['cart__payment__payment_date'], format='dd MMMM', locale='ar') for item in volleyball_aggregated_payments]
 
+                    if len(football_datesList) >= len(volleyball_datesList):
+                        datesList = football_datesList
+                    else:
+                        datesList = volleyball_datesList
 
-    context = {
-        'salesList': mark_safe(json.dumps(salesList)),
-        'datesList': mark_safe(json.dumps(datesList)), 
-    }
-    print(salesList)
-    print(datesList)
-    # Now salesList contains the summed fees for each day, and datesList contains the corresponding dates in Arabic.
+                    context = {
+                        'football_salesList': mark_safe(json.dumps(football_salesList)),
+                        'volleyball_salesList': mark_safe(json.dumps(volleyball_salesList)),
+                        'datesList': mark_safe(json.dumps(datesList)),
+                        'sales_total': sum(football_salesList) + sum(volleyball_salesList),
+                        'academies': academies,
+                        'programs': programs,
+                        'subscribers':subscribers, 
+                        'users': users
+                    }
+                    # Now salesList contains the summed fees for each day, and datesList contains the corresponding dates in Arabic.
 
-    return render(request, 'moderator/moderator_dashboard.html', context)
+                    return render(request, 'moderator/moderator_dashboard.html', context)
+                except Exception as e:
+                    messages.success(request,f"حدث خطأ: {e}", extra_tags="alert-red")
+            else:
+                return redirect('moderator:moderator_dashboard_view',days_ago=0)
+                messages.success(request,"ليس هناك مبيعات في الفترةالمحددة", extra_tags="alert-red")
+    else:
+        return HttpResponse("You are not authorized!")
+

@@ -1,110 +1,72 @@
-{% extends 'base.html' %}
-
-{% block title %} الرئيسية  {% endblock %}
-
-{% block cart_items %}
- <div class="flex items-center lg:space-x-2">
-        <button id="myCartDropdownButton1" data-dropdown-toggle="myCartDropdown1" type="button" class="inline-flex items-center rounded-lg justify-center p-2 text-black hover:bg-gray-100" >
-          <svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#000000"><path d="M284.53-80.67q-30.86 0-52.7-21.97Q210-124.62 210-155.47q0-30.86 21.98-52.7Q253.95-230 284.81-230t52.69 21.98q21.83 21.97 21.83 52.83t-21.97 52.69q-21.98 21.83-52.83 21.83Zm400 0q-30.86 0-52.7-21.97Q610-124.62 610-155.47q0-30.86 21.98-52.7Q653.95-230 684.81-230t52.69 21.98q21.83 21.97 21.83 52.83t-21.97 52.69q-21.98 21.83-52.83 21.83ZM238.67-734 344-515.33h285.33l120-218.67H238.67ZM206-800.67h589.38q22.98 0 34.97 20.84 11.98 20.83.32 41.83L693.33-490.67q-11 19.34-28.87 30.67-17.87 11.33-39.13 11.33H324l-52 96h487.33V-286H278q-43 0-63-31.83-20-31.84-.33-68.17l60.66-111.33-149.33-316H47.33V-880h121.34L206-800.67Zm138 285.34h285.33H344Z"/></svg>
-        </button>
-        
-        <div id="myCartDropdown1" class="hidden z-10 mx-auto max-w-sm space-y-4 overflow-hidden rounded-lg bg-white p-4 antialiased shadow-lg light:bg-gray-800">
-          {% if carts %}
-          {% for enrollment in enrollments %}
-          <div class="grid grid-cols-2">
-            <div>
-              <a href="#" class="truncate text-sm font-semibold leading-none text-black-900  hover:underline">{{ cart.program.program_name }}</a>
-              <p class="mt-0.5 truncate text-sm font-normal text-black-500 ">{{ enrollment.program.program_name  }}</p>
-            </div>
-      
-            <div class="flex items-center justify-end gap-6">
-              <p class="text-sm font-normal leading-none text-gray-500 light:text-gray-400">SR{{ enrollment.program.fees  }}</p>
-      
-              <button data-tooltip-target="tooltipRemoveItem1a" type="button" class="text-red-600 hover:text-red-700 light:text-red-500 light:hover:text-red-600">
-                <span class="sr-only"> Remove </span>
-                <svg class="h-4 w-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-                  <path fill-rule="evenodd" d="M2 12a10 10 0 1 1 20 0 10 10 0 0 1-20 0Zm7.7-3.7a1 1 0 0 0-1.4 1.4l2.3 2.3-2.3 2.3a1 1 0 1 0 1.4 1.4l2.3-2.3 2.3 2.3a1 1 0 0 0 1.4-1.4L13.4 12l2.3-2.3a1 1 0 0 0-1.4-1.4L12 10.6 9.7 8.3Z" clip-rule="evenodd" />
-                </svg>
-              </button>
-              <div id="tooltipRemoveItem1a" role="tooltip" class="tooltip invisible absolute z-10 inline-block rounded-lg bg-gray-900 px-3 py-2 text-sm font-medium text-white opacity-0 shadow-sm transition-opacity duration-300 light:bg-gray-700">
-                Remove item
-                <div class="tooltip-arrow" data-popper-arrow></div>
-              </div>
-            </div>
-          </div>
-          {%endfor%}
-          <a href="{% url 'cart:cart_summary_view' carts.id%}" title="" class="mb-2 me-2 inline-flex w-full items-center justify-center rounded-lg bg-primary-700 px-5 py-2.5 text-sm font-semibold text-center text-white  bg-indigo-600 shadow-xs hover:bg-indigo-700 transition-all duration-500 " role="button"> Proceed to Checkout </a>
-          {% else %}
-          <p>No items in cart.</p>
-          {% endif %}
-        </div>
-          </div>
-{% endblock%}
+{% extends 'base.html' %} {% block title %} الرئيسية {% endblock %} 
 
 {% block content %}
-
-<section class="pt-8 lg:pt-32 bg-[url('https://pagedone.io/asset/uploads/1702362010.png')] h-screen bg-center bg-cover"
+<section
+  class="pt-8 lg:pt-32 h-screen bg-gradient-to-br from-orange-50 to-white bg-white bg-center bg-cover"
+>
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative text-center">
+    <h1
+      class="max-w-2xl mx-auto text-center font-manrope font-bold text-4xl text-gray-900 mb-5 md:text-5xl leading-[50px]"
     >
-    
-      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative text-center">
-      
-        <h1
-          class="max-w-2xl mx-auto text-center font-manrope font-bold text-4xl text-gray-900 mb-5 md:text-5xl leading-[50px]"
-        >
-        <span class="text-indigo-600">نشـ ء </span>
-          المنصة الأولى لجميع الاكاديميات و النوادي الرياضية
-        </h1>
-        <p
-          class="max-w-sm mx-auto text-center text-base font-normal leading-7 text-gray-500 mb-9"
-        >
-          سجل معنا لتصفح الأكاديميات والنوادي الرياضية في منطقتك
-        </p>
-        <a
-          href=""
-          class="w-full md:w-auto mb-14 inline-flex items-center justify-center py-3 px-7 text-base font-semibold text-center text-white rounded-full bg-indigo-600 shadow-xs hover:bg-indigo-700 transition-all duration-500"
-        >
-          إنشاء حساب
-          
-            <path
-              d="M7.5 15L11.0858 11.4142C11.7525 10.7475 12.0858 10.4142 12.0858 10C12.0858 9.58579 11.7525 9.25245 11.0858 8.58579L7.5 5"
-              stroke="white"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
-          </svg>
-        </a>
-        <div class="flex justify-center">
-          
-        </div>
-      </div>
+      <span class="text-[#ED786A]">نشـ ء </span>
+      المنصة الأولى لجميع الاكاديميات و النوادي الرياضية
+    </h1>
+    <p
+      class="max-w-sm mx-auto text-center text-base font-normal leading-7 text-gray-500 mb-9"
+    >
+      سجل معنا لتصفح الأكاديميات والنوادي الرياضية في منطقتك
+    </p>
+    <a
+      href=""
+      class="w-full md:w-auto mb-14 inline-flex items-center justify-center py-3 px-7 text-base font-semibold text-center text-white rounded-full transition-all duration-500 bg-[#ED786A]"
+    >
+      إنشاء حساب
+     
+    </a>
+  </div>
 </section>
-<section>
-  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+<section class="g-gradient-to-br from-orange-50 to-white bg-white">
+  <div
+    class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
+  >
     {% for program in programs %}
-    <a href="{%url 'main:program_detail_view' program.id %}"> 
-      <div class="bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300 hover:scale-105">
-        {% with first_image=program.programimage_set.first %}
-          {% if first_image %}
-            <img src="{{ first_image.image.url }}" alt="{{ program.program_name }}" class="w-full h-48 object-contain">
-          {% else %}
-            <div class="w-full h-48 bg-gray-200 flex items-center justify-center">No Image Available</div>
-          {% endif %}
-        {% endwith %}
+    <a href="{%url 'main:program_detail_view' program.id %}">
+      <div
+        class="bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300 hover:scale-105"
+      >
+        {% with first_image=program.programimage_set.first %} {% if first_image %}
+        <img
+          src="{{ first_image.image.url }}"
+          alt="{{ program.program_name }}"
+          class="w-full h-48 object-contain"
+        />
+        {% else %}
+        <div class="w-full h-48 bg-gray-200 flex items-center justify-center">
+          No Image Available
+        </div>
+        {% endif %} {% endwith %}
         <div class="p-4">
-          <h3 class="text-lg font-semibold mb-2">{{program.program_name}} </h3>
-          <p class="text-gray-700">سعر الأشتراك  :{{program.fees}}</p>
-          <p class="text-gray-700"> :المدة  {{program.start_date}} - {{program.end_date}}</p>
+          <h3 class="text-lg font-semibold mb-2">{{program.program_name}}</h3>
+          <p class="text-gray-700">سعر الأشتراك :{{program.fees}}</p>
+          <p class="text-gray-700">
+            :المدة {{program.start_date}} - {{program.end_date}}
+          </p>
           <p class="text-gray-700">{{program.sport_category}}</p>
-          <p class="text-red-700"> ينتهي التسجيل     :{{program.registration_end_date}}</p>
+          <p class="text-red-700">
+            ينتهي التسجيل :{{program.registration_end_date}}
+          </p>
           <div class="mt-4">
-            <button class="bg-indigo-500 hover:bg-indigo-600 text-white py-2 px-4 rounded-md transition-colors duration-300">Buy Now</button>
+            <button
+              class="bg-indigo-500 hover:bg-indigo-600 text-white py-2 px-4 rounded-md transition-colors duration-300"
+            >
+              Buy Now
+            </button>
           </div>
         </div>
       </div>
     </a>
-{% endfor %}
-</div>
+    {% endfor %}
+  </div>
 </section>
 
 {% endblock %}
