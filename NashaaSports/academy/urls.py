@@ -24,4 +24,5 @@ urlpatterns = [
     path('coaches/list/<academy_id>',views.coach_list_view,name="coach_list_view"),
     path('coach/delete/<coach_id>',views.delete_coach_view,name="delete_coach_view"),
     path('coach/update/<coach_id>',views.update_coach_view,name="update_coach_view"),
+    path('subscribers/<user_id>',views.subscribers_view,name="subscribers_view"),
 ]
