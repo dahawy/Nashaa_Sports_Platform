@@ -9,18 +9,26 @@ from datetime import datetime, timedelta
 from django.contrib import messages
 from django.db import transaction
 from django.db.models.functions import Cast ,Round
-from django.db.models import Avg ,IntegerField,FloatField
+from django.db.models import Avg ,IntegerField,FloatField ,Q
 from django.db.models.functions import ExtractDay
 from django.db.models import F, ExpressionWrapper
+from enrollment.models import Enrollment
 
 
 
 def acadmey_dashboard_view(request:HttpRequest,user_id):
     if request.user.is_authenticated:
         acadmey=AcademyProfile.objects.filter(user=User.objects.get(pk=user_id)).first()
+        branches=Branch.objects.filter(academy=acadmey)
+        programs=Program.objects.filter(branch__academy=acadmey)
+        coaches=Coach.objects.filter(branch__academy=acadmey)
+        enrollments=Enrollment.objects.filter(Q(program__branch__academy=acadmey) & Q(cart__status='Paid') )
+        enrollments_ended=enrollments.filter(status="ended")
+        enrollments_in_progress=enrollments.filter(status='in_progress')
+        enrollments_pending=enrollments.filter(status="pending")
         if acadmey:
             if  request.user.id==int(user_id) and acadmey.approved==True: 
-                context={"acadmey":acadmey}
+                context={"academy":acadmey,'programs':programs,'branches':branches,'enrollments':enrollments,'enrollments_ended':enrollments_ended,'enrollments_in_progress':enrollments_in_progress,'enrollments_pending':enrollments_pending,'coaches':coaches}
                 return render(request,"academy/dashboard.html",context)
             else:
                 return HttpResponse(f"غير مصرح لك")
@@ -369,6 +377,12 @@ def update_media_view(request:HttpResponse,program_id):
     status=False
     image_urls = []
     video_urls = []
+    prev_imgs=ProgramImage.objects.filter(program=program)
+    prev_vids=ProgramVideo.objects.filter(program=program)
+    for image in prev_imgs:
+                image_urls.append(image.image.url)
+    for vide in prev_vids:
+                image_urls.append(vide.video.url)
     if request.method == 'POST':
         images = request.FILES.getlist('images')  
         videos = request.FILES.getlist('videos')  
@@ -376,8 +390,9 @@ def update_media_view(request:HttpResponse,program_id):
         if not images and not videos:
             messages.error(request, "يرجى رفع ملفات الصور أو الفيديو.","red")
         program = get_object_or_404(Program, id=program_id)
-
+        
         with transaction.atomic():
+            
             for image in images:
                 img_instance = ProgramImage.objects.create(program=program, image=image)
                 image_urls.append(img_instance.image.url)
@@ -390,10 +405,12 @@ def update_media_view(request:HttpResponse,program_id):
         images_str = ', '.join(image_urls) if image_urls else None
         videos_str = ', '.join(video_urls) if video_urls else None
         print(image_urls,video_urls)
-        messages.success(request, f"تم انشاء البرنامج بنجاح", extra_tags="green")
+        
         if 'save_project' in request.POST:
+            messages.success(request, f"تم انشاء البرنامج بنجاح", extra_tags="green")
             return redirect('academy_dashboard_view',user_id=request.user)  
-    return render(request, 'academy/add_media.html', {'program_id': program_id,"status":status,"image_urls":image_urls,"video_urls":video_urls,'videos':videos,'images':images} )
+
+    return render(request, 'academy/update_media.html', {'program_id': program_id,"status":status,"image_urls":image_urls,"video_urls":video_urls,'videos':videos,'images':images} )
 def branches_list_view(request:HttpRequest,user_id):
     if request.user.is_authenticated:
         academy=AcademyProfile.objects.get(user=User.objects.get(pk=user_id))
@@ -508,4 +525,43 @@ def update_coach_view(request:HttpResponse,coach_id):
             return HttpResponse("غير مصرح لك")
 
 
+def subscribers_view(request, user_id):
+    if request.user.is_authenticated:
+        academy = AcademyProfile.objects.filter(user=User.objects.get(pk=user_id)).first()
+        if academy:
 
+            if request.user.id == int(user_id) and academy.approved:
+                # Get search term and status from GET parameters
+                search_term = request.GET.get('search', '')
+                selected_status = request.GET.get('status', '')
+
+                # Build the base query
+                query = Q(time_slot__program__branch__academy=academy) & Q(cart__status='Paid')
+
+                # Apply status filter if it's not 'all'
+                if selected_status and selected_status != 'all':
+                    query &= Q(status=selected_status)
+
+            if  request.user.id==int(academy.user.id) and academy.approved==True: 
+                subscribers = Enrollment.objects.filter(Q(time_slot__program__branch__academy=academy) & Q(cart__status='Paid'))
+
+                
+                # Apply search filter if search term is provided
+                if search_term:
+                    query &= (
+                        Q(first_name__icontains=search_term) |
+                        Q(father_name__icontains=search_term) |
+                        Q(last_name__icontains=search_term)
+                    )
+
+                # Apply the filters
+                subscribers = Enrollment.objects.filter(query)
+
+                # Render the template with filtered results
+                return render(request, "academy/subscribers.html", {'subscribers': subscribers})
+            else:
+                return HttpResponse("غير مصرح لك")
+        else:
+            return HttpResponse("لم يتم اعتمادك من قبل منصة نشء! فضلا أنشئ ملف أكاديميتك وانتظر الاعتماد.")
+    else:
+        return HttpResponse("غير مصرح لك")

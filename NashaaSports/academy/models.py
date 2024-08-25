@@ -126,7 +126,7 @@ class TimeSlot(models.Model):
     days = models.CharField(
         max_length=255,
         choices=DayChoices.choices,
-        default=None
+        default=None 
     )
 
 class ProgramImage(models.Model):
