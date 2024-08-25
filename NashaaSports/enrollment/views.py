@@ -7,6 +7,9 @@ from account.models import UserProfile
 from academy.models import TimeSlot
 from enrollment.models import Enrollment
 from django.contrib import messages
+from django.conf import settings
+
+from django.core.mail import EmailMessage
 
 @login_required(login_url="account:log_in")
 def enroll_in_program_view(request:HttpRequest, program_id, user_id):
@@ -84,3 +87,34 @@ def add_enrollment_view(request:HttpRequest):
             messages.error(request, f"حدث خطأ: {str(e)}")
     return render(request,"enrollment_page.html")
 
+def pending_enrollment_status_view(request:HttpRequest,enrollment_id:int):
+    enrollment=Enrollment.objects.get(pk=enrollment_id)
+    enrollment.status="pending"
+    subject = "تحديث حالة اشتراكك"
+    message = f"تم تحديث حالة اشتراكك بأسم {enrollment.first_name} {enrollment.last_name} الى جاري في برنامج {enrollment.program.program_name} من قبل ألاكاديمية"
+    recipient = enrollment.user.user.email 
+    email = EmailMessage(
+            subject,
+            message,
+            settings.EMAIL_HOST_USER,
+            [recipient],
+        )
+    enrollment.save()
+    email.send()
+    
+    return redirect(request.GET.get('next','/'))
+def in_progress_enrollment_status_view(request:HttpRequest,enrollment_id:int):
+    enrollment=Enrollment.objects.get(pk=enrollment_id)
+    enrollment.status="in_progress"
+    subject = "تحديث حالة اشتراكك"
+    message = f"تم تحديث حالة اشتراكك بأسم {enrollment.first_name} {enrollment.last_name} الى جاري في برنامج {enrollment.program.program_name} من قبل ألاكاديمية"
+    recipient = enrollment.user.user.email 
+    email = EmailMessage(
+            subject,
+            message,
+            settings.EMAIL_HOST_USER,
+            [recipient],
+        )
+    enrollment.save()
+    email.send()
+    return redirect(request.GET.get('next','/'))
