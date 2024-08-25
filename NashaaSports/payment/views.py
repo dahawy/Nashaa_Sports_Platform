@@ -5,6 +5,10 @@ from cart.models import Cart
 from payment.models import Payment
 from enrollment.models import Enrollment
 import datetime as datetime
+from django.contrib import messages
+from django.core.mail import EmailMessage
+from django.template.loader import render_to_string
+from django.conf import settings
 
 
 def process_payment(request, cart_id):
@@ -33,8 +37,16 @@ def process_payment(request, cart_id):
 
                 cart.status = Cart.CartStatus.Paid
                 cart.save()
+                content_html = render_to_string("mail/user_reg.html") #set email
+                send_to = payment.cart.user.user.email
+                print(send_to)
+                email_message = EmailMessage("Payment Confirmed", content_html, settings.EMAIL_HOST_USER, [send_to])
+                email_message.content_subtype = "html"
+                #email_message.connection = email_message.get_connection(True)
+                email_message.send()
 
                 messages.success(request, "Payment was successful!")
+            
             elif action == 'cancel':
                 cart.status = Cart.CartStatus.Cancelled
                 cart.save()
