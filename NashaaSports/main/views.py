@@ -12,27 +12,6 @@ import math
 from django.db.models import F, Q
 
 
-
-
-# def home_view(request:HttpRequest):
-
-#     programs = Program.objects.all()
-#     if request.user.is_authenticated:
-#         user = UserProfile.objects.get(user_id=request.user.id)
-#         carts = Cart.objects.filter(user=user, status='Active').first()
-#         enrollments = carts.enrollments.all() if carts else []
-#     else:
-#         carts = Cart.objects.filter(user=request.user.id, status='Active').first()
-#         enrollments = carts.enrollments.all() if carts else []
-
-
-#     context ={
-#         "programs":programs,
-#         "carts":carts,
-#         "enrollments":enrollments,
-#     }
-#     return render(request, "index.html",context)
-
 def home_view(request: HttpRequest):
     programs = Program.objects.all()
 
@@ -51,8 +30,8 @@ def home_view(request: HttpRequest):
                 enrollments = carts.enrollments.all() if carts else []
             elif hasattr(request.user, 'academyprofile'):
                 academy_profile = AcademyProfile.objects.get(user_id=request.user.id)
-                # Handle academy-specific logic here, if needed
-                # For example, you might want to display programs they offer or manage
+                # return redirect(request,"academy:acadmey_dashboard_view")
+
             else:
                 # Handle any other types of profiles, if necessary
                 pass
@@ -68,6 +47,7 @@ def home_view(request: HttpRequest):
         # Add any other context data needed for the academy
     }
     return render(request, "index.html", context)
+
 def programs_view(request:HttpRequest):
     search_query = request.GET.get('search', '')
     price_filter = request.GET.get('price', '')
