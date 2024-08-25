@@ -168,7 +168,7 @@ def moderator_dashboard_view(request:HttpRequest, days_ago: int):
             football_payments = Enrollment.objects.filter(
                 program__sport_category=Program.SportChoices.FOOTBALL,
                 cart__payment__status=True,  #status=True means payment completed
-                cart__payment__payment_date__range=[date_days_ago, today]
+                cart__payment__payment_date__range=[date_days_ago, today + timedelta(days=2)]
             )
 
             # Query to get enrollments for the volleyball category in the specified period with associated payments
@@ -178,41 +178,39 @@ def moderator_dashboard_view(request:HttpRequest, days_ago: int):
                 cart__payment__payment_date__range=[date_days_ago, today]
             )
 
-            if football_payments or volleyball_payments:
-                try:
-                    # Aggregate fees by payment date
-                    football_aggregated_payments = football_payments.values('cart__payment__payment_date').annotate(total_sales=Sum('program__fees')).order_by('cart__payment__payment_date')
-                    volleyball_aggregated_payments = volleyball_payments.values('cart__payment__payment_date').annotate(total_sales=Sum('program__fees')).order_by('cart__payment__payment_date')
-                    # Prepare the salesList and datesList
-                    football_salesList = [float(item['total_sales']) for item in football_aggregated_payments]
-                    football_datesList = [format_date(item['cart__payment__payment_date'], format='dd MMMM', locale='ar') for item in football_aggregated_payments]
+            try:
+                # Aggregate fees by payment date
+                football_aggregated_payments = football_payments.values('cart__payment__payment_date').annotate(total_sales=Sum('program__fees')).order_by('cart__payment__payment_date')
+                volleyball_aggregated_payments = volleyball_payments.values('cart__payment__payment_date').annotate(total_sales=Sum('program__fees')).order_by('cart__payment__payment_date')
+                # Prepare the salesList and datesList
+                football_salesList =[]
+                football_salesList = [float(item['total_sales']) for item in football_aggregated_payments]
+                football_datesList = [format_date(item['cart__payment__payment_date'], format='dd MMMM', locale='ar') for item in football_aggregated_payments]
+                volleyball_datesList =[]
+                volleyball_salesList = [float(item['total_sales']) for item in volleyball_aggregated_payments]
+                volleyball_datesList = [format_date(item['cart__payment__payment_date'], format='dd MMMM', locale='ar') for item in volleyball_aggregated_payments]
+                datesList = []
+                if len(football_datesList) >= len(volleyball_datesList):
+                    datesList = football_datesList
+                else:
+                    datesList = volleyball_datesList
 
-                    volleyball_salesList = [float(item['total_sales']) for item in volleyball_aggregated_payments]
-                    volleyball_datesList = [format_date(item['cart__payment__payment_date'], format='dd MMMM', locale='ar') for item in volleyball_aggregated_payments]
+                context = {
+                    'football_salesList': mark_safe(json.dumps(football_salesList)),
+                    'volleyball_salesList': mark_safe(json.dumps(volleyball_salesList)),
+                    'datesList': mark_safe(json.dumps(datesList)),
+                    'sales_total': sum(football_salesList) + sum(volleyball_salesList),
+                    'academies': academies,
+                    'programs': programs,
+                    'subscribers':subscribers, 
+                    'users': users
+                }
+                # Now salesList contains the summed fees for each day, and datesList contains the corresponding dates in Arabic.
 
-                    if len(football_datesList) >= len(volleyball_datesList):
-                        datesList = football_datesList
-                    else:
-                        datesList = volleyball_datesList
-
-                    context = {
-                        'football_salesList': mark_safe(json.dumps(football_salesList)),
-                        'volleyball_salesList': mark_safe(json.dumps(volleyball_salesList)),
-                        'datesList': mark_safe(json.dumps(datesList)),
-                        'sales_total': sum(football_salesList) + sum(volleyball_salesList),
-                        'academies': academies,
-                        'programs': programs,
-                        'subscribers':subscribers, 
-                        'users': users
-                    }
-                    # Now salesList contains the summed fees for each day, and datesList contains the corresponding dates in Arabic.
-
-                    return render(request, 'moderator/moderator_dashboard.html', context)
-                except Exception as e:
-                    messages.success(request,f"حدث خطأ: {e}", extra_tags="alert-red")
-            else:
-                return redirect('moderator:moderator_dashboard_view',days_ago=0)
-                messages.success(request,"ليس هناك مبيعات في الفترةالمحددة", extra_tags="alert-red")
+                return render(request, 'moderator/moderator_dashboard.html', context)
+            except Exception as e:
+                messages.success(request,f"حدث خطأ: {e}", extra_tags="alert-red")
+            
     else:
         return HttpResponse("You are not authorized!")
 

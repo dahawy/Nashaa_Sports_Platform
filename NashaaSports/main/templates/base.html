@@ -180,12 +180,12 @@
                     <a href="{% url 'account:profile_view' user.id %}" class="block py-2 px-4 text-sm hover:bg-gray-100 light:hover:bg-gray-600 light:text-gray-400 light:hover:text-white">حسابي الشخصي</a>
                     <a href="{% url 'moderator:moderator_dashboard_view' 30 %}" class="block py-2 px-4 text-sm hover:bg-gray-100 light:hover:bg-gray-600 light:text-gray-400 light:hover:text-white">لوحة التحكم</a>
                 </li>
-                    {% endif %}
+                {% endif %}
                     <li>
                 </li>
                 <li>
                   <a
-                    href=""
+                    href="{% url 'enrollment:my_enrollment_view' user.id%}"
                     class="block py-2 px-4 text-sm hover:bg-gray-100 light:hover:bg-gray-600 light:text-gray-400 light:hover:text-white"
                     >اشتراكاتي</a
                   >
@@ -208,7 +208,7 @@
             </div>
             {%else%}
             <a href="{% url 'account:log_in'%}"
-                class="bg-indigo-50 text-indigo-600 rounded-full cursor-pointer font-semibold text-center shadow-xs transition-all duration-500 py-3 px-6 text-sm hover:bg-indigo-100"
+                class="text-white bg-[#ED786A] hover:bg-[#f05e4e] rounded-full cursor-pointer font-semibold text-center shadow-xs transition-all duration-500 py-3 px-6 text-sm"
               >
                 تسجيل دخول 
               </a>
@@ -222,7 +222,7 @@
                   data-dropdown-toggle="myCartDropdown1"
                   type="button"
                   class="relative z-10 flex items-center p-2 text-black bg-gray-100 border border-transparent rounded-full hover:text-gray-700 focus:outline-none focus:text-gray-700">
-                  {%if request.user.is_authenticated%}
+                  {%if request.user.is_authenticated and not request.user.is_staff%}
                   <span class="absolute top-0 right-0 px-2.5 py-1  ml-2  text-xs font-bold leading-none text-white transform translate-x-1/2 -translate-y-1/2 bg-[#ED786A] rounded-full">{{count_item}} </span>
                   {%else%}
                   <span class="absolute top-0 right-0 px-2.5 py-1  ml-2  text-xs font-bold leading-none text-white transform translate-x-1/2 -translate-y-1/2 bg-[#ED786A] rounded-full">0</span>
@@ -237,7 +237,7 @@
                 >
                   {% if carts %} {% for enrollment in enrollments %}
                   <div class="flex flex-row items-center">
-                     <div class="ml-5 w-16 h-16 mx-auto border border-gray-200 rounded-md">
+                    <div class="ml-5 w-16 h-16 mx-auto border border-gray-200 rounded-md">
                         <img class="object-cover w-full h-full rounded-md" src="{{ enrollment.program.programimage_set.first.image.url }}" alt="A beautiful and stylish red dress with a floral print, perfect for a summer day or a night out.">
                       </div>
                     <div class="flex flex-col">
@@ -300,7 +300,6 @@
                   {% else %}
                   <p>السلة فارغة</p>
                   {% endif %}
-                    
                 </div>
             </div>
             {% endblock%}        

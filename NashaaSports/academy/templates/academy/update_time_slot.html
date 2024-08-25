@@ -103,7 +103,7 @@
     <div class="flex-col flex justify-center pt-5 gap-4 ">
         <h2 class="self-start">الفترات المضافة:</h2>
         {% for slot in program.timeslot_set.all %}
-        <div class="flex flex-row items-center  w-full shadow-gray-600 shadow-inner p-4 rounded-lg  ">
+        <div class="flex flex-row items-center  w-full shadow-md   p-4 rounded-lg  ">
 
             <button data-modal-target="popup-modal" data-modal-toggle="popup-modal" type="button"
                 class="text-xs text-red-600 hover:scale-110 duration-200 ease-linear">
@@ -117,7 +117,7 @@
             <div id="popup-modal" tabindex="-1"
                 class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
                 <div class="relative p-4 w-full max-w-md max-h-full">
-                    <div class="relative bg-white rounded-lg shadow ">
+                    <div class="relative bg-white rounded-lg  ">
                         <button type="button"
                             class="absolute top-3 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center "
                             data-modal-hide="popup-modal">
@@ -147,9 +147,19 @@
                 </div>
             </div>
             <div class="flex justify-center items-center w-full">
-                <h2 class="text-sm text-nowrap text-center">{{ slot.days }} من {{slot.start_time }} إلى {{ slot.end_time }} <br>
+               
+                <div class="rounded-lg  p-3 flex items-center gap-5 ">
+                     <!-- <h2 class="text-sm text-nowrap text-center">{{ slot.days }} من {{slot.start_time }} إلى {{ slot.end_time }} <br>
                     عدد المقاعد:{{slot.no_of_seats}}
-                </h2>
+                </h2> -->
+                    <div>
+                      
+                      <p class="text-sm text-gray-600  font-semibold">{{slot.start_time}}</p>
+                      <p class="text-sm text-gray-600  font-semibold">الى</p>
+                      <p class="text-sm text-gray-600  font-semibold">{{slot.end_time}}</p>
+                      <p class="text-sm text-gray-600  font-semibold">الأيام : {{ slot.days }}</p>
+                    </div>
+                  </div>
             </div>
             </div>
         
