@@ -1,0 +1,152 @@
+<button data-drawer-target="sidebar-multi-level-sidebar" data-drawer-toggle="sidebar-multi-level-sidebar" aria-controls="sidebar-multi-level-sidebar" type="button" class="inline-flex items-center p-2 mt-2 ms-3 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
+    <span class="sr-only">Open sidebar</span>
+    <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+    <path clip-rule="evenodd" fill-rule="evenodd" d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"></path>
+    </svg>
+ </button>
+
+<aside  id="sidebar-multi-level-sidebar" class="fixed top-0 gray  right-0 z-40 w-64 h-screen transition-transform translate-x-full sm:translate-x-0" aria-label="Sidebar">
+    
+    <div class="h-full px-3 py-4 overflow-y-auto shadow-lg bg-gray-50 " >
+       <div class="flex justify-center">
+          <a href="{% url 'main:home_view' %}" class="cursor-pointer">
+          <img
+               src="/media/logos/NLogo.png"
+               class="h-10"
+               alt="Nashaa Logo"
+             /></a>
+       </div>
+        <ul class="space-y-2 font-medium pt-20">
+           <li class="">
+              <a href="#" class="flex items-center p-2 text-gray-900 rounded-lg light:text-white hover:bg-gray-100 light:hover:bg-gray-700 group">
+                 <svg class="w-5 h-5 text-[#cd7868] transition duration-75   " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="#cd7868" viewBox="0 0 22 21">
+                    <path d="M16.975 11H10V4.025a1 1 0 0 0-1.066-.998 8.5 8.5 0 1 0 9.039 9.039.999.999 0 0 0-1-1.066h.002Z"/>
+                    <path d="M12.5 0c-.157 0-.311.01-.565.027A1 1 0 0 0 11 1.02V10h8.975a1 1 0 0 0 1-.935c.013-.188.028-.374.028-.565A8.51 8.51 0 0 0 12.5 0Z"/>
+                 </svg>
+                 <span class="ms-3">نظرة عامة</span>
+              </a>
+           </li>
+           <li>
+              <button type="button" class="flex items-center w-full p-2 text-base text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 light:text-white light:hover:bg-gray-700" aria-controls="dropdown-example" data-collapse-toggle="dropdown-example">
+                <div class="">
+                   <span class="material-symbols-outlined text-[#cd7868]" style="font-size: 28px; color: #cd7868;">
+                      surfing
+                      </span>
+                  </div>
+                    <span class="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">البرامج</span>
+                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                       <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                    </svg>
+              </button>
+              <ul id="dropdown-example" class="hidden py-2 space-y-2">
+                    <li>
+                       <a href="{% url 'academy:add_program_view' request.user.id %}" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 light:text-white light:hover:bg-gray-700">اضف برنامج</a>
+                    </li>
+ 
+                    <li>
+                       <a href="{% url 'academy:programs_list_view' %}" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 light:text-white light:hover:bg-gray-700">قائمة البرامج</a>
+                    </li>
+              </ul>
+           </li>
+           <li>
+             <button type="button" class="flex items-center w-full p-2 text-base text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 light:text-white light:hover:bg-gray-700" aria-controls="dropdown-example1" data-collapse-toggle="dropdown-example1">
+                <div class="">
+                   <span class="material-symbols-outlined text-[#cd7868]" style="font-size: 28px; color: #cd7868;">
+                      location_on
+                      </span>
+                  </div>
+                   <span class="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">الفروع</span>
+                   <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                      <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                   </svg>
+             </button>
+             <ul id="dropdown-example1" class="hidden py-2 space-y-2">
+                   <li>
+                      <a href="{% url 'academy:add_branch_view' request.user.id %}" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 light:text-white light:hover:bg-gray-700">اضف فرع</a>
+                   </li>
+                   <li>
+                      <a href="{% url 'academy:branches_list_view' request.user.id %}" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 light:text-white light:hover:bg-gray-700">قائمة الفروع</a>
+                   </li>
+             </ul>
+          </li>
+          <li>
+             <button type="button" class="flex items-center w-full p-2 text-base text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 light:text-white light:hover:bg-gray-700" aria-controls="dropdown-example2" data-collapse-toggle="dropdown-example2">
+                <div class="">
+                   <span class="material-symbols-outlined text-[#cd7868]" style="font-size: 28px; color: #cd7868;">
+                      groups
+                      </span>
+                  </div>
+                   <span class="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">المدربين</span>
+                   <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                      <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                   </svg>
+             </button>
+             <ul id="dropdown-example2" class="hidden py-2 space-y-2">
+                   <li>
+                      <a href="{% url 'academy:add_coach_view' request.user.id %}" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 light:text-white light:hover:bg-gray-700">اضف مدرب</a>
+                   </li>
+ 
+                   <li>
+                      <a href="{% url 'academy:coach_list_view' request.user.id %}" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 light:text-white light:hover:bg-gray-700">قائمة المدربين</a>
+                   </li>
+             </ul>
+          </li>
+          <li>
+             <button type="button" class="flex items-center w-full p-2 text-base text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 light:text-white light:hover:bg-gray-700" aria-controls="dropdown-example3" data-collapse-toggle="dropdown-example3">
+                <div class="">
+                   <span class="material-symbols-outlined text-[#cd7868]" style="font-size: 28px; color: #cd7868;">
+                      group_add
+                      </span>
+                  </div>
+                   <a href="{% url 'academy:subscribers_view' user.id %}">
+                   <span class="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap ">المشتركين</span>
+                </a>
+                  
+             </button>
+            
+          </li>
+           
+           
+           
+        </ul>
+        <ul class="pt-4 mt-4 space-y-2 font-medium border-t border-gray-200 dark:border-gray-700">
+          <li >
+             <a href="{% url 'contactUs:customer_query_view' %}" class="flex items-center p-2 text-gray-900 transition duration-75 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white group">
+                <div class="flex items-center">
+                   <span class="material-symbols-outlined text-[#cd7868]" style="font-size: 28px; color: #cd7868;">
+                      help
+                      </span>
+                      <span class="ms-3">تواصل معنا</span>
+                  </div>
+                
+             </a>
+          </li> 
+          <li >
+             <a href="#" class="flex items-center p-2 text-gray-900 transition duration-75 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white group">
+                <div class="flex items-center">
+                   <span class="material-symbols-outlined text-[#cd7868]" style="font-size: 28px; color: #cd7868;">
+                      info
+                      </span>
+                       <span class="ms-3"> من نحن </span>
+                  </div>
+                
+             </a>
+          </li> 
+          <li >
+             <a href="{% url 'account:log_out' %}" class="flex items-center p-2 text-gray-900 transition duration-75 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white group">
+                <div class="flex items-center">
+                   <span class="material-symbols-outlined text-[#cd6868]" style="font-size: 28px; color: #cd7868;">
+                      logout
+                      </span>
+                      
+                        <span class="ms-3">تسجيل خروج</span>
+                     
+                  </div>
+                
+             </a>
+          </li> 
+          </ul>
+ 
+     </div>
+  </aside>
+
