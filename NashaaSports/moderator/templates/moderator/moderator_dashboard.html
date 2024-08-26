@@ -136,7 +136,7 @@
  
      <div class="flex flex-col rounded-lg bg-blue-50 px-4 py-8 text-center">
        <dt class="order-last text-lg font-medium text-gray-500">اشتراك</dt>
-       <dd class="text-4xl font-extrabold text-blue-600 md:text-5xl" data-target={{subscribers.count}}>0</dd>
+       <dd class="text-4xl font-extrabold text-blue-600 md:text-5xl" data-target={{subscriptions.count}}>0</dd>
      </div>
  
      <div class="flex flex-col rounded-lg bg-blue-50 px-4 py-8 text-center">
@@ -146,7 +146,6 @@
    </dl>
  </div>
 
- 
  
 <div class="max-w-sm mx-auto w-full bg-white rounded-lg shadow  p-4 md:p-6">
   <div class="flex justify-between mb-5">
@@ -202,11 +201,12 @@
 </div>
 
 
-<div class="shadow-lg rounded-lg overflow-hidden w-full">
-  <div class="w-full h-72">
-  <canvas class="p-1 ml-40 mr-40" width="400px" id="chartPie"></canvas>
+<div class="shadow-lg rounded-lg overflow-hidden" style="display: flex; justify-content: center; align-items: center; height: 400px; width: 400px; margin: 0 auto;">
+  <div style="height: 100%; width: 100%;">
+    <canvas id="chartPie"></canvas>
+  </div>
 </div>
-</div>
+
 
 <!-- Required chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -214,16 +214,12 @@
 <!-- Chart pie -->
 <script>
   const dataPie = {
-    labels: ["JavaScript", "Python", "Ruby"],
+    labels: JSON.parse('{{sport_categories}}'),  //All sports categories
     datasets: [
       {
         label: "My First Dataset",
-        data: [300, 50, 100],
-        backgroundColor: [
-          "rgb(133, 105, 241)",
-          "rgb(164, 101, 241)",
-          "rgb(101, 143, 241)",
-        ],
+        data: [300, 50, 100, 200, 80,333,777],
+        backgroundColor: JSON.parse('{{sport_categories_colors}}'),
         hoverOffset: 4,
       },
     ],
@@ -261,7 +257,7 @@
               },
               {
                   name: "رياضة كرة الطائرة",
-                  data: JSON.parse('{{football_salesList}}'), //volleyball sales durning the period of time specified.
+                  data: JSON.parse('{{volleyball_salesList}}'), //volleyball sales durning the period of time specified.
                   color: "#7E3BF2",
               },
           ],
@@ -295,7 +291,7 @@
               show: false,
               labels: {
                   formatter: function (value) {
-                      return  value + ' ريال';
+                      return  (value !== undefined ? value : 0) + ' ريال';
                   }
               }
           },
@@ -304,7 +300,7 @@
       const chart = new ApexCharts(document.getElementById("tooltip-chart"), options);
       chart.render();
   });
-  
+
 </script>
  
    
