@@ -2,7 +2,7 @@
 <div class=" grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 md:gap-16 gap-6 h-screen  md:mx-24 ">
     {% for program in programs %}
     <div class="relative mx-auto md:w-full w-3/4 ">
-      <a href="#" class="relative inline-block duration-300 ease-in-out transition-transform transform hover:-translate-y-2 w-full">
+      <a href="{% url 'academy:program_detail_view' program.id %}" class="relative inline-block duration-300 ease-in-out transition-transform transform hover:-translate-y-2 w-full">
         <div class="shadow p-4 rounded-lg bg-white/65 ">
           <div class="flex justify-center relative rounded-lg overflow-hidden h-52">
             <div class="transition-transform duration-500 transform ease-in-out hover:scale-110 w-full">
@@ -75,12 +75,14 @@
               </span>
             </p>
           </div>
-  
+          <a href="{% url 'enrollment:enroll_in_program_view' program.id user.id %}">
           <div class="grid grid-cols-2 mt-8">
             <div>
+             
                 <div class="bg-yellow-100 rounded-lg w-fit px-3 py-1 ">
-                    <Button >أنظم الان</Button>
+                  <Button >أنظم الان</Button>
                 </div>
+              
             </div>
   
             <div class="flex justify-end">
@@ -91,6 +93,7 @@
               </p>
             </div>
           </div>
+        </a>
         </div>
       </a>
     </div>
