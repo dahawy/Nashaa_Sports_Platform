@@ -29,6 +29,13 @@ def add_bookmark_view(request:HttpRequest, program_id):
 
     except Exception as e:
         print(e)
-
-
     return redirect("academy:program_detail_view", program_id=program_id)
+
+
+
+def bookmark_view(request:HttpRequest, user_id):
+    bookmark= ProgramBookmark.objects.filter(id=user_id)
+    print(bookmark)
+
+    
+    return render(request,"my_bookmark.html",{"bookmarks":bookmark})

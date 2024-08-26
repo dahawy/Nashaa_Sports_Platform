@@ -91,6 +91,7 @@ def add_enrollment_view(request:HttpRequest):
 @login_required(login_url="account:log_in")
 def my_enrollment_view(request:HttpRequest, user_id):
     enrollments = Enrollment.objects.filter(user=UserProfile.objects.filter(user=user_id).first())
+
     context={
         "enrollments":enrollments,
     }
