@@ -63,29 +63,35 @@
                     <thead class="text-xs text-gray-700 uppercase bg-gray-100 light:bg-gray-700 light:text-gray-400">
                         <tr>
                             <th scope="col" class="px-4 py-3">إسم المستخدم</th>
-                            <th scope="col" class="px-4 py-3">المشتركين</th>
+                            <th scope="col" class="px-4 py-3">المشتركون</th>
                             <th scope="col" class="px-4 py-3">رقم الطلب</th>
                             <th scope="col" class="px-4 py-3">إسم البرنامج</th>
+                            <th scope="col" class="px-4 py-3">نوع الرياضة</th>
+                            <th scope="col" class="px-4 py-3">السعر </th>
                             <th scope="col" class="px-4 py-3">الوقت</th>
                             <th scope="col" class="px-4 py-3">بداية البرنامج</th>
                             <th scope="col" class="px-4 py-3">رقم الهوية</th>
                             <th scope="col" class="px-4 py-3">الحالة</th>
-                            <th scope="col" class="px-4 py-3">تاريخ التسجيل</th>
+                            <th scope="col" class="px-4 py-3">تاريخ الاشتراك</th>
+                            <th scope="col" class="px-4 py-3">تاريخ الدفع</th>
                             <th scope="col" class="px-4 py-3"> أوامر</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {%for enrollment in enrollments%}
+                        {%for enrollment in enrollments %}
                         <tr class="border-b light:border-gray-700">
                             <th scope="row" class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap light:text-white">{{enrollment.user.name}}</th>
                             <td class="px-4 py-3">{{enrollment.first_name}} {{enrollment.last_name}}</td>
                             <td class="px-4 py-3">{{enrollment.cart.id}}</td>
                             <td class="px-4 py-3">{{enrollment.program.program_name}}</td>
+                            <td class="px-4 py-3">{{enrollment.program.get_sport_category_display}}</td>
+                            <td class="px-4 py-3">{{enrollment.program.fees}} </td>
                             <td class="px-4 py-3">{{enrollment.time_slot.start_time}} - {{enrollment.time_slot.end_time}}</td>
                             <td class="px-4 py-3">{{enrollment.program.start_date}}</td>
                             <td class="px-4 py-3">{{enrollment.id_number}} </td>
                             <td class="px-4 py-3">{{enrollment.cart.get_status_display}} </td>
                             <td class="px-4 py-3">{{enrollment.created_at}} </td>
+                            <td class="px-4 py-3">{{enrollment.cart.payment.payment_date}} </td>
                             <td class="px-4 py-3 flex items-center justify-end">
                                 <button id="{{enrollment.id}}-dropdown-button" data-dropdown-toggle="{{enrollment.id}}-dropdown" class="inline-flex items-center p-0.5 text-sm font-medium text-center text-gray-500 hover:text-gray-800 rounded-lg focus:outline-none light:text-gray-400 light:hover:text-gray-100" type="button">
                                     <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">

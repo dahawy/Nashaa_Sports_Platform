@@ -23,3 +23,4 @@ class Enrollment(models.Model):
         choices=StatusChoices.choices,
         default=StatusChoices.PENDING,
     )
+
