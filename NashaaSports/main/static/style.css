@@ -1,0 +1,13 @@
+body.dark  {
+    background-color: rgb(40, 40, 40);
+    color: rgb(220, 220, 220);
+}
+
+body.dark h1, body.dark h2, body.dark h3 {
+    color:rgb(255, 179, 0);
+} 
+
+
+body.dark hr {
+    background-color: rgb(115, 115, 115);
+}
