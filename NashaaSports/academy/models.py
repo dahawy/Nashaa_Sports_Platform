@@ -67,6 +67,8 @@ class Program(models.Model):
     is_active=models.BooleanField(default=False) #for compliting the program registration 
     created_at = models.DateTimeField(auto_now_add=True)
 
+
+
 class Coach(models.Model):
 
     class Gender(models.TextChoices):
@@ -137,6 +139,5 @@ class ProgramVideo(models.Model):
     program = models.ForeignKey(Program, on_delete=models.CASCADE)
     video = models.FileField(upload_to='program_videos/')
 
-
-
+   
 

@@ -10,7 +10,15 @@ from django.conf import settings
 from account.models import User,UserProfile,AcademyProfile
 from academy.models import Program
 from django.contrib.auth.decorators import login_required, user_passes_test
-
+from enrollment.models import Enrollment
+from payment.models import Payment
+from django.db.models import Sum
+from django.utils import timezone
+from datetime import timedelta
+from babel.dates import format_date
+from django.utils.safestring import mark_safe
+import json
+import random
 
 # def superuser_required(view_func):
 #     return login_required(user_passes_test(lambda u: u.is_superuser))
@@ -22,16 +30,6 @@ def superuser_required(view_func):
     def _wrapped_view_func(request, *args, **kwargs):
         return view_func(request, *args, **kwargs)
     return _wrapped_view_func
-
-superuser_required
-def moderator_dashboard_view(request:HttpRequest):
-    if request.user.is_superuser:
-        academies = AcademyProfile.objects.filter(approved=True)
-        programs = Program.objects.all()
-        users = User.objects.all()
-        return render(request,"moderator/moderator_dashboard.html",{'academies': academies, 'programs': programs, 'users': users})
-    else:
-        return HttpResponse("You are not authorized!")
 
 
 @superuser_required
@@ -57,26 +55,26 @@ def query_detail_view(request, query_id):
             if form.is_valid():
                 subject = form.cleaned_data['subject']
                 message = form.cleaned_data['message']
+                content_html = render_to_string("moderator/customer_care_reply.html",{'query':query, 'message':message}) 
                 recipient = query.email
 
                 email = EmailMessage(
                     subject,
-                    message,
+                    content_html,
                     settings.EMAIL_HOST_USER,
                     [recipient],
                 )
+                email.content_subtype = "html"
                 email.send()
-                #email.send(fail_silently=False)
                 messages.success(request, "تم إغلاق الحالة وإرسال إيميل للعميل بنجاح", extra_tags="alert-success")
                 return redirect('moderator:customers_queries_view',status= 'Open')
         except Exception as e:
             print(e)
-            messages.error(request, "لم يتم إسال الرد.", extra_tags="alert-danger")
+            messages.error(request, "لم يتم إرسال الرد.", extra_tags="alert-danger")
     else:
         form = ReplyForm(initial={'subject': f"Re: {query.subject}"})
     return render(request, 'moderator/query_detail.html', {'query': query, 'form': form})
-
-
+    
 @superuser_required
 def academies_for_approval_view(request: HttpRequest):
     
@@ -153,3 +151,129 @@ def deactivate_program_view(request: HttpRequest,academy_id):
             return redirect('moderator:programs_view', academy_id=academy_id)
         except Program.DoesNotExist:
             return redirect('moderator:programs_view', academy_id=academy_id)
+        
+
+@superuser_required
+def moderator_dashboard_view(request:HttpRequest, days_ago: int):
+    if request.user.is_superuser:    
+        if int(days_ago) in [30, 90]:
+            academies = AcademyProfile.objects.filter(approved=True)
+            programs = Program.objects.all()
+            subscriptions = Enrollment.objects.all()
+            users = User.objects.all()
+            
+            # Get today's date and calculate the date 30 or 90 days ago
+            today = timezone.now().date()
+            date_days_ago = today - timedelta(days=days_ago)
+            # Query to get enrollments for the football category in the specified period with associated payments
+            football_payments = Enrollment.objects.filter(
+                program__sport_category=Program.SportChoices.FOOTBALL,
+                cart__payment__status=True,  #status=True means payment completed
+                cart__payment__payment_date__range=[date_days_ago, today]
+            )
+
+            # Query to get enrollments for the volleyball category in the specified period with associated payments
+            volleyball_payments = Enrollment.objects.filter(
+                program__sport_category=Program.SportChoices.VOLLEYBALL,
+                cart__payment__status=True,  #status=True means payment completed
+                cart__payment__payment_date__range=[date_days_ago, today]
+            )
+
+            try:
+                # Aggregate fees by payment date
+                football_aggregated_payments = football_payments.values('cart__payment__payment_date').annotate(football_sales_total=Sum('program__fees')).order_by('cart__payment__payment_date')
+                volleyball_aggregated_payments = volleyball_payments.values('cart__payment__payment_date').annotate(volleyball_sales_total=Sum('program__fees')).order_by('cart__payment__payment_date')
+                # Prepare the salesList and datesList
+                football_salesList =[]
+                football_salesList = [float(item['football_sales_total']) for item in football_aggregated_payments]
+                # if list is empty fill it with zero
+                football_salesList = football_salesList if football_salesList else [0]
+                football_datesList = [format_date(item['cart__payment__payment_date'], format='dd MMMM', locale='ar') for item in football_aggregated_payments]
+                volleyball_datesList =[]
+                volleyball_salesList = [float(item['volleyball_sales_total']) for item in volleyball_aggregated_payments]
+                # if list is empty fill it with zero
+                volleyball_salesList = volleyball_salesList if volleyball_salesList else [0]
+                volleyball_datesList = [format_date(item['cart__payment__payment_date'], format='dd MMMM', locale='ar') for item in volleyball_aggregated_payments]
+                datesList = []
+
+                # Get all unique dates from both lists.
+                datesList = list(set(football_datesList + volleyball_datesList))
+
+                # A list of all sport categories
+                sport_categories = Program.objects.values_list('sport_category', flat=True).distinct()
+                # Get all sport categories labels in Arabic
+                #sport_categories_labels = [Program.SportChoices(sport).label for sport in sport_categories]
+                sport_categories_labels = []
+                for sport in sport_categories:
+                    try:
+                        label = Program.SportChoices(sport).label
+                        sport_categories_labels.append(label)
+                    except ValueError:
+                        print(f"Invalid sport category: {sport}")
+
+        
+                sport_categories_colors = generate_colors(len(sport_categories_labels))
+                print(sport_categories_colors)
+              
+
+                context = {
+                    'football_salesList': mark_safe(json.dumps(football_salesList)),
+                    'volleyball_salesList': mark_safe(json.dumps(volleyball_salesList)),
+                    'datesList': mark_safe(json.dumps(datesList)),
+                    'sales_total': sum(football_salesList) + sum(volleyball_salesList),
+                    'academies': academies,
+                    'programs': programs,
+                    'subscriptions':subscriptions, 
+                    'users': users,
+                    'sport_categories': mark_safe(json.dumps(sport_categories_labels)),
+                    'sport_categories_colors': mark_safe(json.dumps(sport_categories_colors)),
+                }
+                return render(request, 'moderator/moderator_dashboard.html', context)
+            except Exception as e:
+                return HttpResponse(f"حدث خطأ: {e}", status=500)
+                #messages.success(request,f"حدث خطأ: {e}", extra_tags="alert-red")
+            
+    else:
+        return HttpResponse("لا تمتلك التصريح اللازم للدخول", status=403)
+
+
+
+def generate_colors(n):
+    # Predefined color list
+    
+    base_colors = [
+        "rgb(112, 214, 255)",
+        "rgb(255, 112, 166)",
+        "rgb(255, 151, 112)",
+        "rgb(255, 214, 112)",
+        "rgb(233, 255, 112)",
+        "rgb(240, 250, 250)",
+        "rgb(203, 243, 240)",  
+        "rgb(46, 196, 182)",
+        "rgb(51, 161, 253)",
+        "rgb(255, 228, 94)",
+        "rgb(255, 99, 146)",
+        "rgb(159, 160, 255)",
+        "rgb(203, 178, 254)",
+        "rgb(255, 183, 3)",
+        "rgb(33, 158, 188)",
+        "rgb(142, 202, 230)",
+        "rgb(248, 247, 255)",
+        "rgb(255, 238, 221)",
+        "rgb(255, 216, 190)",
+        "rgb(247, 37, 133)",
+        "rgb(72, 149, 239)"
+    ]
+        
+
+    # If n is greater than the predefined colors, generate random colors
+    if n > len(base_colors):
+        additional_colors = [
+            "rgb({}, {}, {})".format(random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
+            for _ in range(n - len(base_colors))
+        ]
+        base_colors.extend(additional_colors)
+    
+    return base_colors[:n]
+
+
