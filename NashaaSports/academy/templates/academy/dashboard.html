@@ -7,6 +7,7 @@
       href="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.css"
       rel="stylesheet"
     />
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@40,400,0,0" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -32,9 +33,9 @@
 </style>
 </head>
 <body dir="rtl" class="" style="font-family: Tajawal;">
-   <div class="" style=" height: 100vh; background: linear-gradient(to bottom right, #fff7ed, #ffffff);">
+   <div class="" style=" height: 100vh; background: linear-gradient(to bottom right, #ffffff, #ffffff);">
 
-  
+   
    
    <button data-drawer-target="sidebar-multi-level-sidebar" data-drawer-toggle="sidebar-multi-level-sidebar" aria-controls="sidebar-multi-level-sidebar" type="button" class="inline-flex items-center p-2 mt-2 ms-3 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
       <span class="sr-only">Open sidebar</span>
@@ -45,11 +46,19 @@
 <section class="pt-8 lg:pt-32 " >
 <aside  id="sidebar-multi-level-sidebar" class="fixed top-0 gray  right-0 z-40 w-64 h-screen transition-transform translate-x-full sm:translate-x-0" aria-label="Sidebar">
     
-   <div class="h-full px-3 py-4 overflow-y-auto" style="background-color: rgb(254,254,254,0.6);  ">
-       <ul class="space-y-2 font-medium">
-          <li>
+   <div class="h-full px-3 py-4 overflow-y-auto shadow-lg bg-gray-50 " >
+      <div class="flex justify-center">
+         <a href="{% url 'main:home_view' %}" class="cursor-pointer">
+         <img
+              src="/media/logos/NLogo.png"
+              class="h-10"
+              alt="Nashaa Logo"
+            /></a>
+      </div>
+       <ul class="space-y-2 font-medium pt-20">
+          <li class="">
              <a href="#" class="flex items-center p-2 text-gray-900 rounded-lg light:text-white hover:bg-gray-100 light:hover:bg-gray-700 group">
-                <svg class="w-5 h-5 text-gray-500 transition duration-75 light:text-gray-400 group-hover:text-gray-900 light:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 21">
+                <svg class="w-5 h-5 text-[#cd7868] transition duration-75   " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="#cd7868" viewBox="0 0 22 21">
                    <path d="M16.975 11H10V4.025a1 1 0 0 0-1.066-.998 8.5 8.5 0 1 0 9.039 9.039.999.999 0 0 0-1-1.066h.002Z"/>
                    <path d="M12.5 0c-.157 0-.311.01-.565.027A1 1 0 0 0 11 1.02V10h8.975a1 1 0 0 0 1-.935c.013-.188.028-.374.028-.565A8.51 8.51 0 0 0 12.5 0Z"/>
                 </svg>
@@ -58,9 +67,11 @@
           </li>
           <li>
              <button type="button" class="flex items-center w-full p-2 text-base text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 light:text-white light:hover:bg-gray-700" aria-controls="dropdown-example" data-collapse-toggle="dropdown-example">
-                   <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 light:text-gray-400 light:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 21">
-                      <path d="M15 12a1 1 0 0 0 .962-.726l2-7A1 1 0 0 0 17 3H3.77L3.175.745A1 1 0 0 0 2.208 0H1a1 1 0 0 0 0 2h.438l.6 2.255v.019l2 7 .746 2.986A3 3 0 1 0 9 17a2.966 2.966 0 0 0-.184-1h2.368c-.118.32-.18.659-.184 1a3 3 0 1 0 3-3H6.78l-.5-2H15Z"/>
-                   </svg>
+               <div class="">
+                  <span class="material-symbols-outlined text-[#cd7868]" style="font-size: 28px; color: #cd7868;">
+                     surfing
+                     </span>
+                 </div>
                    <span class="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">البرامج</span>
                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
                       <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
@@ -78,9 +89,11 @@
           </li>
           <li>
             <button type="button" class="flex items-center w-full p-2 text-base text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 light:text-white light:hover:bg-gray-700" aria-controls="dropdown-example1" data-collapse-toggle="dropdown-example1">
-                  <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 light:text-gray-400 light:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 21">
-                     <path d="M15 12a1 1 0 0 0 .962-.726l2-7A1 1 0 0 0 17 3H3.77L3.175.745A1 1 0 0 0 2.208 0H1a1 1 0 0 0 0 2h.438l.6 2.255v.019l2 7 .746 2.986A3 3 0 1 0 9 17a2.966 2.966 0 0 0-.184-1h2.368c-.118.32-.18.659-.184 1a3 3 0 1 0 3-3H6.78l-.5-2H15Z"/>
-                  </svg>
+               <div class="">
+                  <span class="material-symbols-outlined text-[#cd7868]" style="font-size: 28px; color: #cd7868;">
+                     location_on
+                     </span>
+                 </div>
                   <span class="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">الفروع</span>
                   <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
                      <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
@@ -97,9 +110,11 @@
          </li>
          <li>
             <button type="button" class="flex items-center w-full p-2 text-base text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 light:text-white light:hover:bg-gray-700" aria-controls="dropdown-example2" data-collapse-toggle="dropdown-example2">
-                  <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 light:text-gray-400 light:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 21">
-                     <path d="M15 12a1 1 0 0 0 .962-.726l2-7A1 1 0 0 0 17 3H3.77L3.175.745A1 1 0 0 0 2.208 0H1a1 1 0 0 0 0 2h.438l.6 2.255v.019l2 7 .746 2.986A3 3 0 1 0 9 17a2.966 2.966 0 0 0-.184-1h2.368c-.118.32-.18.659-.184 1a3 3 0 1 0 3-3H6.78l-.5-2H15Z"/>
-                  </svg>
+               <div class="">
+                  <span class="material-symbols-outlined text-[#cd7868]" style="font-size: 28px; color: #cd7868;">
+                     groups
+                     </span>
+                 </div>
                   <span class="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">المدربين</span>
                   <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
                      <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
@@ -117,11 +132,13 @@
          </li>
          <li>
             <button type="button" class="flex items-center w-full p-2 text-base text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 light:text-white light:hover:bg-gray-700" aria-controls="dropdown-example3" data-collapse-toggle="dropdown-example3">
-                  <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 light:text-gray-400 light:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 21">
-                     <path d="M15 12a1 1 0 0 0 .962-.726l2-7A1 1 0 0 0 17 3H3.77L3.175.745A1 1 0 0 0 2.208 0H1a1 1 0 0 0 0 2h.438l.6 2.255v.019l2 7 .746 2.986A3 3 0 1 0 9 17a2.966 2.966 0 0 0-.184-1h2.368c-.118.32-.18.659-.184 1a3 3 0 1 0 3-3H6.78l-.5-2H15Z"/>
-                  </svg>
+               <div class="">
+                  <span class="material-symbols-outlined text-[#cd7868]" style="font-size: 28px; color: #cd7868;">
+                     group_add
+                     </span>
+                 </div>
                   <a href="{% url 'academy:subscribers_view' user.id %}">
-                  <span class="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">المشتركين</span>
+                  <span class="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap ">المشتركين</span>
                </a>
                  
             </button>
@@ -131,40 +148,171 @@
           
           
        </ul>
+       <ul class="pt-4 mt-4 space-y-2 font-medium border-t border-gray-200 dark:border-gray-700">
+         <li >
+            <a href="#" class="flex items-center p-2 text-gray-900 transition duration-75 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white group">
+               <div class="flex items-center">
+                  <span class="material-symbols-outlined text-[#cd7868]" style="font-size: 28px; color: #cd7868;">
+                     help
+                     </span>
+                     <span class="ms-3">تواصل معنا</span>
+                 </div>
+               
+            </a>
+         </li> 
+         <li >
+            <a href="#" class="flex items-center p-2 text-gray-900 transition duration-75 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white group">
+               <div class="flex items-center">
+                  <span class="material-symbols-outlined text-[#cd7868]" style="font-size: 28px; color: #cd7868;">
+                     info
+                     </span>
+                     <span class="ms-3"> من نحن </span>
+                 </div>
+               
+            </a>
+         </li> 
+         <li >
+            <a href="#" class="flex items-center p-2 text-gray-900 transition duration-75 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white group">
+               <div class="flex items-center">
+                  <span class="material-symbols-outlined text-[#cd6868]" style="font-size: 28px; color: #cd7868;">
+                     logout
+                     </span>
+                     <span class="ms-3">تسجيل خروج</span>
+                 </div>
+               
+            </a>
+         </li> 
+         </ul>
 
     </div>
  </aside>
  
  <div class="p-4 my-element "  >
     <div class="p-4   rounded-lg " >
-       <div class=" md:grid md:grid-cols-4 gap-4 mb-4 min-sm:flex min-sm:flex-col" >
-          <div class="flex  mb-1 flex-col items-center justify-center h-24 rounded  light:bg-gray-800" style="background-color: rgb(255,255,255,1);">
+       <div class=" md:grid md:grid-cols-4 gap-10 " >
+          <!-- <div class="flex  mb-1 flex-col items-center justify-center h-24 rounded  light:bg-gray-800" style="background-color: rgb(255,255,255,1);">
              <p class="text-2xl text-gray-400 light:text-gray-500">
                 عدد البرامج 
              </p>
              <span class="text-2xl text-gray-400 light:text-gray-500">{{programs.count}}</span>
+          </div> -->
+          <div class="bg-white shadow-md rounded-lg p-6 mb-4 ">
+            <div class="flex items-center justify-between">
+              <div>
+                <h2 class="text-lg font-semibold text-gray-800">البرامج</h2>
+                <p class="text-3xl font-bold text-gray-800">{{programs.count}}</p>
+              </div>
+              <div class="">
+               <span class="material-symbols-outlined text-[#cd7868]" style="font-size: 50px; color: #cd7868;">
+                  surfing
+                  </span>
+              </div>
+            </div>
           </div>
           
-          <div class="flex  mb-1 flex-col items-center justify-center h-24 rounded  light:bg-gray-800" style="background-color: rgb(255,255,255,1);">
+          <!-- <div class="flex  mb-1 flex-col items-center justify-center h-24 rounded  light:bg-gray-800" style="background-color: rgb(255,255,255,1);">
             <p class="text-2xl text-gray-400 light:text-gray-500">
                عدد الفروع 
             </p>
             <span class="text-2xl text-gray-400 light:text-gray-500">{{branches.count}}</span>
-         </div>
-         <div class="flex  mb-1 flex-col items-center justify-center h-24 rounded  light:bg-gray-800" style="background-color: rgb(255,255,255,1);">
+         </div> -->
+         <div class="bg-white shadow-md rounded-lg p-6  mb-4">
+            <div class="flex items-center justify-between">
+              <div>
+                <h2 class="text-lg font-semibold text-gray-800">الفروع</h2>
+                <p class="text-3xl font-bold text-gray-800">{{branches.count}}</p>
+              </div>
+              <div class="text-green-500">
+               <span class="material-symbols-outlined text-[#cd7868]" style="font-size: 50px; color: #cd7868;">
+                  location_on
+                  </span>
+              </div>
+            </div>
+          </div>
+         <!-- <div class="flex  mb-1 flex-col items-center justify-center h-24 rounded  light:bg-gray-800" style="background-color: rgb(255,255,255,1);">
             <p class="text-2xl text-gray-400 light:text-gray-500">
                عدد المدربين 
             </p>
             <span class="text-2xl text-gray-400 light:text-gray-500">{{coaches.count}}</span>
-         </div>
-         <div class="flex  mb-1 flex-col items-center justify-center h-24 rounded  light:bg-gray-800" style="background-color: rgb(255,255,255,1);">
+         </div> -->
+         <div class="bg-white shadow-md rounded-lg p-6 gap-10  mb-4">
+            <div class="flex items-center justify-between">
+              <div>
+                <h2 class="text-lg font-semibold text-gray-800">المدربين</h2>
+                <p class="text-3xl font-bold text-gray-800">{{coaches.count}}</p>
+              </div>
+              <div class="text-green-500">
+               <span class="material-symbols-outlined text-[#cd7868]" style="font-size: 50px; color: #cd7868;">
+                  groups
+                  </span>
+              </div>
+            </div>
+          </div>
+         <!-- <div class="flex  mb-1 flex-col items-center justify-center h-24 rounded  light:bg-gray-800" style="background-color: rgb(255,255,255,1);">
             <p class="text-2xl text-gray-400 light:text-gray-500">
                عدد المشتركين 
             </p>
             <span class="text-2xl text-gray-400 light:text-gray-500">{{enrollments.count}}</span>
-         </div>
+         </div> -->
+         <div class="bg-white shadow-md rounded-lg p-6  mb-4">
+            <div class="flex items-center justify-between">
+              <div>
+                <h2 class="text-lg font-semibold text-gray-800">المشتركين</h2>
+                <p class="text-3xl font-bold text-gray-800">{{enrollments.count}}</p>
+              </div>
+              <div class="text-green-500">
+               <span class="material-symbols-outlined text-[#cd7868]" style="font-size: 50px; color: #cd7868;">
+                  group_add
+                  </span>
+              </div>
+            </div>
+          </div>
        </div>
-       <div class=" rounded bg-white light:bg-gray-800">
+       <div class="  flex flex-col  md:flex-row w-full justify-center gap-5 py-3 mb-10 mt-10">
+
+            
+         <div>
+            <div class="max-w-sm w-full bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6">
+               <div class="flex justify-between">
+                 <div>
+                   <h5 class="leading-none text-3xl font-bold text-gray-900 dark:text-white pb-2">32.4k</h5>
+                   <p class="text-base font-normal text-gray-500 dark:text-gray-400">المشتركين هذا الشهر</p>
+                 </div>
+                 <div class="flex items-center px-2.5 py-0.5 text-base font-semibold text-green-500 dark:text-green-500 text-center">
+                   12%
+                   <svg class="w-3 h-3 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 14">
+                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13V1m0 0L1 5m4-4 4 4" />
+                   </svg>
+                 </div>
+               </div>
+               <div id="area-chart"></div>
+               
+             </div>
+         </div>
+          
+         
+          <div>
+            <div class=" max-w-sm w-full bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6 ">
+               <div class="flex justify-between">
+                 <div>
+                   <h5 class="leading-none text-3xl font-bold text-gray-900 dark:text-white pb-2">15.2k</h5>
+                   <p class="text-base font-normal text-gray-500 dark:text-gray-400">ايرادات هذا الشهر</p>
+                 </div>
+                 <div class="flex items-center px-2.5 py-0.5 text-base font-semibold text-red-500 dark:text-red-500 text-center">
+                   -8%
+                   <svg class="w-3 h-3 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 14">
+                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 1v12M5 1l4 4M5 1L1 5" />
+                   </svg>
+                 </div>
+               </div>
+               <div id="area-chart-2"></div>
+               
+             </div>
+          </div>
+          
+          
+                  </div>
+       <div class=" rounded-lg shadow-md">
         <div class="flex justify-center mb-2 mt-2">
          <h2 class="text-2xl text-gray-400">حالة برامج المشتركين</h2>
         </div>
@@ -174,6 +322,7 @@
             <canvas id="myChart" class="w-72" height="85px" ></canvas>
          </div>
          </div>
+
         
          
        </div>
@@ -192,6 +341,142 @@
  
 
 </div>  
+
+<script>
+   const options1 = {
+     chart: {
+       height: "100%",
+       maxWidth: "100%",
+       type: "area",
+       fontFamily: "Inter, sans-serif",
+       dropShadow: {
+         enabled: false,
+       },
+       toolbar: {
+         show: false,
+       },
+     },
+     tooltip: {
+       enabled: true,
+       x: {
+         show: false,
+       },
+     },
+     fill: {
+       type: "gradient",
+       gradient: {
+         opacityFrom: 0.6,
+         opacityTo: 0,
+         shadeIntensity: 0,
+         stops: [20, 100],
+       },
+     },
+     dataLabels: {
+       enabled: false,
+     },
+     markers: {
+       size: 0,
+     },
+     xaxis: {
+       type: "datetime",
+       categories: ["2023-07-19", "2023-07-20", "2023-07-21", "2023-07-22", "2023-07-23", "2023-07-24", "2023-07-25"],
+       axisBorder: {
+         show: false,
+       },
+       labels: {
+         style: {
+           colors: "#97a3b9",
+         },
+       },
+     },
+     yaxis: {
+       show: false,
+       tickAmount: 3,
+     },
+     grid: {
+       strokeDashArray: 4,
+     },
+     stroke: {
+       curve: "smooth",
+       width: 2,
+     },
+     series: [{
+       name: "Users",
+       data: [30, 40, 60, 20, 50, 90, 50],
+     }, ],
+     colors: ["#4FD1C5"],
+   };
+   
+   const chart1 = new ApexCharts(document.getElementById("area-chart"), options1);
+   chart1.render();
+   
+   const options2 = {
+     chart: {
+       height: "100%",
+       maxWidth: "100%",
+       type: "area",
+       fontFamily: "Inter, sans-serif",
+       dropShadow: {
+         enabled: false,
+       },
+       toolbar: {
+         show: false,
+       },
+     },
+     tooltip: {
+       enabled: true,
+       x: {
+         show: false,
+       },
+     },
+     fill: {
+       type: "gradient",
+       gradient: {
+         opacityFrom: 0.6,
+         opacityTo: 0,
+         shadeIntensity: 0,
+         stops: [20, 100],
+       },
+     },
+     dataLabels: {
+       enabled: false,
+     },
+     markers: {
+       size: 0,
+     },
+     xaxis: {
+       type: "datetime",
+       categories: ["2023-07-19", "2023-07-20", "2023-07-21", "2023-07-22", "2023-07-23", "2023-07-24", "2023-07-25"],
+       axisBorder: {
+         show: false,
+       },
+       labels: {
+         style: {
+           colors: "#97a3b9",
+         },
+       },
+     },
+     yaxis: {
+       show: false,
+       tickAmount: 3,
+     },
+     grid: {
+       strokeDashArray: 4,
+     },
+     stroke: {
+       curve: "smooth",
+       width: 2,
+     },
+     series: [{
+       name: "Visitors",
+       data: [15, 25, 40, 18, 38, 70, 45],
+     }, ],
+     colors: ["#1A56DB"],
+   };
+   
+   const chart2 = new ApexCharts(document.getElementById("area-chart-2"), options2);
+   chart2.render();
+   </script>
 <script>
    // JavaScript code for Chart.js
 
