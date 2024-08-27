@@ -67,7 +67,7 @@ def log_in(request: HttpRequest):
             #     redirect("account:create_academy_profile_view", user_id=academyProfile)
             return redirect(request.GET.get("next", "/"))
         else:
-            messages.error(request, "يرجى المحاولة مرة أخرى. بريدك الإلكتروني أو كلمة المرور الخاصة بك خاطئة", "alert-danger")
+            messages.error(request, "يرجى المحاولة مرة أخرى. إسم المستخدم أو كلمة المرور الخاصة بك خاطئة", "alert-danger")
     return render(request, 'log_in.html')
 
 def log_out(request:HttpRequest):

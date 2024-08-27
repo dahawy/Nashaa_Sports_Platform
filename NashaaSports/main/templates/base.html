@@ -83,7 +83,7 @@
               </svg>
             </button>
           </div>
-          <a href="/" class="flex items-center  rtl:space-x-reverse">
+          <a href="/" class="flex items-center md rtl:space-x-reverse">
             <img
               src="/media/logos/NLogo.png"
               class="h-10"
@@ -106,6 +106,13 @@
                   href="{% url 'main:programs_view' %}"
                   class="text-gray-500 text-sm font-medium hover:text-prime-blue-700 transition-all duration-500 mb-2 block lg:mr-6 lg:text-base md:mb-0 md:mr-3 hover:text-gray-900"
                   >البرامج</a
+                >
+              </li>
+              <li>
+                <a
+                  href="{% url 'main:academies_view' %}"
+                  class="text-gray-500 text-sm font-medium hover:text-prime-blue-700 transition-all duration-500 mb-2 block lg:mr-6 lg:text-base md:mb-0 md:mr-3 hover:text-gray-900"
+                  >ألاكاديميات</a
                 >
               </li>
               <li>
@@ -135,7 +142,7 @@
 
             <button
                 type="button"
-                class="flex mx-3 text-sm bg-gray-800 rounded-full md:mr-0 focus:ring-4 focus:ring-gray-300 light:focus:ring-gray-600"
+                class="flex mx-3 text-sm bg-white-800 rounded-full md:mr-0 focus:ring-4 focus:ring-gray-300 light:focus:ring-gray-600"
                 id="user-menu-button"
                 aria-expanded="false"
                 data-dropdown-toggle="dropdown"
@@ -270,9 +277,7 @@
                   >
                 </li>
               </ul>
-</div>
-
-
+          </div>
             </div>
             {%else%}
             <a href="{% url 'account:log_in'%}"
@@ -282,6 +287,7 @@
               </a>
             {%endif%}
             </div>
+            {% if request.user.is_authenticated or request.user.is_superuser %}
             <!-- Cart Button -->
             {% block cart_items %}
               <div class="flex items-center lg:space-x-2">
@@ -365,18 +371,18 @@
                   <p>السلة فارغة</p>
                   {% endif %}
                 </div>
-
-                <ul>
+                <!-- <ul>
                   <li>
                     <div class="flex items-center gap-1 px-4">    
                       <a href="{% url 'main:mode_view' 'light' %}?next={{request.path}}" class="nav-link px-1"><span class="material-symbols-outlined {% if 'mode' not in request.COOKIES or 'mode' in request.COOKIES and request.COOKIES.mode != 'dark' %} active-icon {% endif %}">light_mode</span></a>
                       <a href="{% url 'main:mode_view' 'dark' %}?next={{request.path}}" class="nav-link px-1"><span class="material-symbols-outlined {% if 'mode' in request.COOKIES and request.COOKIES.mode == 'dark' %} active-icon {% endif %}">dark_mode</span></a>
                     </div>
                   </li>
-                </ul>
+                </ul> -->
             </div>
             
-            {% endblock%}        
+            {% endblock%}    
+            {%endif%}    
         </div>
       </div>
 </nav>
@@ -402,7 +408,7 @@
         </div>
         <div class="grid grid-cols-2 gap-8 sm:gap-6 sm:grid-cols-3">
             <div>
-                <h2 class="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white">روابط مهمة</h2>
+                <h2 class="mb-6 text-sm font-semibold text-gray-900 uppercase">روابط مهمة</h2>
                 <ul class="text-gray-500 dark:text-gray-400 font-medium">
                     <li class="mb-2">
                         <a href="{% url 'main:home_view' %}" class="hover:underline">الرئيسية</a>
@@ -419,7 +425,7 @@
                 </ul>
             </div>
             <div>
-                <h2 class="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white">تابعنا</h2>
+                <h2 class="mb-6 text-sm font-semibold text-gray-900 uppercase ">تابعنا</h2>
                 <ul class="text-gray-500 dark:text-gray-400 font-medium">
                     <li class="mb-2">
                         <a href="#" class="hover:underline ">انستغرام</a>
@@ -430,7 +436,7 @@
                 </ul>
             </div>
             <div>
-                <h2 class="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white">مصادر مهمة</h2>
+                <h2 class="mb-6 text-sm font-semibold text-gray-900 uppercase">مصادر مهمة</h2>
                 <ul class="text-gray-500 dark:text-gray-400 font-medium">
                     <li class="mb-2">
                         <a href="#" class="hover:underline">الخصوصية</a>
