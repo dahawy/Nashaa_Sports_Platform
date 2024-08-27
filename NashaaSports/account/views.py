@@ -52,14 +52,19 @@ def sign_up (request: HttpRequest):
     return render(request, "sign_up.html")
 
 def log_in(request: HttpRequest):
-        
     if request.method == "POST":
     #checking user credentials
+        # userProfile = UserProfile.objects.get(user=request.user)
+        # academyProfile = AcademyProfile.objects.get(user=request.user)
         user = authenticate(request, username=request.POST["username"], password=request.POST["password"])
         if user:
             #login the user
             login(request, user)
             messages.success(request, "لقد تم تسجيل الدخول بنجاح", "alert-success")
+            # if not userProfile:
+            #     redirect("account:create_profile_view", user_id=userProfile)
+            # if not academyProfile:
+            #     redirect("account:create_academy_profile_view", user_id=academyProfile)
             return redirect(request.GET.get("next", "/"))
         else:
             messages.error(request, "يرجى المحاولة مرة أخرى. بريدك الإلكتروني أو كلمة المرور الخاصة بك خاطئة", "alert-danger")
