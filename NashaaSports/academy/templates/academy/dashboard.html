@@ -1,5 +1,26 @@
 {% extends 'academy/base.html' %}
+{% block chart_series %}
+[52.8, 25.8, 19.4]
+{% endblock %}
+{% block label_pie %}
+["Direct", "Organic search", "saeed"]
+{% endblock %}
+{% block payment_dates %} 
+    [
+    {% for date in datesList %}
+        "{{ date }}"{% if not forloop.last %}, {% endif %}
+    {% endfor %}
+    ]
+{% endblock %}
+{% block payment_sales %} 
+  [
+  {% for price in salesList %}
+    "{{ price }}"{% if not forloop.last %}, {% endif %}
+  {% endfor %}
+    ]
+{% endblock %}
 {% block content %}
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <div class="" style="  background: linear-gradient(to bottom right, #ffffff, #ffffff);">        
 <section  >
@@ -91,8 +112,8 @@
             <div class="max-w-sm w-full bg-white rounded-lg shadow  p-4 md:p-6">
                <div class="flex justify-between">
                  <div>
-                   <h5 class="leading-none text-3xl font-bold text-gray-900  pb-2">32.4k</h5>
-                   <p class="text-base font-normal text-gray-500 ">المشتركين هذا الشهر</p>
+                   <h5 class="leading-none text-3xl font-bold text-gray-900  pb-2">{{total_income}}</h5>
+                   <p class="text-base font-normal text-gray-500 ">ايرادات هذا الشهر</p>
                  </div>
                  <div class="flex items-center px-2.5 py-0.5 text-base font-semibold text-green-500  text-center">
                    12%
@@ -126,19 +147,19 @@
              </div>
           </div>
           
-<div class=" bg-white rounded-lg shadow  p-4 md:p-6">
+<div style="max-width: 24rem; max-height: 20rem;" class=" bg-white rounded-lg shadow  p-4 md:p-6">
 
-  <div class="flex justify-between items-start w-full">
+  <div class="flex justify-between items-start max-w-sm">
       <div class="flex-col items-center">
         <div class="flex items-center mb-1">
-            <h5 class="text-xl font-bold leading-none text-gray-900  me-1">Website traffic</h5>
+            <h5 class="text-xl font-bold leading-none text-gray-900  me-1">انواع الرياضات</h5>
       </div>
 
     </div>
 
   </div>
 
-  <div class="py-6" id="pie-chart"></div>
+  <div class="" style="width: 17rem;" id="pie-chart"></div>
 </div>
 
 
@@ -178,3 +199,6 @@
 
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 {% endblock %}
+<!--  -->
+
+<!--  -->

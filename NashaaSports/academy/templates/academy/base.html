@@ -53,7 +53,7 @@
   
     const getChartOptions = () => {
       return {
-        series: [52.8, 26.8, 20.4],
+        series:  {% block chart_series %}  {% endblock %} ,
         colors: ["#1C64F2", "#16BDCA", "#9061F9"],
         chart: {
           height: 420,
@@ -67,7 +67,7 @@
         plotOptions: {
           pie: {
             labels: {
-              show: true,
+              show: false,
             },
             size: "100%",
             dataLabels: {
@@ -75,7 +75,7 @@
             }
           },
         },
-        labels: ["Direct", "Organic search", "Referrals"],
+        labels: {% block label_pie %} {% endblock %} ,
         dataLabels: {
           enabled: true,
           style: {
@@ -152,7 +152,7 @@
          },
          xaxis: {
            type: "datetime",
-           categories: ["2023-07-19", "2023-07-20", "2023-07-21", "2023-07-22", "2023-07-23", "2023-07-24", "2023-07-25"],
+           categories: {% block payment_dates %}  {% endblock %},
            axisBorder: {
              show: false,
            },
@@ -175,7 +175,7 @@
          },
          series: [{
            name: "Users",
-           data: [30, 40, 60, 20, 50, 90, 50],
+           data: {% block payment_sales %} {% endblock %},
          }, ],
          colors: ["#4FD1C5"],
        };

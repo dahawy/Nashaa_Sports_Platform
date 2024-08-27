@@ -14,31 +14,40 @@ from django.db.models.functions import ExtractDay
 from django.db.models import F, ExpressionWrapper
 from enrollment.models import Enrollment
 from review.models import Review
-
+from django.utils import timezone
+from datetime import timedelta
+from django.db.models import Sum
+from babel.dates import format_date
+from datetime import datetime
 
 
 def acadmey_dashboard_view(request:HttpRequest,user_id):
     if request.user.is_authenticated:
-        sport_categories = Program.objects.values_list('sport_category', flat=True).distinct()
-        sport_categories_labels = []
-        for sport in sport_categories:
-            try:
-                label = Program.SportChoices(sport).label
-                sport_categories_labels.append(label)
-            except ValueError:
-                    print(f"Invalid sport category: {sport}")
         # sport_categories_colors = generate_colors(len(sport_categories_labels))
         acadmey=AcademyProfile.objects.filter(user=User.objects.get(pk=user_id)).first()
+
         branches=Branch.objects.filter(academy=acadmey)
         programs=Program.objects.filter(branch__academy=acadmey)
         coaches=Coach.objects.filter(branch__academy=acadmey)
+        today = timezone.now().date()
+        date_days_ago = today - timedelta(days=30)
+        cart__payment__status=True,  #status=True means payment completed
+        cart__payment__payment_date__range=[date_days_ago, today]
+        subscriptions = Enrollment.objects.filter(Q(program__branch__academy=acadmey)&Q(cart__payment__status=True)&Q(cart__payment__payment_date__range=[date_days_ago, today]))
+        aggregated_payments = subscriptions.values('cart__payment__payment_date').annotate(sales_total=Sum('program__fees')).order_by('cart__payment__payment_date')
+
+        salesList =[]
+        salesList = [float(item['sales_total']) for item in aggregated_payments]
+        total_income=sum(salesList)
+        salesList = salesList if salesList else [0]
+        datesList = [item['cart__payment__payment_date'].strftime('%d %B') for item in aggregated_payments]
         enrollments=Enrollment.objects.filter(Q(program__branch__academy=acadmey) & Q(cart__status='Paid') )
         enrollments_ended=enrollments.filter(status="ended")
         enrollments_in_progress=enrollments.filter(status='in_progress')
         enrollments_pending=enrollments.filter(status="pending")
         if acadmey:
             if  request.user.id==int(user_id) and acadmey.approved==True: 
-                context={"academy":acadmey,'programs':programs,'branches':branches,'enrollments':enrollments,'enrollments_ended':enrollments_ended,'enrollments_in_progress':enrollments_in_progress,'enrollments_pending':enrollments_pending,'coaches':coaches}
+                context={"academy":acadmey,'programs':programs,'branches':branches,'enrollments':enrollments,'enrollments_ended':enrollments_ended,'enrollments_in_progress':enrollments_in_progress,'enrollments_pending':enrollments_pending,'coaches':coaches,'salesList':salesList,'datesList':datesList,'total_income':total_income}
                 return render(request,"academy/dashboard.html",context)
             else:
                 return HttpResponse(f"غير مصرح لك")
