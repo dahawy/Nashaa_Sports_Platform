@@ -50,71 +50,80 @@
     {% endblock %}
 </div>
 <script>
-  
-    const getChartOptions = () => {
-      return {
-        series: [52.8, 26.8, 20.4],
-        colors: ["#1C64F2", "#16BDCA", "#9061F9"],
-        chart: {
-          height: 420,
-          width: "100%",
-          type: "pie",
+  const getChartOptions = () => {
+  return {
+    series: {% block chart_series %} {% endblock %},
+    colors: ["#1C64F2", "#16BDCA", "#9061F9"],
+    chart: {
+      height: 420,
+      width: "100%",
+      type: "pie",
+    },
+    stroke: {
+      colors: ["white"],
+    },
+    plotOptions: {
+      pie: {
+        labels: {
+          show: false, // Hide default pie labels
         },
-        stroke: {
-          colors: ["white"],
-          lineCap: "",
-        },
-        plotOptions: {
-          pie: {
-            labels: {
-              show: true,
-            },
-            size: "100%",
-            dataLabels: {
-              offset: -25
-            }
-          },
-        },
-        labels: ["Direct", "Organic search", "Referrals"],
         dataLabels: {
-          enabled: true,
-          style: {
-            fontFamily: "Inter, sans-serif",
-          },
-        },
-        legend: {
-          position: "bottom",
-          fontFamily: "Inter, sans-serif",
-        },
-        yaxis: {
-          labels: {
-            formatter: function (value) {
-              return value + "%"
-            },
-          },
-        },
-        xaxis: {
-          labels: {
-            formatter: function (value) {
-              return value  + "%"
-            },
-          },
-          axisTicks: {
-            show: false,
-          },
-          axisBorder: {
-            show: false,
-          },
-        },
+          offset: -25,
+        }
+      },
+    },
+    labels: {% block label_pie %} {% endblock %},
+    dataLabels: {
+      enabled: true,
+      style: {
+        fontFamily: "Inter, sans-serif",
+      },
+    },
+    legend: {
+      position: "bottom",
+      fontFamily: "Inter, sans-serif",
+    },
+    tooltip: {
+      enabled: true,
+      y: {
+        formatter: function (value) {
+          return ""; // Empty string to hide value
+        }
+      },
+      custom: function ({ series, seriesIndex, dataPointIndex, w }) {
+        // Return the label from your labels array
+        return '<div class="arrow_box">' + w.config.labels[seriesIndex] + '</div>';
       }
-    }
-    
-    if (document.getElementById("pie-chart") && typeof ApexCharts !== 'undefined') {
-      const chart = new ApexCharts(document.getElementById("pie-chart"), getChartOptions());
-      chart.render();
-    }
-    
-    </script> 
+    },
+    yaxis: {
+      labels: {
+        formatter: function (value) {
+          return value + "%";
+        },
+      },
+    },
+    xaxis: {
+      labels: {
+        formatter: function (value) {
+          return value + "%";
+        },
+      },
+      axisTicks: {
+        show: false,
+      },
+      axisBorder: {
+        show: false,
+      },
+    },
+  }
+}
+
+if (document.getElementById("pie-chart") && typeof ApexCharts !== 'undefined') {
+  const chart = new ApexCharts(document.getElementById("pie-chart"), getChartOptions());
+  chart.render();
+}
+
+</script>
     <script>
        const options1 = {
          chart: {
@@ -152,7 +161,7 @@
          },
          xaxis: {
            type: "datetime",
-           categories: ["2023-07-19", "2023-07-20", "2023-07-21", "2023-07-22", "2023-07-23", "2023-07-24", "2023-07-25"],
+           categories: {% block payment_dates %}  {% endblock %},
            axisBorder: {
              show: false,
            },
@@ -174,8 +183,8 @@
            width: 2,
          },
          series: [{
-           name: "Users",
-           data: [30, 40, 60, 20, 50, 90, 50],
+           name: "ايرادات",
+           data: {% block payment_sales %} {% endblock %},
          }, ],
          colors: ["#4FD1C5"],
        };
@@ -219,7 +228,7 @@
          },
          xaxis: {
            type: "datetime",
-           categories: ["2023-07-19", "2023-07-20", "2023-07-21", "2023-07-22", "2023-07-23", "2023-07-24", "2023-07-25"],
+           categories: {% block subscribers_dates %} {% endblock %},
            axisBorder: {
              show: false,
            },
@@ -241,8 +250,8 @@
            width: 2,
          },
          series: [{
-           name: "Visitors",
-           data: [15, 25, 40, 18, 38, 70, 45],
+           name: "مشتركين",
+           data:{% block subscribers_numbers %} {% endblock %},
          }, ],
          colors: ["#1A56DB"],
        };
