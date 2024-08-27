@@ -8,13 +8,13 @@ from .forms import ReplyForm
 import os
 from django.conf import settings
 from account.models import User,UserProfile,AcademyProfile
-from academy.models import Program
+from academy.models import Program,Branch, Coach
 from django.contrib.auth.decorators import login_required, user_passes_test
 from enrollment.models import Enrollment
 from payment.models import Payment
 from django.db.models import Sum
 from django.utils import timezone
-from datetime import timedelta
+from datetime import timedelta, datetime
 from babel.dates import format_date
 from django.utils.safestring import mark_safe
 import json
@@ -277,3 +277,114 @@ def generate_colors(n):
     return base_colors[:n]
 
 
+
+@superuser_required
+def academy_branches_view(request:HttpRequest,academy_id):
+    branches = Branch.objects.filter(academy=AcademyProfile.objects.get(pk=academy_id))
+    subscriptions = Enrollment.objects.filter(time_slot__program__branch__in=branches).count()
+
+    return render(request,'moderator/academy_branches.html',{"branches":branches,'subscriptions':subscriptions})
+
+@superuser_required
+def update_branch_view(request, branch_id):
+    branch = get_object_or_404(Branch, pk=branch_id)
+
+    if request.method == "POST":
+        branch.branch_city = request.POST.get('branch_city')
+        branch.branch_name = request.POST.get('branch_name')
+        branch.register_no = request.POST.get('register_no')
+        
+        # Get the full Google Maps URL from the form
+        map_url = request.POST.get('map_url')
+        
+        if map_url:
+            branch.branch_location = map_url
+        
+        branch.save()
+        messages.success(request, 'تم تحديث الفرع بنجاح')
+        
+
+    # Extract coordinates from the current URL if it exists
+    lat, lng = 0.0, 0.0
+    if branch.branch_location:
+        try:
+            query = branch.branch_location.split('?q=')[-1]
+            lat, lng = map(float, query.split(','))
+        except (ValueError, IndexError):
+            lat, lng = 0.0, 0.0
+
+    return render(request, 'moderator/update_branch.html', {
+        'branch': branch,
+        'lat': lat,
+        'lng': lng,
+        'google_maps_api_key': settings.GOOGLE_API_KEY,
+    })
+
+
+@superuser_required
+def delete_branch_view(request:HttpRequest,branch_id):
+    try:
+        branch=Branch.objects.get(pk=branch_id)
+        branch.delete()
+        messages.success(request,"تم حذف الفرع بنجاح")
+        return redirect(request.GET.get('next','/'))
+    except Exception as e:
+        messages.error(request,"حدث خطأ! حاول مرة اخرى")
+
+
+@superuser_required
+def coaches_view(request:HttpRequest, academy_id):
+    if request.user.is_authenticated:
+        coaches = Coach.objects.filter(branch__academy_id= academy_id)
+    
+        return render(request,'moderator/coaches.html', {'coaches':coaches})
+    else:
+        return HttpResponse("لا تمتلك التصريح لدخول الصفحة")
+    
+
+def delete_coach_view(request: HttpRequest, coach_id: int):
+    if request.user.is_authenticated:
+        try:
+            coach = get_object_or_404(Coach, id=coach_id)
+            coach.delete()
+            messages.success(request,'تم حذف بيانات المدرب بنجاح') 
+            return redirect(request.GET.get('next','/'))
+        except Exception as e:
+            messages.error(request,"حدث خطأ! لم تتم عملية الحذف","green")
+    else:
+        return messages.error('سجل الدخول من فضلك')
+
+
+@superuser_required
+def update_coach_view(request:HttpResponse,coach_id):
+    if request.user.is_authenticated:
+        coach = get_object_or_404(Coach, pk=coach_id)
+
+        if request.method=="POST":
+            date_str = request.POST.get('birth_date')
+            birth_date = datetime.strptime(date_str, '%m/%d/%Y').date()
+            coach.name = request.POST['name']
+            coach.birth_date = birth_date
+            coach.email = request.POST['email']
+            coach.phone = request.POST['phone']
+            coach.experience = request.POST['experience']
+            coach.nationality = request.POST['nationality']
+            coach.gender = request.POST['gender']
+            coach.avatar = request.FILES['avatar']
+            coach.save()
+            messages.success(request,"تم تحديث بيانات المدرب بنجاح","green")
+            return redirect(request.GET.get('next','/'))
+        gender_choices = get_gender_choices()
+        nationality_choices = get_Nationality_choices
+        return render(request,'moderator/update_coach.html',{'coach':coach, 'gender_choices': gender_choices, 'nationality_choices': nationality_choices})
+
+    else:
+        return HttpResponse("لا تمتلك التصريح لدخول الصفحة")
+
+
+def get_gender_choices():
+    return [(choice, choice_display) for choice, choice_display in Coach.Gender.choices]
+
+
+def get_Nationality_choices():
+    return [(choice, choice_display) for choice, choice_display in Coach.Nationality.choices]

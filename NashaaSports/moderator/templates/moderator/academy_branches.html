@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+{% block content %}
+
+    <div class="flex justify-center mt-10 md:pt-40">
+        <h1 class="text-4xl self-center">الفروع</h1>
+    </div>
+   
+    
+<div class="flex justify-center mt-10">
+
+    <div class=" w-96 md:w-3/4 relative overflow-x-auto shadow-md sm:rounded-lg ">
+        
+        <table class="w-full text-sm text-left rtl:text-right text-gray-500 ">
+            <thead class="text-xs md:text-sm text-gray-700 uppercase bg-gray-100">
+                <tr>
+                    <th scope="col" class="px-6 py-3">
+                        اسم الفرع
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        المدينة
+                    </th>
+                    
+                    <th scope="col" class="px-6 py-3">
+                        السجل التجاري
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        عدد البرامج 
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        عدد المدربين  
+                   </th>
+                    
+                    <th scope="col" class="px-6 py-3">
+                         عدد المشتركين  
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                       تعديل/حذف 
+                   </th>
+                    
+                </tr>
+            </thead>
+            <tbody>
+                
+               
+                
+                {% for branch in branches %}
+                <tr class="bg-white border-b  hover:bg-gray-50">
+                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
+                        {{ branch.branch_name }}
+                    </th>
+                    <td class="px-6 py-4">
+                       {{branch.branch_city}}
+                    </td>
+                    <td class="px-6 py-4">
+                        {{branch.register_no}}
+                    </td>
+                    <td class="px-6 py-4" dir="ltr">
+                        {{branch.program_set.all.count}}
+                    </td>
+                    <td class="px-6 py-4">
+                        {{branch.coach_set.all.count}}
+                    </td>
+                    <td class="px-6 py-4">
+                        {{subscriptions.count}}
+                    </td>
+                    <td class="px-6 py-4 text-right flex items-center">
+                        <button data-branch-id="{{ branch.id }}" class="open-popup-btn">
+                            <span class="material-symbols-outlined hover:text-red-600 hover:scale-110 duration-300">delete</span>
+                        </button>
+                        <a href="{% url 'moderator:update_branch_view' branch.id %}"><span class="material-symbols-outlined">edit</span></a>
+  
+                    </td>
+                </tr>
+                {% endfor %}
+                
+
+            </tbody>
+        </table>
+        {% for branch in branches %}
+    <div id="popup-{{ branch.id }}" class="popup hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+        <div class="bg-white rounded-lg p-8 shadow-lg w-full max-w-md">
+            <h2 class="text-xl font-semibold mb-4">هل انت متاكد من حذف {{ branch.branch_name }}؟<br><span class="text-sm text-gray-400">سوف يتم حذف جميع البرامج المتعلقة بهذا الفرع</span></h2>
+            <button class="close-popup-btn bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none"><a href="">لا</a></button>
+            <a href="{% url 'moderator:delete_branch_view' branch.id %}?next={{request.path}}"><button class="close-popup-btn bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 focus:outline-none">نعم</button></a>
+        </div>
+    </div>
+    {% endfor %}
+        
+    </div>
+</div>
+
+
+    <script>
+        // Handle opening popups and hiding cards
+        document.querySelectorAll('.open-popup-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                const branchId = button.getAttribute('data-branch-id');
+                document.getElementById(`popup-${branchId}`).classList.remove('hidden');
+                document.getElementById(`branch-card-${branchId}`).classList.add('hidden');
+            });
+        });
+
+        // Handle closing popups
+        document.querySelectorAll('.close-popup-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                const popup = button.closest('.popup');
+                popup.classList.add('hidden');
+                
+                const branchId = popup.id.split('-')[1];
+                document.getElementById(`branch-card-${branchId}`).classList.remove('hidden');
+            });
+        });
+
+        // Optional: Close popup when clicking outside the content
+        document.querySelectorAll('.popup').forEach(popup => {
+            popup.addEventListener('click', (e) => {
+                if (e.target === popup) {
+                    popup.classList.add('hidden');
+
+                    const branchId = popup.id.split('-')[1];
+                    document.getElementById(`branch-card-${branchId}`).classList.remove('hidden');
+                }
+            });
+        });
+    </script>
+{% endblock %}
