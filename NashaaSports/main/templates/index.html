@@ -61,23 +61,54 @@
       <button type="button" class="w-3 h-3 rounded-full" aria-current="false" aria-label="Slide 4" data-carousel-slide-to="3"></button>
       
   </div>
-  <!-- Slider controls -->
-  <button type="button" class="absolute top-0 start-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none" data-carousel-prev>
-      <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
-          <svg class="w-4 h-4 text-white dark:text-gray-800 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 1 1 5l4 4"/>
-          </svg>
-          <span class="sr-only">Previous</span>
-      </span>
-  </button>
-  <button type="button" class="absolute top-0 end-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none" data-carousel-next>
-      <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
-          <svg class="w-4 h-4 text-white dark:text-gray-800 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
-          </svg>
-          <span class="sr-only">Next</span>
-      </span>
-  </button>
+</div>
+
+<div class="flex flex-wrap justify-center gap-8 py-16">
+  <div class="p-4 rounded-lg" >
+     <div class=" md:grid md:grid-cols-3 gap-10" >
+        <div class="w-80 bg-white rounded-lg shadow-md">
+          <div class="flex items-center justify-between p-10">
+            <div>
+              <h2 class="text-lg font-semibold text-gray-800">البرامج</h2>
+              <p class="text-3xl font-bold text-gray-800">{{programs.count}}</p>
+            </div>
+            <div class="">
+             <span class="material-symbols-outlined text-[#cd7868]" style="font-size: 50px; color: #cd7868;">
+                surfing
+                </span>
+            </div>
+          </div>
+        </div>
+        
+       <div class="w-80 bg-white rounded-lg shadow-md">
+          <div class="flex items-center justify-between p-10">
+            <div>
+              <h2 class="text-lg font-semibold text-gray-800">الأكاديميات</h2>
+              <p class="text-3xl font-bold text-gray-800">{{academy.count}}-</p>
+            </div>
+            <div class="text-green-500">
+             <span class="material-symbols-outlined text-[#cd7868]" style="font-size: 50px; color: #cd7868;">
+                sports_golf
+                </span>
+            </div>
+          </div>
+        </div>
+      
+       <div class="w-80 bg-white rounded-lg shadow-md">
+          <div class="flex items-center justify-between p-10">
+            <div>
+              <h2 class="text-lg font-semibold text-gray-800">المشتركين</h2>
+              <p class="text-3xl font-bold text-gray-800">{{enrollments.count}}-</p>
+            </div>
+            <div class="text-green-500">
+             <span class="material-symbols-outlined text-[#cd7868]" style="font-size: 50px; color: #cd7868;">
+                group_add
+                </span>
+            </div>
+          </div>
+        </div>
+     </div>
+  </div>
 </div>
 
 
@@ -87,72 +118,114 @@
     <p class="text-center mb-16">من خلال تميزنا, تمكنا من خدمة الكثير من العملاء وقدمنا لهم منصة يديرون عليها جميع برامجمهم الرياضية, وتوفر عليهم الوقت والجهد</p>
     <div class="grid grid-cols-5 gap-4 py-10">
       <div class="flex justify-center items-center ">
-        <img src="/media/logos/Noor.png" alt="Client 1 Logo" class="h-20">
+        <img src="/media/logos/Noor.png" alt="Client 1 Logo" class="h-20 transition-transform duration-200 hover:scale-125">
       </div>
       <div class="flex justify-center items-center">
-        <img src="/media/logos/ahli.png" alt="Client 2 Logo" class="h-20">
+        <img src="/media/logos/ahli.png" alt="Client 2 Logo" class="h-20 transition-transform duration-200 hover:scale-125">
       </div>
       <div class="flex justify-center items-center">
-        <img src="/media/logos/Nasr.png" alt="Client 3 Logo" class="h-20">
+        <img src="/media/logos/Nasr.png" alt="Client 3 Logo" class="h-20 transition-transform duration-200 hover:scale-125">
       </div>
       <div class="flex justify-center items-center">
-        <img src="/media/logos/Ettifaq.png" alt="Client 4 Logo" class="h-20">
+        <img src="/media/logos/Ettifaq.png" alt="Client 4 Logo" class="h-20 transition-transform duration-200 hover:scale-125">
       </div>
       <div class="flex justify-center items-center">
-        <img src="/media/logos/hilal.png" alt="Client 5 Logo" class="h-20">
+        <img src="/media/logos/hilal.png" alt="Client 5 Logo" class="h-20 transition-transform duration-200 hover:scale-125">
       </div>
       </div>
 
       <div class="grid grid-cols-5 gap-4 py-10">
         <div class="flex justify-center items-center">
-          <img src="/media/logos/Abha.png" alt="Client 1 Logo" class="h-20">
+          <img src="/media/logos/Abha.png" alt="Client 1 Logo" class="h-20 transition-transform duration-200 hover:scale-125">
         </div>
         <div class="flex justify-center items-center">
-          <img src="/media/logos/Fath.png" alt="Client 2 Logo" class="h-20">
+          <img src="/media/logos/Fath.png" alt="Client 2 Logo" class="h-20 transition-transform duration-200 hover:scale-125">
         </div>
         <div class="flex justify-center items-center">
-          <img src="/media/logos/Ittihad.png" alt="Client 3 Logo" class="h-20">
+          <img src="/media/logos/Ittihad.png" alt="Client 3 Logo" class="h-20 transition-transform duration-200 hover:scale-125">
         </div>
         <div class="flex justify-center items-center">
-          <img src="/media/logos/Me5wh.png" alt="Client 4 Logo" class="h-20">
+          <img src="/media/logos/Me5wh.png" alt="Client 4 Logo" class="h-20 transition-transform duration-200 hover:scale-125">
         </div>
         <div class="flex justify-center items-center">
-          <img src="/media/logos/Safa.png" alt="Client 5 Logo" class="h-20">
+          <img src="/media/logos/Safa.png" alt="Client 5 Logo" class="h-20 transition-transform duration-200 hover:scale-125">
         </div>
         </div>
 
         <div class="grid grid-cols-5 gap-4 py-10">
           <div class="flex justify-center items-center">
-            <img src="/media/logos/Khaleej.png" alt="Client 1 Logo" class="h-20">
+            <img src="/media/logos/Khaleej.png" alt="Client 1 Logo" class="h-20 transition-transform duration-200 hover:scale-125">
           </div>
           <div class="flex justify-center items-center">
-            <img src="/media/logos/Qadsiah.png" alt="Client 2 Logo" class="h-20">
+            <img src="/media/logos/Qadsiah.png" alt="Client 2 Logo" class="h-20 transition-transform duration-200 hover:scale-125">
           </div>
           <div class="flex justify-center items-center">
-            <img src="/media/logos/Raed.png" alt="Client 3 Logo" class="h-20">
+            <img src="/media/logos/Raed.png" alt="Client 3 Logo" class="h-20 transition-transform duration-200 hover:scale-125">
           </div>
           <div class="flex justify-center items-center">
-            <img src="/media/logos/NLogo.png" alt="Client 4 Logo" class="h-20">
+            <img src="/media/logos/T3awn.png" alt="Client 4 Logo" class="h-20 transition-transform duration-200 hover:scale-125">
           </div>
           <div class="flex justify-center items-center">
-            <img src="/media/logos/NLogo.png" alt="Client 5 Logo" class="h-20">
+            <img src="/media/logos/Shabab.png" alt="Client 5 Logo" class="h-20 transition-transform duration-200 hover:scale-125">
           </div>
           </div>
   </div>
 
-  <div class="flex flex-row p-8 justify-center items-center">
+  <div class="flex flex-row p-8 justify-center items-center bg-[#CD786A] my-16 rounded-full">
     <div class="shadow-lg rounded-full w-56">
-      <img src="/media/images/NashaaBG.jpg">
+      <img class="rounded-full" src="/media/images/NashaaBG.jpg">
     </div>
     <div class="py-8">
       <div class="py-8 px-10">
-        <div class="">
-        <h1 class="font-bold">لماذا تختار نشـ ء؟</h1>
-        <p>عند اختيار المنصة الأفضل لخدمة الأكاديميات الرياضية؛ عليك الاطلاع على آراء العملاء </p>
-        <p>حتى لا تندم على الاختيار في المستقبل كذلك يمكنك زيارة مقر الشركة والتحدث مع فريق العمل وجها لوجه</p>
-        <p>يمكن لعملائنا أن يناقشوا احتياجاتهم مع فريق العمل وذلك للحصول على أفضل نتيجة ترضي العميل وتحقق متطلباته.</p>
-        <p>كذلك إذا لم يكن لدى العميل أي اقتراحات, سنقوم بعرض تجربتنا والفوائد من منصتنا.</p>
-        </div>
+        
+        <h1 class="text-white font-bold text-4xl">لماذا تختار نشـ ء؟</h1>
+        <br>
+        <h1 class="text-xl text-white">عند اختيار المنصة الأفضل لخدمة الأكاديميات الرياضية؛ عليك الاطلاع على آراء العملاء حتى لا تندم على</h1>
+        <h1 class="text-xl text-white">الاختيار في المستقبل كذلك يمكنك زيارة مقر الشركة والتحدث مع فريق العمل وجها لوجه. يمكن لعملائنا أن</h1>
+        <h1 class="text-xl text-white"> يناقشوا احتياجاتهم مع فريق العمل وذلك للحصول على أفضل نتيجة ترضي العميل وتحقق متطلباته.</h1>
+        <h1 class="text-xl text-white">كذلك إذا لم يكن لدى العميل أي اقتراحات, سنقوم بعرض تجربتنا والفوائد من منصتنا.</h1>
+
+      </div>
+    </div>
+  </div>
+
+  <h1 class="text-center font-bold text-5xl py-10">آراء العملاء</h1>
+
+  <div class="flex flex-wrap justify-center items-center gap-10 my-8 py-16">
+    
+    <div class="bg-white rounded-lg shadow-md overflow-hidden max-w-sm card flex flex-col">
+      <div class="relative flex items-center justify-center">
+        <img src="/media/images/orange.jpg" class="w-32 h-32 rounded-full">
+      </div>
+      <div class="p-6">
+        <p class="text-gray-700 text-base mb-4">
+          "منصة جميلة قدمت لنا خدمات في غاية الروعة كما أن فريق العمل  مثال جيد للتعاون مع العميل وتقديم الخدمة على أكمل وجه"
+        </p>
+        <p class="text-gray-500 text-sm">أبو علي</p>
+      </div>
+    </div>
+  
+    <div class="bg-white rounded-lg shadow-md overflow-hidden max-w-sm card flex flex-col">
+      <div class="relative flex items-center justify-center">
+        <img src="/media/images/orange.jpg" class="w-32 h-32 rounded-full">
+      </div>
+      <div class="p-6">
+        <p class="text-gray-700 text-base mb-4">
+          "نشـ ء ساعدتنا في التعرف على أكاديميات بالقرب منا لم نكن نعلم عنها من قبل. شكراً جزيلاً لكم ونتمنى لكم التوفيق"
+        </p>
+        <p class="text-gray-500 text-sm">أم آدم</p>
+      </div>
+    </div>
+  
+    <div class="bg-white rounded-lg shadow-md overflow-hidden max-w-sm card flex flex-col">
+      <div class="relative flex items-center justify-center">
+        <img src="/media/images/orange.jpg" class="w-32 h-32 rounded-full">
+      </div>
+      <div class="p-6">
+        <p class="text-gray-700 text-base mb-4">
+          "برامج كثيرة وفي شتى الرياضات وللأبناء والبنات. لقد اختصرت علينا نشـ ء الكثير من الجهد في البحث عن ما يناسب أبناءنا"
+        </p>
+        <p class="text-gray-500 text-sm">مساعد حسن</p>
       </div>
     </div>
   </div>
