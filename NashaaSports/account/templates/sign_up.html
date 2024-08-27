@@ -3,7 +3,7 @@
 {% block title %} إنشاء حساب  {% endblock %}
 
 {% block content %}
-    <section class="flex justify-center relative">
+    <!-- <section class="flex justify-center relative">
       <img src="https://pagedone.io/asset/uploads/1702362010.png" alt="gradient background image" class="w-full h-full object-cover fixed">
       <div class="mx-auto max-w-lg px-6 lg:px-8 absolute py-20">
         {% if messages %} 
@@ -98,6 +98,94 @@
           </script>
         </div>
       </div>
-      </section>
+      </section> -->
+<section class="mt-20 bg-gradient-to-br from-orange-50 to-white bg-white">
+  <div >
+        <div class="min-h-screen flex flex-col items-center justify-center">
+          <div class="grid md:grid-cols-2 items-center gap-4 bg-gray-100  max-md:gap-8 max-w-6xl max-md:max-w-lg w-full p-4 m-4 shadow-[0_2px_10px_-3px_rgba(6,81,237,0.3)] rounded-md">
+            <div class="md:max-w-md w-full px-4 py-4">
+                <div class="mb-12">
+                  <h3 class="text-gray-800 text-3xl font-extrabold">إنشاء حساب جديد</h3>
+                  <p class="text-sm mt-4 text-gray-800"> هل لديك حساب بالفعل؟ <a href="{% url 'account:log_in' %}" class="text-[#ED786A] font-bold hover:text-[#f05e4e] hover:underline ml-1 whitespace-nowrap">سجل دخول من هنا</a></p>
+                </div>
+                <form  action="{% url 'account:sign_up'%}"
+                method="POST"
+                class="">
+                {% csrf_token %}
+                  <div class="">
+                    <label class="text-gray-800 text-lg block mb-2">إسم المستخدم</label>
+                    <div class="relative flex items-center">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="w-[20px] h-[20px] absolute left-2 mb-6" height="24px" viewBox="0 -960 960 960" width="24px" fill="#B7B7B7"><path d="M480-480q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47ZM160-160v-112q0-34 17.5-62.5T224-378q62-31 126-46.5T480-440q66 0 130 15.5T736-378q29 15 46.5 43.5T800-272v112H160Zm80-80h480v-32q0-11-5.5-20T700-306q-54-27-109-40.5T480-360q-56 0-111 13.5T260-306q-9 5-14.5 14t-5.5 20v32Zm240-320q33 0 56.5-23.5T560-640q0-33-23.5-56.5T480-720q-33 0-56.5 23.5T400-640q0 33 23.5 56.5T480-560Zm0-80Zm0 400Z"/></svg>
+                      <input type="text" name="username" id="username"
+                          class="w-full h-12 text-gray-900 placeholder:text-gray-400 text-sm font-normal leading-7 rounded-full border-gray-300 border shadow-sm focus:outline-none px-4 mb-6"
+                          placeholder="إسم المستخدم" required minlength="3" maxlength="150" pattern="^[\w.@+-]+$">
+                    </div>
+                </div>
+              <div class="">
+                <label class="text-gray-800 text-lg block mb-2">البريد الإلكتروني</label>
+                <div class="relative flex items-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="w-[20px] h-[20px] absolute left-2 mb-6" height="24px" viewBox="0 -960 960 960" width="24px" fill="#B7B7B7"><path d="M160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h640q33 0 56.5 23.5T880-720v480q0 33-23.5 56.5T800-160H160Zm320-280L160-640v400h640v-400L480-440Zm0-80 320-200H160l320 200ZM160-640v-80 480-400Z"/></svg>
+                  <input type="email" name="email" id="email"
+                        class="w-full h-12 text-gray-900 placeholder:text-gray-400 text-sm font-normal leading-7 rounded-full border-gray-300 border shadow-sm focus:outline-none px-4 mb-6"
+                        placeholder=" أدخل البريد الإلكتروني" required>
+                </div>
+              </div>
+              <div class="">
+                <label class="text-gray-800 text-lg block mb-2">كلمة المرور</label>
+                <div class="relative flex items-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="w-[20px] h-[20px] absolute left-2" height="24px" viewBox="0 -960 960 960" width="24px" fill="#B7B7B7"><path d="M420-680q0-33 23.5-56.5T500-760q33 0 56.5 23.5T580-680q0 33-23.5 56.5T500-600q-33 0-56.5-23.5T420-680ZM500 0 320-180l60-80-60-80 60-85v-47q-54-32-87-86.5T260-680q0-100 70-170t170-70q100 0 170 70t70 170q0 67-33 121.5T620-472v352L500 0ZM340-680q0 56 34 98.5t86 56.5v125l-41 58 61 82-55 71 75 75 40-40v-371q52-14 86-56.5t34-98.5q0-66-47-113t-113-47q-66 0-113 47t-47 113Z"/></svg>
+                  <input name="password" type="password" required class="w-full h-12 text-gray-900 placeholder:text-gray-400 text-sm font-normal leading-7 rounded-full border-gray-300 border shadow-sm focus:outline-none px-4 mb-1" placeholder="أدخل كلمة المرور" />
+                </div>
+              </div>
+              <div class="mt-2">
+                <label class="text-gray-800 text-lg block mb-2">تأكيد كلمة المرور</label>
+                <div class="relative flex items-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="w-[20px] h-[20px] absolute left-2" height="24px" viewBox="0 -960 960 960" width="24px" fill="#B7B7B7"><path d="M420-680q0-33 23.5-56.5T500-760q33 0 56.5 23.5T580-680q0 33-23.5 56.5T500-600q-33 0-56.5-23.5T420-680ZM500 0 320-180l60-80-60-80 60-85v-47q-54-32-87-86.5T260-680q0-100 70-170t170-70q100 0 170 70t70 170q0 67-33 121.5T620-472v352L500 0ZM340-680q0 56 34 98.5t86 56.5v125l-41 58 61 82-55 71 75 75 40-40v-371q52-14 86-56.5t34-98.5q0-66-47-113t-113-47q-66 0-113 47t-47 113Z"/></svg>
+                  <input name="repeat_password" type="password" required class="w-full h-12 text-gray-900 placeholder:text-gray-400 text-sm font-normal leading-7 rounded-full border-gray-300 border shadow-sm focus:outline-none px-4 mb-1" placeholder="أدخل كلمة المرور" />
+                </div>
+              </div>
+              <div class="mt-12">
+              <button type="submit" class="w-full shadow-xl py-2.5 px-4 text-sm tracking-wide rounded-md text-white bg-[#ED786A] font-bold hover:bg-[#f05e4e] focus:outline-none">
+               إنشاء حساب
+                </button>
+              </div>
+              </form>
+                
+                <hr>
+                <div class="space-x-6 flex justify-center mt-6">
+                  <button type="button"
+                    class="border-none outline-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32px" class="inline" viewBox="0 0 512 512">
+                      <path fill="#fbbd00"
+                        d="M120 256c0-25.367 6.989-49.13 19.131-69.477v-86.308H52.823C18.568 144.703 0 198.922 0 256s18.568 111.297 52.823 155.785h86.308v-86.308C126.989 305.13 120 281.367 120 256z"
+                        data-original="#fbbd00" />
+                      <path fill="#0f9d58"
+                        d="m256 392-60 60 60 60c57.079 0 111.297-18.568 155.785-52.823v-86.216h-86.216C305.044 385.147 281.181 392 256 392z"
+                        data-original="#0f9d58" />
+                      <path fill="#31aa52"
+                        d="m139.131 325.477-86.308 86.308a260.085 260.085 0 0 0 22.158 25.235C123.333 485.371 187.62 512 256 512V392c-49.624 0-93.117-26.72-116.869-66.523z"
+                        data-original="#31aa52" />
+                      <path fill="#3c79e6"
+                        d="M512 256a258.24 258.24 0 0 0-4.192-46.377l-2.251-12.299H256v120h121.452a135.385 135.385 0 0 1-51.884 55.638l86.216 86.216a260.085 260.085 0 0 0 25.235-22.158C485.371 388.667 512 324.38 512 256z"
+                        data-original="#3c79e6" />
+                      <path fill="#cf2d48"
+                        d="m352.167 159.833 10.606 10.606 84.853-84.852-10.606-10.606C388.668 26.629 324.381 0 256 0l-60 60 60 60c36.326 0 70.479 14.146 96.167 39.833z"
+                        data-original="#cf2d48" />
+                      <path fill="#eb4132"
+                        d="M256 120V0C187.62 0 123.333 26.629 74.98 74.98a259.849 259.849 0 0 0-22.158 25.235l86.308 86.308C162.883 146.72 206.376 120 256 120z"
+                        data-original="#eb4132" />
+                    </svg>
+                  </button>
+                </div>
+              </form>
+            </div>
+  
+            <div class="md:h-full bg-[#000842] rounded-xl lg:p-12 p-8">
+              <img src="https://readymadeui.com/signin-image.webp" class="w-full h-full object-contain" alt="login-image" />
+            </div>
+          </div>
+        </div>
+  </div>
+</section>
 {% endblock%}
                                             

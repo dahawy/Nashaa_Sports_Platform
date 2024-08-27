@@ -21,22 +21,22 @@ def sign_up (request: HttpRequest):
         repeat_password = request.POST.get('repeat_password')
         # Check password match
         if password != repeat_password:
-            messages.error(request, 'Passwords do not match!')
+            messages.error(request, 'كلمة المرور غير متطابقة!')
             return render(request, 'sign_up.html')
         # Check if user already exists
         if User.objects.filter(username=username).exists():
-            messages.error(request, "A user with that username already exists.", "alert-danger")
+            messages.error(request, "إسم الستخدم مسجل مسبقاً", "alert-danger")
             return render(request, "sign_up.html")
         # Check if email already exists
         if User.objects.filter(email=email).exists():
-            messages.error(request, "A user with that email already exists.", "alert-danger")
+            messages.error(request, "يوجد مستخدم لديه هذا البريد الإلكتروني بالفعل.", "alert-danger")
             return render(request, "sign_up.html") 
         
     if request.method == "POST":
         try:
             new_user = User.objects.create_user(username = request.POST["username"], password=request.POST["password"], email=request.POST["email"])
             new_user.save()
-            messages.success(request, "You have been Registered Successfully", "alert-success")
+            messages.success(request, "لقد تم تسجيلك بنجاح", "alert-success")
             #send confirmation email
             content_html = render_to_string("mail/welcoming.html",{"userName":new_user}) #set email
             send_to = new_user.email
@@ -46,7 +46,7 @@ def sign_up (request: HttpRequest):
             email_message.send()
             return redirect("account:log_in")
         except IntegrityError:
-            messages.error(request, "An error occurred during registration.", "alert-danger")
+            messages.error(request, "حدث خطأ أثناء التسجيل! أعد المحاولة", "alert-danger")
         except Exception as e:
             messages.error(request, f"An unexpected error occurred: {str(e)}", "alert-danger")
     return render(request, "sign_up.html")
@@ -59,15 +59,15 @@ def log_in(request: HttpRequest):
         if user:
             #login the user
             login(request, user)
-            messages.success(request, "You are logged in successfully", "alert-success")
+            messages.success(request, "لقد تم تسجيل الدخول بنجاح", "alert-success")
             return redirect(request.GET.get("next", "/"))
         else:
-            messages.error(request, "Please try again. You credentials are wrong", "alert-danger")
+            messages.error(request, "يرجى المحاولة مرة أخرى. بريدك الإلكتروني أو كلمة المرور الخاصة بك خاطئة", "alert-danger")
     return render(request, 'log_in.html')
 
 def log_out(request:HttpRequest):
     logout(request)
-    messages.success(request, "You are logged out successfully", "alert-warning")
+    messages.success(request, "لقد تم تسجيل خروجك بنجاح", "alert-warning")
     return redirect(request.GET.get("next", "main:home_view"))
 
 @login_required(login_url="account:log_in")

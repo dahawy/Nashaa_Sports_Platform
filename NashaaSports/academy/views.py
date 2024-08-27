@@ -19,6 +19,15 @@ from review.models import Review
 
 def acadmey_dashboard_view(request:HttpRequest,user_id):
     if request.user.is_authenticated:
+        sport_categories = Program.objects.values_list('sport_category', flat=True).distinct()
+        sport_categories_labels = []
+        for sport in sport_categories:
+            try:
+                label = Program.SportChoices(sport).label
+                sport_categories_labels.append(label)
+            except ValueError:
+                    print(f"Invalid sport category: {sport}")
+        # sport_categories_colors = generate_colors(len(sport_categories_labels))
         acadmey=AcademyProfile.objects.filter(user=User.objects.get(pk=user_id)).first()
         branches=Branch.objects.filter(academy=acadmey)
         programs=Program.objects.filter(branch__academy=acadmey)

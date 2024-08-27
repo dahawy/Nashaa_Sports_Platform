@@ -1,10 +1,9 @@
-{% extends 'base.html' %}
+{% extends 'academy/base.html' %}
 {% block content %}
 
 <script src="https://maps.googleapis.com/maps/api/js?key={{ google_maps_api_key }}&libraries=places"></script>
 
 <form class="max-w-sm pt-36 mx-auto" method="post" >
-    <h1>Update Branch Location: {{ branch.name }}</h1>
       
     {% csrf_token %}
     <div class="mb-5">
@@ -32,9 +31,9 @@
 
 
     <!--  -->
-    <h1>Update Branch Location: {{ branch.branch_name }}</h1>
-    <div id="map" style="height: 500px; width: 100%;"></div>
-    <input id="search-box" class="controls" type="text" placeholder="Search Box">
+    <h1>اختار الموقع</h1>
+    <div id="map" class="rounded-lg" style="height: 200px; width: 100%;"></div>
+    <input id="search-box" class="controls rounded-full h-5" type="text" placeholder="ابحث عن الفرع">
     <input type="hidden" id="map-url" name="map_url" value="{{ branch.branch_location }}">
     
 
@@ -42,7 +41,7 @@
 
     <!--  -->
 
-    <button data-modal-target="popup-modal" data-modal-toggle="popup-modal" type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center light:bg-blue-600 light:hover:bg-blue-700 light:focus:ring-blue-800">اضف الفرع</button>
+    <button data-modal-target="popup-modal" data-modal-toggle="popup-modal" type="submit" class="mt-6 text-white bg-[#ED786A] hover:bg-[#f05e4e] focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center light:bg-orange-600 light:hover:bg-orange-700 light:focus:ring-orange-800">تحديث الفرع</button>
   </form>
   <script>
     let map;
@@ -56,7 +55,10 @@
 
         map = new google.maps.Map(document.getElementById('map'), {
             zoom: 15,
-            center: initialLocation
+            center: initialLocation,
+            mapTypeControl: false, // Disable map/satellite view option
+            streetViewControl: false, // Disable Pegman (Street View)
+            zoomControl: false, // Disable zoom controls
         });
 
         marker = new google.maps.Marker({
@@ -137,6 +139,7 @@
 
     window.onload = initMap;
 </script>
+
 
 
 {% endblock %}
