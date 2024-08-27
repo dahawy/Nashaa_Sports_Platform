@@ -124,15 +124,15 @@ def sing_up_asAcademy_view(request: HttpRequest):
         # Check password match
         if password != repeat_password:
             messages.error(request, 'كلمات المرور غير متطابقة!')
-            return render(request, 'sign_up.html')
+            return render(request, 'academy_sign_up.html')
         # Check if user already exists
         if User.objects.filter(username=username).exists():
             messages.error(request, "يوجد مستخدم يحمل اسم المستخدم هذا بالفعل.", "alert-danger")
-            return render(request, "sign_up.html")
+            return render(request, "academy_sign_up.html")
         # Check if email already exists
         if User.objects.filter(email=email).exists():
             messages.error(request, "يوجد مستخدم لديه هذا البريد الإلكتروني بالفعل.", "alert-danger")
-            return render(request, "sign_up.html") 
+            return render(request, "academy_sign_up.html") 
         
     if request.method == "POST":
         try:
