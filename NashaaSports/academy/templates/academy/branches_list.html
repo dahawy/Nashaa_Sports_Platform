@@ -1,38 +1,82 @@
-{% extends 'base.html' %}
+{% extends 'academy/base.html' %}
 {% block content %}
-<div class="">
-    <div class="flex justify-center md:pt-40">
+
+    <div class="flex justify-center  ">
         <h1 class="text-4xl self-center">الفروع</h1>
     </div>
-    <!-- end of header -->
+   
+    
+<div class="flex justify-center mt-10">
 
-    <div class="flex flex-wrap justify-center mt-11 md:justify-center gap-5">
-        {% for branch in branches %}
-        <div id="branch-card-{{ branch.id }}">
-            <div class="md:w-[15rem] md:h-[16rem] p-6 bg-white border border-gray-200 rounded-lg shadow hover:scale-110 duration-300 ease-linear">
-                <i class="fa-solid fa-city text-gray-500 text-4xl"></i>
-                <a href="#">
-                    <h5 class="mb-2 text-2xl font-semibold tracking-tight text-gray-900">{{ branch.branch_name }}</h5>
-                </a>
-                <p class="font-normal text-gray-500">السجل التجاري: <span class="text-xs">{{ branch.register_no }}</span></p>
-                <p class="font-normal text-gray-500">عدد البرامج: {{ branch.program_set.count }}</p>
-                <p class="mb-3 font-normal text-gray-500">{{ branch.branch_city }}</p>
-                <div class="flex justify-between">
-                    <a href="#" class="inline-flex font-medium items-center text-blue-600 hover:underline">عرض البرامج</a>
-                    <div class="flex items-center">
-                        <a href="{% url 'academy:update_branch_view' branch.id %}"><span class="material-symbols-outlined">edit</span></a>
+    <div class=" w-96 md:w-3/4 relative overflow-x-auto shadow-md sm:rounded-lg ">
+        
+        <table class="w-full text-sm text-left rtl:text-right text-gray-500 ">
+            <thead class="text-xs md:text-sm text-gray-700 uppercase bg-gray-100">
+                <tr>
+                    <th scope="col" class="px-6 py-3">
+                        اسم الفرع
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        المدينة
+                    </th>
+                    
+                    <th scope="col" class="px-6 py-3">
+                        السجل التجاري
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        عدد البرامج 
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        عدد المدربون  
+                   </th>
+                    
+                    <th scope="col" class="px-6 py-3">
+                         عدد المشتركون  
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                       تعديل\حذف 
+                   </th>
+                    
+                </tr>
+            </thead>
+            <tbody>
+                
+               
+                
+                {% for branch in branches %}
+                <tr class="bg-white border-b  hover:bg-gray-50">
+                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
+                        {{ branch.branch_name }}
+                    </th>
+                    <td class="px-6 py-4">
+                       {{branch.branch_city}}
+                    </td>
+                    <td class="px-6 py-4">
+                        {{branch.register_no}}
+                    </td>
+                    <td class="px-6 py-4" dir="ltr">
+                        {{branch.program_set.all.count}}
+                    </td>
+                    <td class="px-6 py-4">
+                        {{branch.coach_set.all.count}}
+                    </td>
+                    <td class="px-6 py-4">
+                        {{subscriber_count}}
+                    </td>
+                    <td class="px-6 py-4 text-right flex items-center">
                         <button data-branch-id="{{ branch.id }}" class="open-popup-btn">
-                            <span class="material-symbols-outlined hover:text-red-600">delete</span>
+                            <span class="material-symbols-outlined hover:text-red-600 hover:scale-110 duration-300">delete</span>
                         </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        {% endfor %}
-    </div>
+                        <a href="{% url 'academy:update_branch_view' branch.id %}"><span class="material-symbols-outlined">edit</span></a>
+  
+                    </td>
+                </tr>
+                {% endfor %}
+                
 
-    <!-- Loop through each branch to generate popups -->
-    {% for branch in branches %}
+            </tbody>
+        </table>
+        {% for branch in branches %}
     <div id="popup-{{ branch.id }}" class="popup hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
         <div class="bg-white rounded-lg p-8 shadow-lg w-full max-w-md">
             <h2 class="text-xl font-semibold mb-4">هل انت متاكد من حذف {{ branch.branch_name }}؟<br><span class="text-sm text-gray-400">سوف يتم حذف جميع البرامج المتعلقة بهذا الفرع</span></h2>
@@ -41,6 +85,10 @@
         </div>
     </div>
     {% endfor %}
+        
+    </div>
+</div>
+
 
     <script>
         // Handle opening popups and hiding cards

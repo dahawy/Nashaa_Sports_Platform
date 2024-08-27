@@ -17,3 +17,5 @@ class Review(models.Model):
     review = models.TextField()
     rating = models.CharField(choices=RatingChoices.choices)  
     created_at = models.DateTimeField(auto_now_add=True)
+
+    

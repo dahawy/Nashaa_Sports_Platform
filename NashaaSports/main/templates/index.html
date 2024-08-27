@@ -22,13 +22,19 @@
     >
       سجل معنا لتصفح الأكاديميات والأندية الرياضية في منطقتك
     </p>
+    {% if request.user.is_authenticated %}
     <a
-      href=""
-      class="w-full md:w-auto mb-14 inline-flex items-center justify-center py-3 px-7 text-base font-semibold text-center text-white rounded-full transition-all duration-500 bg-[#ED786A] hover:bg-[#f05e4e]"
-    >
-      إنشاء حساب
-    
+      href="{% url 'main:programs_view' %}"
+      class="w-full md:w-auto mb-14 inline-flex items-center justify-center py-3 px-7 text-base font-semibold text-center text-white rounded-full transition-all duration-500 bg-[#ED786A] hover:bg-[#f05e4e]">
+      تصفح برامجنا
     </a>
+    {% else %}
+    <a
+      href="{% url 'account:log_in' %}"
+      class="w-full md:w-auto mb-14 inline-flex items-center justify-center py-3 px-7 text-base font-semibold text-center text-white rounded-full transition-all duration-500 bg-[#ED786A] hover:bg-[#f05e4e]">
+      إنشاء حساب
+    </a>
+    {% endif %}
   </div>
 </section>
 
@@ -276,6 +282,5 @@
     
   </div>
 </section> -->
-
 
 {% endblock %}

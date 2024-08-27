@@ -13,9 +13,12 @@ def cart_data(request):
         try:
             user = UserProfile.objects.get(user_id=request.user.id)
             carts = Cart.objects.filter(user=user, status='Active').first()
-            enrollments = carts.enrollments.all() if carts else []
-            total_fees = sum(enrollment.program.fees for enrollment in enrollments)
-            count_item = enrollments.count()
+            if carts:
+                enrollments = carts.enrollments.all()  # This is a QuerySet
+                count_item = enrollments.count()  # count() is valid here
+                total_fees = sum(enrollment.program.fees for enrollment in enrollments)
+            else:
+                enrollments = []
         except UserProfile.DoesNotExist:
             # Handle the case where UserProfile does not exist
             carts = None

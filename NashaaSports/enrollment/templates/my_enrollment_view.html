@@ -63,39 +63,46 @@
                     <thead class="text-xs text-gray-700 uppercase bg-gray-100 light:bg-gray-700 light:text-gray-400">
                         <tr>
                             <th scope="col" class="px-4 py-3">إسم المستخدم</th>
-                            <th scope="col" class="px-4 py-3">المشتركين</th>
+                            <th scope="col" class="px-4 py-3">المشتركون</th>
                             <th scope="col" class="px-4 py-3">رقم الطلب</th>
                             <th scope="col" class="px-4 py-3">إسم البرنامج</th>
+                            <th scope="col" class="px-4 py-3">نوع الرياضة</th>
+                            <th scope="col" class="px-4 py-3">السعر </th>
                             <th scope="col" class="px-4 py-3">الوقت</th>
                             <th scope="col" class="px-4 py-3">بداية البرنامج</th>
                             <th scope="col" class="px-4 py-3">رقم الهوية</th>
                             <th scope="col" class="px-4 py-3">الحالة</th>
-                            <th scope="col" class="px-4 py-3">تاريخ الانشاء</th>
+                            <th scope="col" class="px-4 py-3">تاريخ الاشتراك</th>
+                            <th scope="col" class="px-4 py-3">تاريخ الدفع</th>
                             <th scope="col" class="px-4 py-3"> أوامر</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {%for enrollment in enrollments%}
+                        {%for enrollment in enrollments %}
                         <tr class="border-b light:border-gray-700">
                             <th scope="row" class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap light:text-white">{{enrollment.user.name}}</th>
                             <td class="px-4 py-3">{{enrollment.first_name}} {{enrollment.last_name}}</td>
                             <td class="px-4 py-3">{{enrollment.cart.id}}</td>
                             <td class="px-4 py-3">{{enrollment.program.program_name}}</td>
-                            <td class="px-4 py-3">{{enrollment.get_time_slot_display.start_time}}</td>
+                            <td class="px-4 py-3">{{enrollment.program.get_sport_category_display}}</td>
+                            <td class="px-4 py-3">{{enrollment.program.fees}} </td>
+                            <td class="px-4 py-3">{{enrollment.time_slot.start_time}} - {{enrollment.time_slot.end_time}}</td>
                             <td class="px-4 py-3">{{enrollment.program.start_date}}</td>
                             <td class="px-4 py-3">{{enrollment.id_number}} </td>
                             <td class="px-4 py-3">{{enrollment.cart.get_status_display}} </td>
                             <td class="px-4 py-3">{{enrollment.created_at}} </td>
+                            <td class="px-4 py-3">{{enrollment.cart.payment.payment_date}} </td>
                             <td class="px-4 py-3 flex items-center justify-end">
                                 <button id="{{enrollment.id}}-dropdown-button" data-dropdown-toggle="{{enrollment.id}}-dropdown" class="inline-flex items-center p-0.5 text-sm font-medium text-center text-gray-500 hover:text-gray-800 rounded-lg focus:outline-none light:text-gray-400 light:hover:text-gray-100" type="button">
                                     <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z" />
                                     </svg>
                                 </button>
-                                <div id="{{enrollment.id}}-dropdown" class="hidden z-10 w-44 bg-white rounded divide-y divide-gray-900 shadow ">
+                                <div id="{{enrollment.id}}-dropdown" class="hidden z-10 w-90 bg-gray-100 shadow-inner rounded divide-y divide-gray-900 ">
                                     <ul class="py-1 text-sm text-gray-700 light:text-gray-200" aria-labelledby="{{enrollment.id}}-dropdown-button">
                                         <li>
-                                            <button id="readProductButton" data-modal-target="readProductModal" data-modal-toggle="readProductModal" class="block text-black bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center" type="button">
+                                            <!-- Modal toggle -->
+                                            <button id="readEnrollmentButton" data-modal-target="{{enrollment.id}}-readEnrollmentModal" data-modal-toggle="{{enrollment.id}}-readEnrollmentModal" class="block bg-[#ED786A] text-white hover:bg-[#f05e4e] focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center" type="button">
                                             المزيد من التفاصيل
                                             </button>
                                         </li>
@@ -103,6 +110,66 @@
                                 </div>
                             </td>
                         </tr>
+                        <!-- detail modal -->
+<div id="{{enrollment.id}}-readEnrollmentModal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-modal md:h-full">
+    <div class="relative p-4 w-full max-w-xl h-full md:h-auto">
+        <!-- Modal content -->
+        <div class="relative p-4 bg-white rounded-lg shadow font-light:bg-gray-800 sm:p-5">
+                <!-- Modal header -->
+                <div class="flex justify-between mb-4 rounded-t sm:mb-5">
+                    <div class="text-lg text-gray-900 md:text-xl font-light:text-white">
+                        <h3 class="font-semibold ">
+                        تفاصيل الأشتراك 
+                        </h3>
+                        </div>
+                        <div>
+                            <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 inline-flex font-light:hover:bg-gray-600 font-light:hover:text-white" data-modal-toggle="{{enrollment.id}}-readEnrollmentModal">
+                                <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+                            <span class="sr-only">Close modal</span>
+                            </button>
+                            </div>
+                            </div>
+                    <dl>
+                    <p>
+                       <b>إسم المشترك:</b>  {{enrollment.first_name}} {{enrollment.last_name}}
+                       <b class="pr-36">رقم الهوية:</b>  {{enrollment.id_number}}
+                    </p>
+                    <p>
+                        <b>رقم الطلب :</b>  {{enrollment.id}}
+                        </p>
+                    <p>
+                        <b>الحالة الصحية:</b>  {{enrollment.health_condition}}
+                    </p>
+                    <p>
+                        <b>إسم البرنامج:</b>  {{enrollment.program.program_name}}
+                        <b class="pr-36">نوع البرنامج :</b>  {{enrollment.program.get_sport_category_display}} 
+                    </p>
+                    <p>
+                       <b>وصف البرنامج:</b>  {{enrollment.program.description}}
+                    </p>
+                    <p>
+                        <b>التاريخ:</b>  {{enrollment.program.start_date}} - {{enrollment.program.end_date}}
+                        </p>
+                        <p>
+                            <b >تاريخ التسجيل:</b>  {{enrollment.created_at}} 
+                        </p>
+                    <p>
+                        <b>الفئة العمرية:</b>  {{enrollment.program.min_age}} - {{enrollment.program.max_age}}
+                    </p>
+                    <p>
+                        <b>رسوم الأشتراك:</b>  SR {{enrollment.program.fees}}
+                        <b class="pr-36">حالة الأشتراك:</b>  {{enrollment.cart.get_status_display}}
+                    </p>
+
+                </dl>
+                <div class="flex justify-between items-center">
+                        <button type="button" class="bg-[#ED786A] text-white hover:bg-[#f05e4e] inline-flex items-center bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center font-light:bg-primary-600 font-light:hover:bg-primary-700 font-light:focus:ring-primary-800">
+                            الذهاب للبرنامج
+                        </button>                           
+                </div>
+        </div>
+    </div>
+</div>
                         {%endfor%}
                     </tbody>
                 </table>
@@ -151,59 +218,6 @@
         </div>
     </div>
     </section>
-    <!-- Modal toggle -->
-<div class="flex justify-center m-5">
-    <button id="readProductButton" data-modal-target="readProductModal" data-modal-toggle="readProductModal" class="block text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800" type="button">
-    Show read modal
-    </button>
-</div>
-
-<!-- Main modal -->
-<div id="readProductModal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-modal md:h-full">
-    <div class="relative p-4 w-full max-w-xl h-full md:h-auto">
-        <!-- Modal content -->
-        <div class="relative p-4 bg-white rounded-lg shadow font-light:bg-gray-800 sm:p-5">
-                <!-- Modal header -->
-                <div class="flex justify-between mb-4 rounded-t sm:mb-5">
-                    <div class="text-lg text-gray-900 md:text-xl font-light:text-white">
-                        <h3 class="font-semibold ">
-                            Apple iMac 27”
-                        </h3>
-                        <p class="font-bold">
-                            $2999
-                        </p>
-                    </div>
-                    <div>
-                        <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 inline-flex font-light:hover:bg-gray-600 font-light:hover:text-white" data-modal-toggle="readProductModal">
-                            <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
-                            <span class="sr-only">Close modal</span>
-                        </button>
-                    </div>
-                </div>
-                <dl>
-                    <dt class="mb-2 font-semibold leading-none text-gray-900 font-light:text-white">Details</dt>
-                    <dd class="mb-4 font-light text-gray-500 sm:mb-5 font-light:text-gray-400">Standard glass ,3.8GHz 8-core 10th-generation Intel Core i7 processor, Turbo Boost up to 5.0GHz, 16GB 2666MHz DDR4 memory, Radeon Pro 5500 XT with 8GB of GDDR6 memory, 256GB SSD storage, Gigabit Ethernet, Magic Mouse 2, Magic Keyboard - US.</dd>
-                    <dt class="mb-2 font-semibold leading-none text-gray-900 font-light:text-white">Category</dt>
-                    <dd class="mb-4 font-light text-gray-500 sm:mb-5 font-light:text-gray-400">Electronics/PC</dd>
-                </dl>
-                <div class="flex justify-between items-center">
-                    <div class="flex items-center space-x-3 sm:space-x-4">
-                        <button type="button" class="text-white inline-flex items-center bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center font-light:bg-primary-600 font-light:hover:bg-primary-700 font-light:focus:ring-primary-800">
-                            <svg aria-hidden="true" class="mr-1 -ml-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"></path><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd"></path></svg>
-                            Edit
-                        </button>               
-                        <button type="button" class="py-2.5 px-5 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-200 font-light:focus:ring-gray-700 font-light:bg-gray-800 font-light:text-gray-400 font-light:border-gray-600 font-light:hover:text-white font-light:hover:bg-gray-700">
-                            Preview
-                        </button>
-                    </div>              
-                    <button type="button" class="inline-flex items-center text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center font-light:bg-red-500 font-light:hover:bg-red-600 font-light:focus:ring-red-900">
-                        <svg aria-hidden="true" class="w-5 h-5 mr-1.5 -ml-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg>
-                        Delete
-                    </button>
-                </div>
-        </div>
-    </div>
-</div>
     {% endblock%}
         <section class="bg-gray-50 light:bg-gray-900 p-3 sm:p-5">
         <div class="mx-auto max-w-screen-xl px-4 lg:px-12">

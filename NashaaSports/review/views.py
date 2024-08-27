@@ -43,10 +43,12 @@ def add_review_view(request:HttpRequest, program_id):
 
 def delete_review_view(request:HttpRequest, review_id):
 
-
+    rating=0
     try:
         review = Review.objects.get(pk=review_id)
         program_id=review.program.id
+
+
 
         if not ( request.user.is_staff and request.user.has_perm("programs.delete_review")) and review.user != request.user:
             messages.warning(request, "You can't delete this review","alert-warning")

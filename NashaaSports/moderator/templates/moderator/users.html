@@ -5,33 +5,33 @@
 {% block content %}
 <div class="pt-36 bg-gray-100 min-h-screen">
     <div class="max-w-6xl mx-auto mt-10 px-8"> <!-- Increased padding here -->
-        <div class="bg-gradient-to-r from-green-400 via-blue-500 to-purple-600 p-12 rounded-xl shadow-xl text-white text-center transform transition-transform hover:scale-105">
+        <div class="bg-gray-100 p-12 rounded-xl shadow-xl text-white text-center transform transition-transform hover:scale-105">
             {% if user_type == 'academy' %}
-                <h1 class="text-5xl font-extrabold mb-4">مستخدمو الأكاديميات: <span class="bg-yellow-300 text-gray-900 px-4 py-2 rounded-full inline-block">{{ users.count }}</span> مستخدم</h1>
+                <h1 class="text-5xl text-black font-extrabold mb-4">مستخدمو الأكاديميات: <span class="bg-[#cd6868] text-gray-900 px-4 py-2 rounded-full inline-block">{{ users.count }}</span> مستخدم</h1>
             {% elif user_type == 'individual' %}
-                <h1 class="text-5xl font-extrabold mb-4">المستخدمون الأفراد: <span class="bg-yellow-300 text-gray-900 px-4 py-2 rounded-full inline-block">{{ users.count }}</span> مستخدم</h1>
+                <h1 class="text-5xl text-black font-extrabold mb-4">المستخدمون الأفراد: <span class="bg-[#cd6868]text-gray-900 px-4 py-2 rounded-full inline-block">{{ users.count }}</span> مستخدم</h1>
             {% elif user_type == 'all' %}
-                <h1 class="text-5xl font-extrabold mb-4">جميع المستخدمين: <span class="bg-yellow-300 text-gray-900 px-4 py-2 rounded-full inline-block">{{ users.count }}</span> مستخدم</h1>
+                <h1 class="text-5xl font-extrabold mb-4">جميع المستخدمين: <span class="bg-[#cd6868] text-gray-900 px-4 py-2 rounded-full inline-block">{{ users.count }}</span> مستخدم</h1>
             {% endif %}
         </div>
         
         <div class="mt-12 bg-white rounded-lg shadow-lg overflow-hidden">
             <table class="min-w-full bg-white">
-                <thead>
-                    <tr class="bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 text-white">
-                        <th class="py-4 px-8 border-b-2 border-gray-200 text-right text-lg leading-5 font-semibold uppercase tracking-wider">الاسم</th>
-                        <th class="py-4 px-8 border-b-2 border-gray-200 text-right text-lg leading-5 font-semibold uppercase tracking-wider">المعرف</th>
-                        <th class="py-4 px-8 border-b-2 border-gray-200 text-right text-lg leading-5 font-semibold uppercase tracking-wider">الإيميل</th>
+                <thead class="w-full bg-gray-100">
+                    <tr class=" text-white">
+                        <th class="py-4 text-black px-8 border-b-2 border-gray-200 text-right text-lg leading-5 font-semibold uppercase tracking-wider">الاسم</th>
+                        <th class="py-4 text-black px-8 border-b-2 border-gray-200 text-right text-lg leading-5 font-semibold uppercase tracking-wider">المعرف</th>
+                        <th class="py-4 text-black px-8 border-b-2 border-gray-200 text-right text-lg leading-5 font-semibold uppercase tracking-wider">الإيميل</th>
                         {% if user_type == 'individual' %}
-                        <th class="py-4 px-8 border-b-2 border-gray-200 text-right text-lg leading-5 font-semibold uppercase tracking-wider">الهوية </th>
+                        <th class="py-4 px-8 text-black border-b-2 border-gray-200 text-right text-lg leading-5 font-semibold uppercase tracking-wider">الهوية </th>
                         {% endif %}
                         {% if user_type == 'academy' %}
-                        <th class="py-4 px-8 border-b-2 border-gray-200 text-right text-lg leading-5 font-semibold uppercase tracking-wider">السجل التجاري</th>
+                        <th class="py-4 px-8 text-black border-b-2 border-gray-200 text-right text-lg leading-5 font-semibold uppercase tracking-wider">السجل التجاري</th>
                         {% endif %}
                         {% if user_type == 'all' %}
-                        <th class="py-4 px-8 border-b-2 border-gray-200 text-right text-lg leading-5 font-semibold uppercase tracking-wider">السجل </th>
+                        <th class="py-4 px-8 text-black border-b-2 border-gray-200 text-right text-lg leading-5 font-semibold uppercase tracking-wider">السجل </th>
                         {% endif %}
-                        <th class="py-4 px-8 border-b-2 border-gray-200 text-right text-lg leading-5 font-semibold uppercase tracking-wider">تاريخ التسجيل</th>
+                        <th class="py-4 px-8 text-black border-b-2 border-gray-200 text-right text-lg leading-5 font-semibold uppercase tracking-wider">تاريخ التسجيل</th>
                     </tr>
                 </thead>
                 <tbody class="bg-white">

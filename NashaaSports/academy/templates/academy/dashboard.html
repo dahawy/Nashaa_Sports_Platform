@@ -1,202 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-   <meta charset="UTF-8">
-   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <link
-      href="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.css"
-      rel="stylesheet"
-    />
-    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@40,400,0,0" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Platypi:ital,wght@0,300..800;1,300..800&family=Tajawal:wght@200;300;400;500;700;800;900&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap"
-        rel="stylesheet">
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-   <title>Document</title>
-   
-<style>
-  
-   /* Default styling for smaller screens */
-.my-element {
-   margin-right: 1rem; /* Default margin for smaller screens */
-}
-
-/* Styling for medium screens and above */
-@media (min-width: 768px) {
-   .my-element {
-       margin-right: 16rem;
-   }
-}
-</style>
-</head>
-<body dir="rtl" class="" style="font-family: Tajawal;">
-   <div class="" style=" height: 100vh; background: linear-gradient(to bottom right, #ffffff, #ffffff);">
-
-  
-   
-   <button data-drawer-target="sidebar-multi-level-sidebar" data-drawer-toggle="sidebar-multi-level-sidebar" aria-controls="sidebar-multi-level-sidebar" type="button" class="inline-flex items-center p-2 mt-2 ms-3 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
-      <span class="sr-only">Open sidebar</span>
-      <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-      <path clip-rule="evenodd" fill-rule="evenodd" d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"></path>
-      </svg>
-   </button>
-<section class="pt-8 lg:pt-32 " >
-<aside  id="sidebar-multi-level-sidebar" class="fixed top-0 gray  right-0 z-40 w-64 h-screen transition-transform translate-x-full sm:translate-x-0" aria-label="Sidebar">
-    
-   <div class="h-full px-3 py-4 overflow-y-auto shadow-lg bg-gray-50 " style="">
-      <div class="flex justify-center">
-         <a href="{% url 'main:home_view' %}" class="cursor-pointer">
-         <img
-              src="/media/logos/NLogo.png"
-              class="h-10"
-              alt="Nashaa Logo"
-            /></a>
-      </div>
-       <ul class="space-y-2 font-medium pt-20">
-          <li class="">
-             <a href="#" class="flex items-center p-2 text-gray-900 rounded-lg light:text-white hover:bg-gray-100 light:hover:bg-gray-700 group">
-                <svg class="w-5 h-5 text-[#cd7868] transition duration-75   " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="#cd7868" viewBox="0 0 22 21">
-                   <path d="M16.975 11H10V4.025a1 1 0 0 0-1.066-.998 8.5 8.5 0 1 0 9.039 9.039.999.999 0 0 0-1-1.066h.002Z"/>
-                   <path d="M12.5 0c-.157 0-.311.01-.565.027A1 1 0 0 0 11 1.02V10h8.975a1 1 0 0 0 1-.935c.013-.188.028-.374.028-.565A8.51 8.51 0 0 0 12.5 0Z"/>
-                </svg>
-                <span class="ms-3">نظرة عامة</span>
-             </a>
-          </li>
-          <li>
-             <button type="button" class="flex items-center w-full p-2 text-base text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 light:text-white light:hover:bg-gray-700" aria-controls="dropdown-example" data-collapse-toggle="dropdown-example">
-               <div class="">
-                  <span class="material-symbols-outlined text-[#cd7868]" style="font-size: 28px; color: #cd7868;">
-                     surfing
-                     </span>
-                 </div>
-                   <span class="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">البرامج</span>
-                   <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                      <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
-                   </svg>
-             </button>
-             <ul id="dropdown-example" class="hidden py-2 space-y-2">
-                   <li>
-                      <a href="{% url 'academy:add_program_view' request.user.id %}" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 light:text-white light:hover:bg-gray-700">اضف برنامج</a>
-                   </li>
-
-                   <li>
-                      <a href="{% url 'academy:programs_list_view' %}" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 light:text-white light:hover:bg-gray-700">قائمة البرامج</a>
-                   </li>
-             </ul>
-          </li>
-          <li>
-            <button type="button" class="flex items-center w-full p-2 text-base text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 light:text-white light:hover:bg-gray-700" aria-controls="dropdown-example1" data-collapse-toggle="dropdown-example1">
-               <div class="">
-                  <span class="material-symbols-outlined text-[#cd7868]" style="font-size: 28px; color: #cd7868;">
-                     location_on
-                     </span>
-                 </div>
-                  <span class="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">الفروع</span>
-                  <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
-                  </svg>
-            </button>
-            <ul id="dropdown-example1" class="hidden py-2 space-y-2">
-                  <li>
-                     <a href="{% url 'academy:add_branch_view' request.user.id %}" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 light:text-white light:hover:bg-gray-700">اضف فرع</a>
-                  </li>
-                  <li>
-                     <a href="{% url 'academy:branches_list_view' request.user.id %}" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 light:text-white light:hover:bg-gray-700">قائمة الفروع</a>
-                  </li>
-            </ul>
-         </li>
-         <li>
-            <button type="button" class="flex items-center w-full p-2 text-base text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 light:text-white light:hover:bg-gray-700" aria-controls="dropdown-example2" data-collapse-toggle="dropdown-example2">
-               <div class="">
-                  <span class="material-symbols-outlined text-[#cd7868]" style="font-size: 28px; color: #cd7868;">
-                     groups
-                     </span>
-                 </div>
-                  <span class="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">المدربين</span>
-                  <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
-                  </svg>
-            </button>
-            <ul id="dropdown-example2" class="hidden py-2 space-y-2">
-                  <li>
-                     <a href="{% url 'academy:add_coach_view' request.user.id %}" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 light:text-white light:hover:bg-gray-700">اضف مدرب</a>
-                  </li>
-
-                  <li>
-                     <a href="{% url 'academy:coach_list_view' request.user.id %}" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 light:text-white light:hover:bg-gray-700">قائمة المدربين</a>
-                  </li>
-            </ul>
-         </li>
-         <li>
-            <button type="button" class="flex items-center w-full p-2 text-base text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 light:text-white light:hover:bg-gray-700" aria-controls="dropdown-example3" data-collapse-toggle="dropdown-example3">
-               <div class="">
-                  <span class="material-symbols-outlined text-[#cd7868]" style="font-size: 28px; color: #cd7868;">
-                     group_add
-                     </span>
-                 </div>
-                  <a href="{% url 'academy:subscribers_view' user.id %}">
-                  <span class="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap ">المشتركين</span>
-               </a>
-                 
-            </button>
-           
-         </li>
-          
-          
-          
-       </ul>
-       <ul class="pt-4 mt-4 space-y-2 font-medium border-t border-gray-200 dark:border-gray-700">
-         <li >
-            <a href="#" class="flex items-center p-2 text-gray-900 transition duration-75 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white group">
-               <div class="flex items-center">
-                  <span class="material-symbols-outlined text-[#cd7868]" style="font-size: 28px; color: #cd7868;">
-                     help
-                     </span>
-                     <span class="ms-3">تواصل معنا</span>
-                 </div>
-               
-            </a>
-         </li> 
-         <li >
-            <a href="#" class="flex items-center p-2 text-gray-900 transition duration-75 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white group">
-               <div class="flex items-center">
-                  <span class="material-symbols-outlined text-[#cd7868]" style="font-size: 28px; color: #cd7868;">
-                     info
-                     </span>
-                     <span class="ms-3"> من نحن </span>
-                 </div>
-               
-            </a>
-         </li> 
-         <li >
-            <a href="#" class="flex items-center p-2 text-gray-900 transition duration-75 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white group">
-               <div class="flex items-center">
-                  <span class="material-symbols-outlined text-[#cd6868]" style="font-size: 28px; color: #cd7868;">
-                     logout
-                     </span>
-                     <span class="ms-3">تسجيل خروج</span>
-                 </div>
-               
-            </a>
-         </li> 
-         </ul>
-
-    </div>
- </aside>
- 
- <div class="p-4 my-element "  >
+{% extends 'academy/base.html' %}
+{% block content %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<div class="" style="  background: linear-gradient(to bottom right, #ffffff, #ffffff);">        
+<section  >
+ <div class=""  >
     <div class="p-4   rounded-lg " >
-       <div class=" md:grid md:grid-cols-4 gap-4 mb-4 min-sm:flex min-sm:flex-col" >
+       <div class=" md:grid md:grid-cols-4 gap-x-10 " >
           <!-- <div class="flex  mb-1 flex-col items-center justify-center h-24 rounded  light:bg-gray-800" style="background-color: rgb(255,255,255,1);">
              <p class="text-2xl text-gray-400 light:text-gray-500">
                 عدد البرامج 
              </p>
              <span class="text-2xl text-gray-400 light:text-gray-500">{{programs.count}}</span>
           </div> -->
-          <div class="bg-white shadow-md rounded-lg p-6">
+          <div class="bg-white shadow-md rounded-lg p-6 mb-4 ">
             <div class="flex items-center justify-between">
               <div>
                 <h2 class="text-lg font-semibold text-gray-800">البرامج</h2>
@@ -216,7 +32,7 @@
             </p>
             <span class="text-2xl text-gray-400 light:text-gray-500">{{branches.count}}</span>
          </div> -->
-         <div class="bg-white shadow-md rounded-lg p-6">
+         <div class="bg-white shadow-md rounded-lg p-6  mb-4">
             <div class="flex items-center justify-between">
               <div>
                 <h2 class="text-lg font-semibold text-gray-800">الفروع</h2>
@@ -235,7 +51,7 @@
             </p>
             <span class="text-2xl text-gray-400 light:text-gray-500">{{coaches.count}}</span>
          </div> -->
-         <div class="bg-white shadow-md rounded-lg p-6">
+         <div class="bg-white shadow-md rounded-lg p-6 gap-10  mb-4">
             <div class="flex items-center justify-between">
               <div>
                 <h2 class="text-lg font-semibold text-gray-800">المدربين</h2>
@@ -254,7 +70,7 @@
             </p>
             <span class="text-2xl text-gray-400 light:text-gray-500">{{enrollments.count}}</span>
          </div> -->
-         <div class="bg-white shadow-md rounded-lg p-6">
+         <div class="bg-white shadow-md rounded-lg p-6  mb-4">
             <div class="flex items-center justify-between">
               <div>
                 <h2 class="text-lg font-semibold text-gray-800">المشتركين</h2>
@@ -268,121 +84,70 @@
             </div>
           </div>
        </div>
-       <div class=" rounded-lg shadow-md flex flex-row w-full justify-center gap-5 py-3">
+       <div class="  flex flex-col  md:flex-row w-full justify-center gap-5 py-3 mb-10 mt-10">
 
             
-         <div class="max-w-sm w-full bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6">
-            <div class="flex justify-between">
-              <div>
-                <h5 class="leading-none text-3xl font-bold text-gray-900 dark:text-white pb-2">32.4k</h5>
-                <p class="text-base font-normal text-gray-500 dark:text-gray-400">Users this week</p>
-              </div>
-              <div class="flex items-center px-2.5 py-0.5 text-base font-semibold text-green-500 dark:text-green-500 text-center">
-                12%
-                <svg class="w-3 h-3 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 14">
-                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13V1m0 0L1 5m4-4 4 4" />
-                </svg>
-              </div>
-            </div>
-            <div id="area-chart"></div>
-            <div class="grid grid-cols-1 items-center border-gray-200 border-t dark:border-gray-700 justify-between">
-              <div class="flex justify-between items-center pt-5">
-                <button id="dropdownDefaultButton" data-dropdown-toggle="lastDaysdropdown" data-dropdown-placement="bottom"
-                  class="text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-gray-900 text-center inline-flex items-center dark:hover:text-white"
-                  type="button">
-                  Last 7 days
-                  <svg class="w-2.5 m-2.5 ms-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4" />
-                  </svg>
-                </button>
-                <div id="lastDaysdropdown" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
-                  <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton">
-                    <li>
-                      <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Yesterday</a>
-                    </li>
-                    <li>
-                      <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Today</a>
-                    </li>
-                    <li>
-                      <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Last 7 days</a>
-                    </li>
-                    <li>
-                      <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Last 30 days</a>
-                    </li>
-                    <li>
-                      <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Last 90 days</a>
-                    </li>
-                  </ul>
-                </div>
-                <a href="#" class="uppercase text-sm font-semibold inline-flex items-center rounded-lg text-blue-600 hover:text-blue-700 dark:hover:text-blue-500  hover:bg-gray-100 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700 px-3 py-2">
-                  Users Report
-                  <svg class="w-2.5 h-2.5 ms-1.5 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4" />
-                  </svg>
-                </a>
-              </div>
-            </div>
+         <div>
+            <div class="max-w-sm w-full bg-white rounded-lg shadow  p-4 md:p-6">
+               <div class="flex justify-between">
+                 <div>
+                   <h5 class="leading-none text-3xl font-bold text-gray-900  pb-2">32.4k</h5>
+                   <p class="text-base font-normal text-gray-500 ">المشتركين هذا الشهر</p>
+                 </div>
+                 <div class="flex items-center px-2.5 py-0.5 text-base font-semibold text-green-500  text-center">
+                   12%
+                   <svg class="w-3 h-3 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 14">
+                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13V1m0 0L1 5m4-4 4 4" />
+                   </svg>
+                 </div>
+               </div>
+               <div id="area-chart"></div>
+               
+             </div>
+         </div>
+          
+         
+          <div>
+            <div class=" max-w-sm w-full bg-white rounded-lg shadow  p-4 md:p-6 ">
+               <div class="flex justify-between">
+                 <div>
+                   <h5 class="leading-none text-3xl font-bold text-gray-900  pb-2">15.2k</h5>
+                   <p class="text-base font-normal text-gray-500">ايرادات هذا الشهر</p>
+                 </div>
+                 <div class="flex items-center px-2.5 py-0.5 text-base font-semibold text-red-500  text-center">
+                   -8%
+                   <svg class="w-3 h-3 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 14">
+                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 1v12M5 1l4 4M5 1L1 5" />
+                   </svg>
+                 </div>
+               </div>
+               <div id="area-chart-2"></div>
+               
+             </div>
           </div>
           
-          <!-- Duplicate of the first card -->
-          <div class="max-w-sm w-full bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6 mt-4">
-            <div class="flex justify-between">
-              <div>
-                <h5 class="leading-none text-3xl font-bold text-gray-900 dark:text-white pb-2">15.2k</h5>
-                <p class="text-base font-normal text-gray-500 dark:text-gray-400">New Visitors</p>
-              </div>
-              <div class="flex items-center px-2.5 py-0.5 text-base font-semibold text-red-500 dark:text-red-500 text-center">
-                -8%
-                <svg class="w-3 h-3 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 14">
-                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 1v12M5 1l4 4M5 1L1 5" />
-                </svg>
-              </div>
-            </div>
-            <div id="area-chart-2"></div>
-            <div class="grid grid-cols-1 items-center border-gray-200 border-t dark:border-gray-700 justify-between">
-              <div class="flex justify-between items-center pt-5">
-                <button id="dropdownDefaultButton2" data-dropdown-toggle="lastDaysdropdown2" data-dropdown-placement="bottom"
-                  class="text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-gray-900 text-center inline-flex items-center dark:hover:text-white"
-                  type="button">
-                  Last 7 days
-                  <svg class="w-2.5 m-2.5 ms-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4" />
-                  </svg>
-                </button>
-                <div id="lastDaysdropdown2" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
-                  <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton2">
-                    <li>
-                      <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Yesterday</a>
-                    </li>
-                    <li>
-                      <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Today</a>
-                    </li>
-                    <li>
-                      <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Last 7 days</a>
-                    </li>
-                    <li>
-                      <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Last 30 days</a>
-                    </li>
-                    <li>
-                      <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Last 90 days</a>
-                    </li>
-                  </ul>
-                </div>
-                <a href="#" class="uppercase text-sm font-semibold inline-flex items-center rounded-lg text-blue-600 hover:text-blue-700 dark:hover:text-blue-500  hover:bg-gray-100 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700 px-3 py-2">
-                  Visitors Report 
-                  <svg class="w-2.5 h-2.5 ms-1.5 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4" />
-                  </svg>
-                </a>
-              </div>
-            </div>
-          </div>
+<div class=" bg-white rounded-lg shadow  p-4 md:p-6">
+
+  <div class="flex justify-between items-start w-full">
+      <div class="flex-col items-center">
+        <div class="flex items-center mb-1">
+            <h5 class="text-xl font-bold leading-none text-gray-900  me-1">Website traffic</h5>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="py-6" id="pie-chart"></div>
+</div>
+
+
           
           
                   </div>
        <div class=" rounded-lg shadow-md">
         <div class="flex justify-center mb-2 mt-2">
-         <h2 class="text-2xl text-gray-400">حالة برامج المشتركين</h2>
+         <h2 class="text-2xl text-gray-400">حالة الاشتراكات </h2>
         </div>
         <div class="flex items-center justify-center  mb-4 rounded bg-white light:bg-gray-800"></div>
          <div class=" w-full">
@@ -410,207 +175,6 @@
 
 </div>  
 
-<script>
-   const options1 = {
-     chart: {
-       height: "100%",
-       maxWidth: "100%",
-       type: "area",
-       fontFamily: "Inter, sans-serif",
-       dropShadow: {
-         enabled: false,
-       },
-       toolbar: {
-         show: false,
-       },
-     },
-     tooltip: {
-       enabled: true,
-       x: {
-         show: false,
-       },
-     },
-     fill: {
-       type: "gradient",
-       gradient: {
-         opacityFrom: 0.6,
-         opacityTo: 0,
-         shadeIntensity: 0,
-         stops: [20, 100],
-       },
-     },
-     dataLabels: {
-       enabled: false,
-     },
-     markers: {
-       size: 0,
-     },
-     xaxis: {
-       type: "datetime",
-       categories: ["2023-07-19", "2023-07-20", "2023-07-21", "2023-07-22", "2023-07-23", "2023-07-24", "2023-07-25"],
-       axisBorder: {
-         show: false,
-       },
-       labels: {
-         style: {
-           colors: "#97a3b9",
-         },
-       },
-     },
-     yaxis: {
-       show: false,
-       tickAmount: 3,
-     },
-     grid: {
-       strokeDashArray: 4,
-     },
-     stroke: {
-       curve: "smooth",
-       width: 2,
-     },
-     series: [{
-       name: "Users",
-       data: [30, 40, 60, 20, 50, 90, 50],
-     }, ],
-     colors: ["#4FD1C5"],
-   };
-   
-   const chart1 = new ApexCharts(document.getElementById("area-chart"), options1);
-   chart1.render();
-   
-   const options2 = {
-     chart: {
-       height: "100%",
-       maxWidth: "100%",
-       type: "area",
-       fontFamily: "Inter, sans-serif",
-       dropShadow: {
-         enabled: false,
-       },
-       toolbar: {
-         show: false,
-       },
-     },
-     tooltip: {
-       enabled: true,
-       x: {
-         show: false,
-       },
-     },
-     fill: {
-       type: "gradient",
-       gradient: {
-         opacityFrom: 0.6,
-         opacityTo: 0,
-         shadeIntensity: 0,
-         stops: [20, 100],
-       },
-     },
-     dataLabels: {
-       enabled: false,
-     },
-     markers: {
-       size: 0,
-     },
-     xaxis: {
-       type: "datetime",
-       categories: ["2023-07-19", "2023-07-20", "2023-07-21", "2023-07-22", "2023-07-23", "2023-07-24", "2023-07-25"],
-       axisBorder: {
-         show: false,
-       },
-       labels: {
-         style: {
-           colors: "#97a3b9",
-         },
-       },
-     },
-     yaxis: {
-       show: false,
-       tickAmount: 3,
-     },
-     grid: {
-       strokeDashArray: 4,
-     },
-     stroke: {
-       curve: "smooth",
-       width: 2,
-     },
-     series: [{
-       name: "Visitors",
-       data: [15, 25, 40, 18, 38, 70, 45],
-     }, ],
-     colors: ["#F56565"],
-   };
-   
-   const chart2 = new ApexCharts(document.getElementById("area-chart-2"), options2);
-   chart2.render();
-   </script>
-<script>
-   // JavaScript code for Chart.js
 
-   const data = {
-    datasets: [{
-        data: ['{{enrollments_ended.count}}', '{{enrollments_pending.count}}', '{{enrollments_in_progress.count}}'],
-        backgroundColor: [
-            'rgba(255, 99, 132, 0.2)', // First bar: Red
-            'rgba(255, 165, 0, 0.2)',  // Second bar: Orange
-            'rgba(0, 128, 0, 0.2)'     // Third bar: Green
-        ],
-        borderColor: [
-            'rgba(255, 99, 132, 1)',   // Border color for the first bar
-            'rgba(255, 165, 0, 1)',    // Border color for the second bar
-            'rgba(0, 128, 0, 1)'       // Border color for the third bar
-        ],
-        borderWidth: 1
-    }],
-    labels: ['منتهي', 'معلق', 'جاري']
-   };
-
-   const config = {
-       type: 'bar',
-       data: data,
-       options: {
-           responsive: true,
-           plugins: {
-               legend: {
-                   display: false // Hide legend if not needed
-               },
-               tooltip: {
-                   callbacks: {
-                       label: function(tooltipItem) {
-                           return tooltipItem.label + ': ' + tooltipItem.raw;
-                       }
-                   }
-               }
-           },
-           scales: {
-               x: {
-                   grid: {
-                       display: false // Hide x-axis grid lines
-                   },
-                   ticks: {
-                       display: false // Hide x-axis labels
-                   }
-               },
-               y: {
-                   grid: {
-                       display: false // Hide y-axis grid lines
-                   },
-                   ticks: {
-                       display: false // Hide y-axis labels
-                   }
-               }
-           }
-       }
-   };
-
-   window.onload = function() {
-       // Create and render the chart
-       const ctx = document.getElementById('myChart').getContext('2d');
-       new Chart(ctx, config);
-   };
-</script>
-
-<script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.js"></script>
-</body>
-</html>
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+{% endblock %}
