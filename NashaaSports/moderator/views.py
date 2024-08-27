@@ -203,7 +203,7 @@ def moderator_dashboard_view(request:HttpRequest, days_ago: int):
                 # A list of all sport categories
                 sport_categories = Program.objects.values_list('sport_category', flat=True).distinct()
                 # Get all sport categories labels in Arabic
-                #sport_categories_labels = [Program.SportChoices(sport).label for sport in sport_categories]
+                #sport_categories_labels = [Program.SportChoices(sport).label for sport in sport_categories] 
                 sport_categories_labels = []
                 for sport in sport_categories:
                     try:

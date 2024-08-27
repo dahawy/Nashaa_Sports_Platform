@@ -116,26 +116,32 @@
                         </span> <p> {{time_slot.start_time}}</p>-<p>{{time_slot.end_time}}</p>
             </div>
                 {% endfor %}
-                <div class="flex gap-2">
+                <div class="flex gap-2 items-center">
                     <span class="material-symbols-outlined text-[0.9rem]">
                         event
                         </span>
                         {{program.start_date}}
 
                 </div>
+                <div class="flex gap-2 items-center">
+                    <span class="material-symbols-outlined text-[0.9rem]">
+                        event_busy
+                        </span>
+                        {{program.end_date}}
+
+                </div>
                
                 <p class="font-normal text-gray-700 ">الاعمار : {{program.min_age}} - {{program.max_age}}</p>
                 <p class="font-normal text-gray-700 ">مدة البرنامج : {{program.duration}} أسابيع</p>
-                <p class="font-normal text-gray-700 ">قيمة البرنامج : {{program.fees}} ريال</p>
-                <div class="mt-10">
+                <p class="font-normal text-red-700 ">تاريخ انتهاء التسجيل : {{program.registration_end_date}}</p>
+                <div class="mt-10 flex justify-between items-center">
 
                     <a href="{% url 'enrollment:enroll_in_program_view' program.id user.id %}"
                         class=" text-white bg-[#ED786A] hover:bg-[#f05e4e]  font-medium rounded-lg text-sm px-5 py-2.5 text-center transition-all duration-500 ">سجل
                         الان</a>
-                        <!-- <a
-      href=""
-      class="w-full md:w-auto mb-14 inline-flex items-center justify-center py-3 px-7 text-base font-semibold text-center text-white rounded-full transition-all duration-500 bg-[#ED786A] hover:bg-[#f05e4e]"
-    > سجل الان </a> -->
+                    
+                    <h2 class="text-lg  font-semibold">{{program.fees}} ريال</h2>
+      
                 </div>
             </div>
 
