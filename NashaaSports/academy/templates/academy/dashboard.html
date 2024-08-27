@@ -1,49 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-   <meta charset="UTF-8">
-   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <link
-      href="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.css"
-      rel="stylesheet"
-    />
-    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@40,400,0,0" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Platypi:ital,wght@0,300..800;1,300..800&family=Tajawal:wght@200;300;400;500;700;800;900&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap"
-        rel="stylesheet">
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-   <title>Document</title>
-   
-<style>
-  
-   /* Default styling for smaller screens */
-.my-element {
-   margin-right: 1rem; /* Default margin for smaller screens */
-}
-
-/* Styling for medium screens and above */
-@media (min-width: 768px) {
-   .my-element {
-       margin-right: 16rem;
-   }
-}
-</style>
-</head>
-<body dir="rtl" class="" style="font-family: Tajawal;">
-   <div class="" style=" height: 100vh; background: linear-gradient(to bottom right, #ffffff, #ffffff);">
-
-   
-   
-   
-<section class="pt-8 lg:pt-32 " >
-{% include 'academy/sidebar.html' %}
- 
- <div class="p-4 my-element "  >
+{% extends 'academy/base.html' %}
+{% block content %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<div class="" style="  background: linear-gradient(to bottom right, #ffffff, #ffffff);">        
+<section  >
+ <div class=""  >
     <div class="p-4   rounded-lg " >
-       <div class=" md:grid md:grid-cols-4 gap-10 " >
+       <div class=" md:grid md:grid-cols-4 gap-x-10 " >
           <!-- <div class="flex  mb-1 flex-col items-center justify-center h-24 rounded  light:bg-gray-800" style="background-color: rgb(255,255,255,1);">
              <p class="text-2xl text-gray-400 light:text-gray-500">
                 عدد البرامج 
@@ -126,13 +88,13 @@
 
             
          <div>
-            <div class="max-w-sm w-full bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6">
+            <div class="max-w-sm w-full bg-white rounded-lg shadow  p-4 md:p-6">
                <div class="flex justify-between">
                  <div>
-                   <h5 class="leading-none text-3xl font-bold text-gray-900 dark:text-white pb-2">32.4k</h5>
-                   <p class="text-base font-normal text-gray-500 dark:text-gray-400">المشتركين هذا الشهر</p>
+                   <h5 class="leading-none text-3xl font-bold text-gray-900  pb-2">32.4k</h5>
+                   <p class="text-base font-normal text-gray-500 ">المشتركين هذا الشهر</p>
                  </div>
-                 <div class="flex items-center px-2.5 py-0.5 text-base font-semibold text-green-500 dark:text-green-500 text-center">
+                 <div class="flex items-center px-2.5 py-0.5 text-base font-semibold text-green-500  text-center">
                    12%
                    <svg class="w-3 h-3 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 14">
                      <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13V1m0 0L1 5m4-4 4 4" />
@@ -146,13 +108,13 @@
           
          
           <div>
-            <div class=" max-w-sm w-full bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6 ">
+            <div class=" max-w-sm w-full bg-white rounded-lg shadow  p-4 md:p-6 ">
                <div class="flex justify-between">
                  <div>
-                   <h5 class="leading-none text-3xl font-bold text-gray-900 dark:text-white pb-2">15.2k</h5>
-                   <p class="text-base font-normal text-gray-500 dark:text-gray-400">ايرادات هذا الشهر</p>
+                   <h5 class="leading-none text-3xl font-bold text-gray-900  pb-2">15.2k</h5>
+                   <p class="text-base font-normal text-gray-500">ايرادات هذا الشهر</p>
                  </div>
-                 <div class="flex items-center px-2.5 py-0.5 text-base font-semibold text-red-500 dark:text-red-500 text-center">
+                 <div class="flex items-center px-2.5 py-0.5 text-base font-semibold text-red-500  text-center">
                    -8%
                    <svg class="w-3 h-3 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 14">
                      <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 1v12M5 1l4 4M5 1L1 5" />
@@ -164,11 +126,28 @@
              </div>
           </div>
           
+<div class=" bg-white rounded-lg shadow  p-4 md:p-6">
+
+  <div class="flex justify-between items-start w-full">
+      <div class="flex-col items-center">
+        <div class="flex items-center mb-1">
+            <h5 class="text-xl font-bold leading-none text-gray-900  me-1">Website traffic</h5>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="py-6" id="pie-chart"></div>
+</div>
+
+
+          
           
                   </div>
        <div class=" rounded-lg shadow-md">
         <div class="flex justify-center mb-2 mt-2">
-         <h2 class="text-2xl text-gray-400">حالة برامج المشتركين</h2>
+         <h2 class="text-2xl text-gray-400">حالة الاشتراكات </h2>
         </div>
         <div class="flex items-center justify-center  mb-4 rounded bg-white light:bg-gray-800"></div>
          <div class=" w-full">
@@ -196,207 +175,6 @@
 
 </div>  
 
-<script>
-   const options1 = {
-     chart: {
-       height: "100%",
-       maxWidth: "100%",
-       type: "area",
-       fontFamily: "Inter, sans-serif",
-       dropShadow: {
-         enabled: false,
-       },
-       toolbar: {
-         show: false,
-       },
-     },
-     tooltip: {
-       enabled: true,
-       x: {
-         show: false,
-       },
-     },
-     fill: {
-       type: "gradient",
-       gradient: {
-         opacityFrom: 0.6,
-         opacityTo: 0,
-         shadeIntensity: 0,
-         stops: [20, 100],
-       },
-     },
-     dataLabels: {
-       enabled: false,
-     },
-     markers: {
-       size: 0,
-     },
-     xaxis: {
-       type: "datetime",
-       categories: ["2023-07-19", "2023-07-20", "2023-07-21", "2023-07-22", "2023-07-23", "2023-07-24", "2023-07-25"],
-       axisBorder: {
-         show: false,
-       },
-       labels: {
-         style: {
-           colors: "#97a3b9",
-         },
-       },
-     },
-     yaxis: {
-       show: false,
-       tickAmount: 3,
-     },
-     grid: {
-       strokeDashArray: 4,
-     },
-     stroke: {
-       curve: "smooth",
-       width: 2,
-     },
-     series: [{
-       name: "Users",
-       data: [30, 40, 60, 20, 50, 90, 50],
-     }, ],
-     colors: ["#4FD1C5"],
-   };
-   
-   const chart1 = new ApexCharts(document.getElementById("area-chart"), options1);
-   chart1.render();
-   
-   const options2 = {
-     chart: {
-       height: "100%",
-       maxWidth: "100%",
-       type: "area",
-       fontFamily: "Inter, sans-serif",
-       dropShadow: {
-         enabled: false,
-       },
-       toolbar: {
-         show: false,
-       },
-     },
-     tooltip: {
-       enabled: true,
-       x: {
-         show: false,
-       },
-     },
-     fill: {
-       type: "gradient",
-       gradient: {
-         opacityFrom: 0.6,
-         opacityTo: 0,
-         shadeIntensity: 0,
-         stops: [20, 100],
-       },
-     },
-     dataLabels: {
-       enabled: false,
-     },
-     markers: {
-       size: 0,
-     },
-     xaxis: {
-       type: "datetime",
-       categories: ["2023-07-19", "2023-07-20", "2023-07-21", "2023-07-22", "2023-07-23", "2023-07-24", "2023-07-25"],
-       axisBorder: {
-         show: false,
-       },
-       labels: {
-         style: {
-           colors: "#97a3b9",
-         },
-       },
-     },
-     yaxis: {
-       show: false,
-       tickAmount: 3,
-     },
-     grid: {
-       strokeDashArray: 4,
-     },
-     stroke: {
-       curve: "smooth",
-       width: 2,
-     },
-     series: [{
-       name: "Visitors",
-       data: [15, 25, 40, 18, 38, 70, 45],
-     }, ],
-     colors: ["#1A56DB"],
-   };
-   
-   const chart2 = new ApexCharts(document.getElementById("area-chart-2"), options2);
-   chart2.render();
-   </script>
-<script>
-   // JavaScript code for Chart.js
 
-   const data = {
-    datasets: [{
-        data: ['{{enrollments_ended.count}}', '{{enrollments_pending.count}}', '{{enrollments_in_progress.count}}'],
-        backgroundColor: [
-            'rgba(255, 99, 132, 0.2)', // First bar: Red
-            'rgba(255, 165, 0, 0.2)',  // Second bar: Orange
-            'rgba(0, 128, 0, 0.2)'     // Third bar: Green
-        ],
-        borderColor: [
-            'rgba(255, 99, 132, 1)',   // Border color for the first bar
-            'rgba(255, 165, 0, 1)',    // Border color for the second bar
-            'rgba(0, 128, 0, 1)'       // Border color for the third bar
-        ],
-        borderWidth: 1
-    }],
-    labels: ['منتهي', 'معلق', 'جاري']
-   };
-
-   const config = {
-       type: 'bar',
-       data: data,
-       options: {
-           responsive: true,
-           plugins: {
-               legend: {
-                   display: false // Hide legend if not needed
-               },
-               tooltip: {
-                   callbacks: {
-                       label: function(tooltipItem) {
-                           return tooltipItem.label + ': ' + tooltipItem.raw;
-                       }
-                   }
-               }
-           },
-           scales: {
-               x: {
-                   grid: {
-                       display: false // Hide x-axis grid lines
-                   },
-                   ticks: {
-                       display: false // Hide x-axis labels
-                   }
-               },
-               y: {
-                   grid: {
-                       display: false // Hide y-axis grid lines
-                   },
-                   ticks: {
-                       display: false // Hide y-axis labels
-                   }
-               }
-           }
-       }
-   };
-
-   window.onload = function() {
-       // Create and render the chart
-       const ctx = document.getElementById('myChart').getContext('2d');
-       new Chart(ctx, config);
-   };
-</script>
-
-<script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.js"></script>
-</body>
-</html>
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+{% endblock %}

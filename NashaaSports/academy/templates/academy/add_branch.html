@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'academy/base.html' %}
 {% block content %}
 
 <script src="https://maps.googleapis.com/maps/api/js?key={{ google_maps_api_key }}&libraries=places&callback=initMap" async defer></script>
@@ -121,14 +121,14 @@
     {% csrf_token %}
     <div class="mb-5">
       <label for="branch_name" class="block mb-2 text-sm font-medium text-gray-900 light:text-white">اسم الفرع</label>
-      <input type="text" name="branch_name" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 light:bg-gray-700 light:border-gray-600 light:placeholder-gray-400 light:text-white light:focus:ring-blue-500 light:focus:border-blue-500 light:shadow-sm-light" placeholder="name@flowbite.com" required />
+      <input type="text" name="branch_name" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 light:bg-gray-700 light:border-gray-600 light:placeholder-gray-400 light:text-white light:focus:ring-blue-500 light:focus:border-blue-500 light:shadow-sm-light" placeholder="ريال مدريد فرغ الرياض-العليا" required />
     </div>
     <div class="mb-5">
         
 
         <label for="branch_city" class="block mb-2 text-sm font-medium text-gray-900 light:text-white">المدينة</label>
     <select id="countries" name="branch_city"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 light:bg-gray-700 light:border-gray-600 light:placeholder-gray-400 light:text-white light:focus:ring-blue-500 light:focus:border-blue-500">
-      <option selected>Choose a country</option>
+      <option selected>اختار مدينة</option>
       {% for key , value in cities %}
       <option value="{{value}}">{{value}}</option>
       {% endfor %}
@@ -143,7 +143,7 @@
     </div>
     <div class="mb-5">
         <label for="search-box" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">حدد موقع الفرع</label>
-        <input id="search-box" type="text" placeholder="Search for places" class="w-25 h-7 rounded-lg ">
+        <input id="search-box" type="text" placeholder="ابحث عن الفرغ" class="w-25 h-7 rounded-lg ">
     <div id="map" class="h-64 rounded-lg"></div>
     <input type="text" id="map-url" placeholder="Map URL" name="location" class="hidden" readonly>
     </div>
@@ -151,9 +151,8 @@
       <div class="flex items-center h-5">
         <input id="terms" type="checkbox" value="" class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 light:bg-gray-700 light:border-gray-600 light:focus:ring-blue-600 light:ring-offset-gray-800 light:focus:ring-offset-gray-800" required />
       </div>
-      <label for="terms" class="ms-2 text-sm font-medium text-gray-900 light:text-gray-300">I agree with the <a href="#" class="text-blue-600 hover:underline light:text-blue-500">terms and conditions</a></label>
-    </div>
-    <button data-modal-target="popup-modal" data-modal-toggle="popup-modal" type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center light:bg-blue-600 light:hover:bg-blue-700 light:focus:ring-blue-800">اضف الفرع</button>
+          </div>
+    <button data-modal-target="popup-modal" data-modal-toggle="popup-modal" type="submit" class="text-white w-full bg-[#ED786A] hover:bg-[#f05e4e] focus:ring-4 focus:outline-none focus:ring-orange-300  font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">اضف الفرع</button>
   </form>
   
 

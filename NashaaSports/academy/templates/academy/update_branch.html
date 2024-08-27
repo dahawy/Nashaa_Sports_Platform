@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'academy/base.html' %}
 {% block content %}
 
 <script src="https://maps.googleapis.com/maps/api/js?key={{ google_maps_api_key }}&libraries=places"></script>
@@ -33,7 +33,7 @@
     <!--  -->
     <h1>اختار الموقع</h1>
     <div id="map" class="rounded-lg" style="height: 200px; width: 100%;"></div>
-    <input id="search-box" class="controls" type="text" placeholder="Search Box">
+    <input id="search-box" class="controls rounded-full h-5" type="text" placeholder="ابحث عن الفرع">
     <input type="hidden" id="map-url" name="map_url" value="{{ branch.branch_location }}">
     
 
@@ -55,7 +55,10 @@
 
         map = new google.maps.Map(document.getElementById('map'), {
             zoom: 15,
-            center: initialLocation
+            center: initialLocation,
+            mapTypeControl: false, // Disable map/satellite view option
+            streetViewControl: false, // Disable Pegman (Street View)
+            zoomControl: false, // Disable zoom controls
         });
 
         marker = new google.maps.Marker({
@@ -136,6 +139,7 @@
 
     window.onload = initMap;
 </script>
+
 
 
 {% endblock %}
