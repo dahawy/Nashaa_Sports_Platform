@@ -289,7 +289,7 @@
             </div>
             {% if request.user.is_authenticated or request.user.is_superuser %}
             <!-- Cart Button -->
-            {% block cart_items %}
+
               <div class="flex items-center lg:space-x-2">
                 <button 
                   id="myCartDropdownButton1"
@@ -380,8 +380,7 @@
                   </li>
                 </ul> -->
             </div>
-            
-            {% endblock%}    
+              
             {%endif%}    
         </div>
       </div>

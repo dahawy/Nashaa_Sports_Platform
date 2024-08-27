@@ -79,7 +79,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                # 'main.context_processors.cart_data',
+                'main.context_processors.cart_data',
             ],
         },
     },
@@ -97,19 +97,19 @@ WSGI_APPLICATION = 'NashaaSports.wsgi.application'
 #         'NAME': BASE_DIR / 'db.sqlite3',
 #     }
 # }
-# DATABASES = {
-#         "default":dj_database_url.config(default=DATABASE_URL,conn_max_age=1800),
-# }
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'nashaa_sport_db',
-        'USER': 'postgres', 
-        'PASSWORD': '',
-        'HOST': 'localhost'
-
-    }
+        "default":dj_database_url.config(default=DATABASE_URL,conn_max_age=1800),
 }
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'nashaa_sport_db',
+#         'USER': 'postgres', 
+#         'PASSWORD': '',
+#         'HOST': 'localhost'
+
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
