@@ -158,3 +158,9 @@ def mode_view(request:HttpRequest, mode):
     elif mode == "dark":
         response.set_cookie("mode", "dark")
     return response
+
+
+
+def about_view(request:HttpRequest):
+    
+    return render(request, "about.html")

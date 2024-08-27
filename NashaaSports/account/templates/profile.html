@@ -4,12 +4,125 @@
 
 {% block content %}
 {% if request.user.is_authenticated %}
-<section class="relative p-48 pb-24">
-        <div class="w-full max-w-7xl mx-auto px-6 md:px-8">
-            <div class="flex items-center justify-center relative z-10 mb-2.5">
-            {% if profile.logo %}
-            <img src="{{ profile.logo.url }}"
-            class="border-4 border-solid border-white rounded-full"
+<section class="w-full overflow-hidden bg-gradient-to-br from-orange-50 to-white bg-white">
+    <div class="flex flex-col my-48 bg-gray-100 shadow-2xl rounded-2xl mx-20">
+        {% if request.user.is_staff and not request.user.is_superuser %}
+         <h4 class=" mr-32 my-16 text-gray-900 text-4xl font-semibold leading-loose"> معلومات الأكاديمية</h4>
+        <div class="flex justify-between">
+            <!-- Profile Image -->
+               <div class="flex items-right justify-start relative z-10 mb-2.5 mr-36 bg-cover w-15 h-15">
+               {% if profile.logo %}
+               <img src="{{ profile.logo.url }}"
+               class="w-40 h-40 rounded-full shadow-2xl"
+               alt="academy-logo-image" 
+               />
+               {% else %}
+               <img
+               src="/media/avatars/defaultAvatar.png"
+               class="w-40 h-40 rounded-full"
+               alt="academy-logo-image"
+               />
+               {% endif %}
+               </div>
+        </div>
+            <div class="mr-36">
+                    <h1 class=" flex flex-row gap-4 items-center w-full mt-4 sm:mx-4 xs:pl-4 text-gray-800 light:text-white lg:text-3xl font-semibold md:text-3xl sm:text-3xl xs:text-xl">
+                        {{profile.academy_name}} 
+                        <button id="updateProductButton" data-modal-target="updateProfileModal" data-modal-toggle="updateProfileModal" class="block w-10 h-10 text-black bg-white border-2 border-black hover:bg-black-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm flex items-center justify-center" type="button">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 -960 960 960" width="18px" fill="#000000">
+                                <path d="M200-200h57l391-391-57-57-391 391v57Zm-80 80v-170l528-527q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T817-647L290-120H120Zm640-584-56-56 56 56Zm-141 85-28-29 57 57-29-28Z"/>
+                            </svg>
+                        </button>
+                        </h1>
+                <p class="w-full mb-8 sm:mx-4 xs:pl-4 text-gray-500 light:text-white lg:text-xl md:text-base base:text-base xs:text-sm">
+                    {{request.user.username}}@</p>
+            </div>
+        <div
+            class="xl:w-[80%] lg:w-[90%] md:w-[90%] sm:w-[92%] xs:w-[90%] mx-auto flex flex-col gap-4 items-center relative lg:-top-8 md:-top-6 sm:-top-4 xs:-top-4">
+            <!-- Detail -->
+            <div class="w-full my-auto py-6 flex flex-col justify-center gap-2">
+                <div class="w-full flex sm:flex-row xs:flex-col gap-2 p-10 bg-gray-200 justify-center rounded-lg">
+                    <div class="w-full">
+                        <dl class="text-gray-900 divide-y divide-gray-200 light:text-white light:divide-gray-700">
+                            <div class="flex flex-col pb-3">
+                                <dt class="mb-1 text-gray-500 md:text-lg light:text-gray-400">أسم الأكاديمية</dt>
+                                <dd class="text-lg font-semibold">{{profile.academy_name}}</dd> 
+                            </div>
+                            <div class="flex flex-col py-3">
+                                <dt class="mb-1 text-gray-500 md:text-lg light:text-gray-400">حول الأكاديمية</dt>
+                                <dd class="text-lg font-semibold">{{profile.description}}</dd>
+                            </div>
+                        </dl>
+                    </div>
+                    <div class="w-full mr-3">
+                        <dl class="text-gray-900 divide-y divide-gray-200 light:text-white light:divide-gray-700">
+                            <div class="flex flex-col pb-3">
+                                <dt class="mb-1 text-gray-500 md:text-lg light:text-gray-400">البريد الإلكتروني</dt>
+                                <dd class="text-lg font-semibold">{{profile.user.email}}</dd>
+                            </div>
+                            <div class="flex flex-col pt-3">
+                                <dt class="mb-1 text-gray-500 md:text-lg light:text-gray-400">حالة الأكديمية</dt>
+                                {%if profile.approved %}
+                                <dd class="text-lg text-green-500 font-semibold">معتمد</dd>
+                                {%else%}
+                                <dd class="text-lg text-red-500 font-semibold">غير معتمد</dd>
+                                {%endif%}
+                            </div>
+                        </dl>
+                    </div>
+                </div>
+                <!-- Update modal -->
+                    <div id="updateProfileModal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-modal md:h-full">
+                        <div class="relative p-4 w-full max-w-2xl h-full md:h-auto">
+                            <!-- Modal content -->
+                            <div class="relative p-4 bg-white rounded-lg shadow light:bg-gray-800 sm:p-5">
+                                <!-- Modal header -->
+                                <div class="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5 light:border-gray-600">
+                                    <h3 class="text-lg font-semibold text-gray-900 light:text-white">
+                                        تحديث بيانات الأكاديمية
+                                    </h3>
+                                    <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center" data-modal-toggle="updateProfileModal">
+                                        <svg aria-hidden="true" class="w-5 h-5 left-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+                                        <span class="sr-only">Close modal</span>
+                                    </button>
+                                </div>
+                                <!-- Modal body -->
+                                <form id="updateForm{{ profile.id }}"
+                                    action="{% url 'account:update_academy_profile' %}"
+                                    method="post"
+                                    enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                    <div class="grid gap-4 mb-4 sm:grid-cols-2">
+                                        <div class="sm:col-span-2">
+                                            <label for="description" class="block mb-2 text-sm font-medium text-gray-900 light:text-white">حول ألاكاديمية</label>
+                                            <textarea id="description" name="description" rows="5" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 light:bg-gray-700 light:border-gray-600 light:placeholder-gray-400 light:text-white light:focus:ring-primary-500 light:focus:border-primary-500" placeholder="وصف أكاديمتك">{{profile.description}}</textarea>                    
+                                        </div>
+                                        <div class="sm:col-span-2">
+                                            <label class="block mb-2 text-sm font-medium text-black" for="file_input">أرفع صورة</label>
+                                            <input name="logo" class="block w-full text-sm text-black border border-gray-300 rounded-lg cursor-pointer bg-gray-50  focus:outline-none" aria-describedby="file_input_help" id="file_input" type="file">
+                                            <p class="mt-1 text-sm text-gray-200" id="file_input_help">SVG, PNG, JPG or GIF (MAX. 800x400px).</p>
+                                        </div>
+
+                                    </div>
+                                    <div class="flex items-center space-x-4 justify-end gap-5">
+                                        <button type="submit" class="text-black bg-white hover:bg-gray-200 border-2 border-black focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center light:bg-primary-600 light:hover:bg-primary-700 light:focus:ring-primary-800">
+                                            تحديث
+                                        </button>
+                                        <button type="button" class="text-red-600 inline-flex items-center hover:text-white border border-red-600 hover:bg-red-600 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center " data-modal-toggle="updateProfileModal">
+                                            إلغاء
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                {%else%}
+                <h4 class="mr-32 my-16 text-gray-900 text-4xl font-semibold leading-loose">المعلومات الشخصية</h4>
+                <!-- Profile Image -->
+            <div class="flex items-right justify-start relative z-10 mb-2.5 mr-36 bg-cover w-15 h-15">
+            {% if profile.avatar %}
+            <img src="{{ profile.avatar.url }}"
+            class="w-40 h-40 rounded-full"
             alt="user-avatar-image" 
             />
             {% else %}
@@ -20,133 +133,176 @@
             />
             {% endif %}
             </div>
-            <h3 class="text-center font-manrope font-bold text-3xl leading-10 text-gray-900 mb-3">{{request.user.username}}</h3>
-            <p class="text-2xl  leading-7 wtext-black-500 text-center mb-8"> مرحبا ,{{profile.name}} </p>
+                <div class="mr-36">
+                <h1 class=" flex flex-row gap-4 items-center w-full mt-4 sm:mx-4 xs:pl-4 text-gray-800 light:text-white lg:text-3xl font-semibold md:text-3xl sm:text-3xl xs:text-xl">
+                        {{profile.name}} 
+                        <button id="updateProductButton" data-modal-target="updateProfileModal" data-modal-toggle="updateProfileModal" class="block w-10 h-10 text-black bg-white border-2 border-black hover:bg-black-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm flex items-center justify-center" type="button">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 -960 960 960" width="18px" fill="#000000">
+                                <path d="M200-200h57l391-391-57-57-391 391v57Zm-80 80v-170l528-527q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T817-647L290-120H120Zm640-584-56-56 56 56Zm-141 85-28-29 57 57-29-28Z"/>
+                            </svg>
+                        </button>
+                        </h1>
+                </h1>
+                <p class="w-full mb-8 sm:mx-4 xs:pl-4 text-gray-500 light:text-white lg:text-xl md:text-base base:text-base xs:text-sm">
+                    {{request.user.username}}@</p>
+            </div>
+        <div
+            class="xl:w-[80%] lg:w-[90%] md:w-[90%] sm:w-[92%] xs:w-[90%] mx-auto flex flex-col gap-4 items-center relative lg:-top-8 md:-top-6 sm:-top-4 xs:-top-4">
+            <!-- Detail -->
+            <div class="w-full my-auto py-6 flex flex-col justify-center gap-2">
+                <div class="w-full flex sm:flex-row xs:flex-col gap-2 p-10 bg-gray-200 justify-center rounded-lg">
+                    <div class="w-full">
+                        <dl class="text-gray-900 divide-y divide-gray-200 light:text-white light:divide-gray-700">
+                            <div class="flex flex-col pb-3">
+                                <dt class="mb-1 text-gray-500 md:text-lg light:text-gray-400">الأسم</dt>
+                                <dd class="text-lg font-semibold">{{profile.name}}</dd>
+                            </div>
+                            <div class="flex flex-col py-3">
+                                <dt class="mb-1 text-gray-500 md:text-lg light:text-gray-400">الجنسية</dt>
+                                <dd class="text-lg font-semibold">{{profile.get_nationality_display}} </dd>
+                            </div>
+                            <div class="flex flex-col py-3">
+                                <dt class="mb-1 text-gray-500 md:text-lg light:text-gray-400">تاريخ الميلاد</dt>
+                                <dd class="text-lg font-semibold">{{profile.birth_date}}</dd>
+                            </div>
+                            <div class="flex flex-col py-3">
+                                <dt class="mb-1 text-gray-500 md:text-lg light:text-gray-400">الجنس</dt>
+                                <dd class="text-lg font-semibold">{{profile.get_gender_display}}</dd>
+                            </div>
+                        </dl>
+                    </div>
+                    <div class="w-full  mr-3">
+                        <dl class="text-gray-900 divide-y divide-gray-200 light:text-white light:divide-gray-700">
+                            <div class="flex flex-col pb-3">
+                                <dt class="mb-1 text-gray-500 md:text-lg light:text-gray-400">البريد الإلكتروني</dt>
+                                <dd class="text-lg font-semibold">{{profile.user.email}}</dd>
+                            </div>
 
-             <div class="w-full max-w-7xl px-4 md:px-5 lg:px-5 mx-auto">
-            <div class="w-full flex-col justify-start items-start lg:gap-14 md:gap-10 gap-8 inline-flex">
-               <div class="w-full flex-col justify-start items-start gap-8 flex">
-                <div class="w-full flex-col justify-start items-start gap-6 flex">
-                    {% if request.user.is_staff and not request.user.is_superuser %}
-                    <h4 class="text-gray-900 text-xl font-semibold leading-loose"> معلومات الأكاديمية</h4>
-                        <div class="w-full justify-start items-start gap-8 flex sm:flex-row flex-col">
-                            <div class="w-full flex-col justify-start items-start gap-1.5 flex">
-                                <label for="" class="flex gap-1 items-center text-gray-600 text-base font-medium leading-relaxed">إسم الأكاديمية
-                                </label>
-                                <p class="w-72 border-2 border-black">{{profile.academy_name}}</p>
+                            <div class="flex flex-col pt-3">
+                                <dt class="mb-1 text-gray-500 md:text-lg light:text-gray-400">رقم الهوية</dt>
+                                <dd class="text-lg font-semibold">{{profile.id_number}}</dd>
                             </div>
-                            <div class="w-full flex-col justify-start items-start gap-1.5 flex">
-                                <label for="wight-input" class="flex gap-1 items-center text-gray-600 text-base font-medium leading-relaxed">عن الأكاديمية
-                                </label>
-                                <p class="w-72 border-2 border-black" >{{profile.description}}</p>
+                            <div class="flex flex-col pt-3">
+                                <dt class="mb-1 text-gray-500 md:text-lg light:text-gray-400">الحالةالصحية</dt>
+                                <dd class="text-lg font-semibold">{{profile.health_condition}}</dd>
                             </div>
-                        </div>
-                        <div class="w-full justify-start items-start gap-8 flex sm:flex-row flex-col">
-                            <div class="w-full flex-col justify-start items-start gap-1.5 flex">
-                                <label for="" class="flex gap-1 items-center text-gray-600 text-base font-medium leading-relaxed">إسم الستخدم
-                                </label>
-                                <p class="w-72 border-2 border-black">{{user.username}}</p>
-                            </div>
-                            <div class="w-full flex-col justify-start items-start gap-1.5 flex">
-                                <label for="" class="flex gap-1 items-center text-gray-600 text-base font-medium leading-relaxed">البريد الإلكتروني
-                                </label>
-                                <p class="w-72 border-2 border-black">{{user.email}}</p>
-                            </div>
-                        </div>
-                        <div class="w-full justify-start items-start gap-8 flex sm:flex-row flex-col">
-                            <div class="w-full flex-col justify-start items-start gap-1.5 flex">
-                                <label for="" class="flex gap-1 items-center text-gray-600 text-base font-medium leading-relaxed">حالة الحساب
-                                </label>
-                                <p class="w-72 border-2 border-black">{{profile.approved}}</p>
-                            </div>
-                    {%else%}
-                    <h4 class="text-gray-900 text-xl font-semibold leading-loose">المعلومات الشخصية</h4>
-                        <div class="w-full justify-start items-start gap-8 flex sm:flex-row flex-col">
-                            <div class="w-full flex-col justify-start items-start gap-1.5 flex">
-                                <label for="" class="flex gap-1 items-center text-gray-600 text-base font-medium leading-relaxed">إسم العميل
-                                </label>
-                                <p class="w-72 border-2 border-black">{{profile.name}}</p>
-                            </div>
-                            <div class="w-full flex-col justify-start items-start gap-1.5 flex">
-                                <label for="wight-input" class="flex gap-1 items-center text-gray-600 text-base font-medium leading-relaxed">الجنسية
-                                </label>
-                                <p class="w-72 border-2 border-black" >{{profile.get_nationality_display}}</p>
-                            </div>
-                        </div>
-                        <div class="w-full justify-start items-start gap-8 flex sm:flex-row flex-col">
-                            <div class="w-full flex-col justify-start items-start gap-1.5 flex">
-                                <label for="" class="flex gap-1 items-center text-gray-600 text-base font-medium leading-relaxed">إسم الستخدم
-                                </label>
-                                <p class="w-72 border-2 border-black">{{user.username}}</p>
-                            </div>
-                            <div class="w-full flex-col justify-start items-start gap-1.5 flex">
-                                <label for="" class="flex gap-1 items-center text-gray-600 text-base font-medium leading-relaxed">البريد الإلكتروني
-                                </label>
-                                <p class="w-72 border-2 border-black">{{user.email}}</p>
-                            </div>
-                        </div>
-                        <div class="w-full justify-start items-start gap-8 flex sm:flex-row flex-col">
-                            <div class="w-full flex-col justify-start items-start gap-1.5 flex">
-                                <label for="" class="flex gap-1 items-center text-gray-600 text-base font-medium leading-relaxed">الهوية الوطنية
-                                </label>
-                                <p class="w-72 border-2 border-black">{{profile.id_number}}</p>
-                            </div>
-                            <div class="w-full flex-col justify-start items-start gap-1.5 flex">
-                                <label for="" class="flex gap-1 items-center text-gray-600 text-base font-medium leading-relaxed">الجنس
-                                </label>
-                                <p class="w-72 border-2 border-black">{{profile.get_gender_display}}</p>
-                            </div>
-                        </div>
-                        <div class="w-full justify-start items-start gap-8 flex sm:flex-row flex-col">
-                            <div class="w-full flex-col justify-start items-start gap-1.5 flex">
-                                <label for="hight-input" class="flex gap-1 items-center text-gray-600 text-base font-medium leading-relaxed">الحالة الصحية
-                                </label>
-                                <p class="w-72 border-2 border-black">{{profile.health_condition}}</p>
-                            </div>
-                        </div>
-                        {%endif%}
+                        </dl>
                     </div>
                 </div>
+                    <!-- Update modal -->
+                    <div id="updateProfileModal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-modal md:h-full">
+                        <div class="relative p-4 w-full max-w-2xl h-full md:h-auto">
+                            <!-- Modal content -->
+                            <div class="relative p-4 bg-white rounded-lg shadow light:bg-gray-800 sm:p-5">
+                                <!-- Modal header -->
+                                <div class="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5 light:border-gray-600">
+                                    <h3 class="text-lg font-semibold text-gray-900 light:text-white">
+                                        تحديث البيانات الشخصية
+                                    </h3>
+                                    <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center" data-modal-toggle="updateProfileModal">
+                                        <svg aria-hidden="true" class="w-5 h-5 left-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+                                        <span class="sr-only">Close modal</span>
+                                    </button>
+                                </div>
+                                <!-- Modal body -->
+                                <form id="updateForm{{ profile.id }}"
+                                    action="{% url 'account:update_user_profile' %}"
+                                    method="post"
+                                    enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                    <div class="grid gap-4 mb-4 sm:grid-cols-2">
+                                        <div>
+                                            <label for="name" class="block mb-2 text-sm font-medium text-gray-900 light:text-white">إسم الستخدم</label>
+                                            <input type="text" name="name" id="name" value="{{profile.name}}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 light:bg-gray-700 light:border-gray-600 light:placeholder-gray-400 light:text-white light:focus:ring-primary-500 light:focus:border-primary-500" placeholder="">
+                                        </div>
+                                        <div>
+                                            <label for="id_number" class="block mb-2 text-sm font-medium text-gray-900 light:text-white">رقم الهوية</label>
+                                            <input type="text" name="id_number" id="id_number" value="{{profile.id_number}}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="{{profile.id_number}}">
+                                        </div>
+                                        <div>
+                                            <label for="birth_date" class="block mb-2 text-sm font-medium text-gray-900 light:text-white">تاريخ الميلاد</label>
+                                            <input type="date" value="{{ profile.birth_date|date:'Y-m-d' }}"  name="birth_date" id="birth_date" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 light:bg-gray-700 light:border-gray-600 light:placeholder-gray-400 light:text-white light:focus:ring-primary-500 light:focus:border-primary-500" placeholder="{{profile.birth_date}}">
+                                        </div>
+                                        <div>
+                                             <label
+                                                for="nationality"
+                                                class="flex gap-1 items-center text-gray-600 text-base font-medium leading-relaxed"
+                                                >الجنسية
+                                                <svg
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    width="7"
+                                                    height="7"
+                                                    viewBox="0 0 7 7"
+                                                    fill="none"
+                                                >
+                                                    <path
+                                                    d="M3.11222 6.04545L3.20668 3.94744L1.43679 5.08594L0.894886 4.14134L2.77415 3.18182L0.894886 2.2223L1.43679 1.2777L3.20668 2.41619L3.11222 0.318182H4.19105L4.09659 2.41619L5.86648 1.2777L6.40838 2.2223L4.52912 3.18182L6.40838 4.14134L5.86648 5.08594L4.09659 3.94744L4.19105 6.04545H3.11222Z"
+                                                    fill="#EF4444"
+                                                    />
+                                                </svg>
+                                                </label>
+                                                <select
+                                                id="nationality"
+                                                name="nationality"
+                                                required
+                                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                                                required
+                                                >
+                                                <option value="{{profile.nationality}}">اختر الجنسية</option>
+                                                {% for value, label in profile.Nationality.choices %}
+                                                <option value="{{ value }}" {% if profile.nationality == value %}selected{% endif %}>{{ label }}</option>
+                                                {% endfor %}
+                                                </select>
+                                        </div>
+                                        <div>
+                                            <label for="gender" class="block mb-2 text-sm font-medium text-gray-900 light:text-white"></label>
+                                              <div class="flex">
+                                                    {% for value, label in profile.Gender.choices %}
+                                                    <div class="mr-4">
+                                                        <input
+                                                        type="radio"
+                                                        id="gender_{{ value }}"
+                                                        name="gender"
+                                                        value="{{ value }}"
+                                                        {% if profile.gender == value %}checked{% endif %}
+                                                        required
+                                                        class="form-radio h-5 w-5 text-[#ED786A]"
+                                                        required
+                                                        />
+                                                        <label for="gender_{{ value }}" class="ml-2 text-gray-700"
+                                                        >{{ label }}</label
+                                                        >
+                                                    </div>
+                                                    {% endfor %}
+                                                    </div>
+                                        </div>
+                                        <div class="sm:col-span-2">
+                                            <label for="health_condition" class="block mb-2 text-sm font-medium text-gray-900 light:text-white">الحالة الصحية</label>
+                                            <textarea id="health_condition" name="health_condition" rows="5" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 light:bg-gray-700 light:border-gray-600 light:placeholder-gray-400 light:text-white light:focus:ring-primary-500 light:focus:border-primary-500" placeholder="أكتب هنا حالتك الصحية">{{profile.health_condition}}</textarea>                    
+                                        </div>
+                                        <div class="sm:col-span-2">
+                                            <label class="block mb-2 text-sm font-medium text-black" for="file_input">أرفع صورة</label>
+                                            <input name="avatar" class="block w-full text-sm text-black border border-gray-300 rounded-lg cursor-pointer bg-gray-50  focus:outline-none" aria-describedby="file_input_help" id="file_input" type="file">
+                                            <p class="mt-1 text-sm text-gray-200" id="file_input_help">SVG, PNG, JPG or GIF (MAX. 800x400px).</p>
+                                        </div>
+
+                                    </div>
+                                    <div class="flex items-center space-x-4 justify-end gap-5">
+                                        <button type="submit" class="text-black bg-white hover:bg-gray-200 border-2 border-black focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center light:bg-primary-600 light:hover:bg-primary-700 light:focus:ring-primary-800">
+                                            تحديث
+                                        </button>
+                                        <button type="button" class="text-red-600 inline-flex items-center hover:text-white border border-red-600 hover:bg-red-600 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center " data-modal-toggle="updateProfileModal">
+                                            إلغاء
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                {%endif%}
             </div>
         </div>
-    </section>
-        </div>
-    </section>
-{%endif%}  
-{% if messages %} 
-{% for message in messages %}
-<div id="toast-bottom-right" class="fixed flex items-center w-full max-w-xs p-4 mb-4 text-gray-500 bg-white rounded-lg  shadow top-8 right-5 light:text-gray-400 light:bg-gray-800 "  role="alert">
-            <div class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-blue-500 bg-blue-100 rounded-lg light:bg-blue-800 light:text-blue-200">
-                <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM10 15a1 1 0 1 1 0-2 1 1 0 0 1 0 2Zm1-4a1 1 0 0 1-2 0V6a1 1 0 0 1 2 0v5Z"/>
-                </svg>
-                <span class="sr-only">Info icon</span>
-            </div>
-  <div class="ms-3 text-sm font-normal">{{message}}</div>
-  <button
-    type="button"
-    class="ms-auto -mx-1.5 -my-1.5 bg-white text-gray-400 hover:text-gray-900 rounded-lg focus:ring-2 focus:ring-gray-300 p-1.5 hover:bg-gray-100 inline-flex items-center justify-center h-8 w-8 light:text-gray-500 light:hover:text-white light:bg-gray-800 light:hover:bg-gray-700"
-    data-dismiss-target="#toast-bottom-right"
-    aria-label="Close"
-  >
-    <span class="sr-only">Close</span>
-    <svg
-      class="w-3 h-3"
-      aria-hidden="true"
-      xmlns="http://www.w3.org/2000/svg"
-      fill="none"
-      viewBox="0 0 14 14"
-    >
-      <path
-        stroke="currentColor"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        stroke-width="2"
-        d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
-      />
-    </svg>
-  </button>
-  </div>
-  {% endfor %}                         
-  {% endif %}                     
+    </div>
+</section>
+{%endif%}                      
 {% endblock %}

@@ -3,102 +3,6 @@
 {% block title %} إنشاء حساب  {% endblock %}
 
 {% block content %}
-    <!-- <section class="flex justify-center relative">
-      <img src="https://pagedone.io/asset/uploads/1702362010.png" alt="gradient background image" class="w-full h-full object-cover fixed">
-      <div class="mx-auto max-w-lg px-6 lg:px-8 absolute py-20">
-        {% if messages %} 
-          {% for message in messages %}
-          <div class="flex items-center w-full max-w-sm py-5 px-6 text-gray-600 bg-white rounded-xl border border-gray-200 shadow-sm mb-6" id="alert">
-          <p class="text-base font-medium"> {{message}} </p>
-          <div class="ml-auto flex items-center space-x-3">
-          <button type="button" class="inline-flex flex-shrink-0 justify-center items-center text-gray-400 transition-all duration-150 " data-dismiss-target="#alert">
-            <span class="sr-only">Close</span>
-            <svg class="w-6 h-6 " viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M7 17L17 7M17 17L7 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
-          </button>
-          </div>
-          </div>
-          {% endfor %}{%endif%}
-        <div class="rounded-2xl bg-white shadow-xl">
-          <form action="{% url 'account:sign_up' %}"
-              method="POST"
-              enctype="multipart/form-data" 
-              class="lg:p-11 p-7 mx-auto"
-              id="signupForm">
-            {% csrf_token %}
-                  <div class="mb-11">
-                      <h1 class="text-gray-900 text-center font-manrope text-3xl font-bold leading-10 mb-2">إنشاء حساب جديد</h1>
-                      <p class="text-gray-500 text-center text-base font-medium leading-6">لنبدأ رحلة مليئة بالإنجازات</p>
-                  </div>
-                  <input type="text" name="username" id="username"
-                        class="w-full h-12 text-gray-900 placeholder:text-gray-400 text-lg font-normal leading-7 rounded-full border-gray-300 border shadow-sm focus:outline-none px-4 mb-6"
-                        placeholder="إسم المستخدم" required minlength="3" maxlength="150" pattern="^[\w.@+-]+$">
-                  <input type="email" name="email" id="email"
-                        class="w-full h-12 text-gray-900 placeholder:text-gray-400 text-lg font-normal leading-7 rounded-full border-gray-300 border shadow-sm focus:outline-none px-4 mb-6"
-                        placeholder="البريد الإلكتروني" required>
-                  <input type="password" name="password" id="password"
-                        class="w-full h-12 text-gray-900 placeholder:text-gray-400 text-lg font-normal leading-7 rounded-full border-gray-300 border shadow-sm focus:outline-none px-4 mb-6"
-                        placeholder="كلمة المرور" required minlength="8">
-                  <input type="password" name="repeat_password" id="repeat_password"
-                        class="w-full h-12 text-gray-900 placeholder:text-gray-400 text-lg font-normal leading-7 rounded-full border-gray-300 border shadow-sm focus:outline-none px-4 mb-6"
-                        placeholder="تأكيد كلمة المرور" required minlength="8">
-                  <button type="submit" 
-                          class="w-full h-12 text-white text-center text-base font-semibold leading-6 rounded-full hover:bg-indigo-800 transition-all duration-700 bg-indigo-600 shadow-sm mb-11">
-                      إنشئ حساب
-                  </button>
-                  <a href="{% url 'account:log_in' %}" class="flex justify-center text-gray-900 text-base font-medium leading-6">
-                      <span class="text-indigo-600 font-semibold pl-3">تسجيل دخول</span>هل لديك حساب بالفعل؟
-                  </a>
-                  <a href="{% url 'account:sing_up_asAcademy_view' %}" class="flex justify-center text-gray-900 text-base font-medium leading-6">
-                      <span class="text-indigo-600 font-semibold pl-3">إنشاء حساب أكاديمية</span>إنضم إلينا. 
-                  </a>
-        </form>
-          <script>
-              document.getElementById('signupForm').addEventListener('submit', function(event) {
-                  var password = document.getElementById('password');
-                  var repeatPassword = document.getElementById('repeat_password');
-                  var email = document.getElementById('email');
-                  var username = document.getElementById('username');
-
-                  // Reset previous error messages
-                  document.querySelectorAll('.error-message').forEach(e => e.remove());
-
-                  // Validate username
-                  if (!/^[\w.@+-]+$/.test(username.value)) {
-                      event.preventDefault();
-                      showError(username, 'اسم المستخدم يجب أن يحتوي على أحرف وأرقام ورموز . @ + - _ فقط');
-                  }
-
-                  // Validate email
-                  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value)) {
-                      event.preventDefault();
-                      showError(email, 'الرجاء إدخال بريد إلكتروني صحيح');
-                  }
-
-                  // Validate password
-                  if (password.value.length < 8) {
-                      event.preventDefault();
-                      showError(password, 'يجب أن تكون كلمة المرور 8 أحرف على الأقل');
-                  }
-
-                  // Check if passwords match
-                  if (password.value !== repeatPassword.value) {
-                      event.preventDefault();
-                      showError(repeatPassword, 'كلمات المرور غير متطابقة');
-                  }
-              });
-
-              function showError(input, message) {
-                  var error = document.createElement('div');
-                  error.className = 'error-message text-red-500 text-sm mt-1';
-                  error.textContent = message;
-                  input.parentNode.insertBefore(error, input.nextSibling);
-              }
-          </script>
-        </div>
-      </div>
-      </section> -->
 <section class="mt-20 bg-gradient-to-br from-orange-50 to-white bg-white">
   <div >
         <div class="min-h-screen flex flex-col items-center justify-center">
@@ -148,6 +52,9 @@
               <button type="submit" class="w-full shadow-xl py-2.5 px-4 text-sm tracking-wide rounded-md text-white bg-[#ED786A] font-bold hover:bg-[#f05e4e] focus:outline-none">
                إنشاء حساب
                 </button>
+                 <a href="{% url 'account:sing_up_asAcademy_view' %}" class="flex justify-center text-gray-900 text-base font-medium mt-3 leading-6">
+                     <p>إنضم إلينا !   <span class="text-[#ED786A] font-bold hover:text-[#f05e4e] focus:outline-none pl-3">إنشاء حساب أكاديمية</span> </p>  
+                  </a>
               </div>
               </form>
                 
@@ -186,6 +93,48 @@
           </div>
         </div>
   </div>
+  <script>
+              document.getElementById('signupForm').addEventListener('submit', function(event) {
+                  var password = document.getElementById('password');
+                  var repeatPassword = document.getElementById('repeat_password');
+                  var email = document.getElementById('email');
+                  var username = document.getElementById('username');
+
+                  // Reset previous error messages
+                  document.querySelectorAll('.error-message').forEach(e => e.remove());
+
+                  // Validate username
+                  if (!/^[\w.@+-]+$/.test(username.value)) {
+                      event.preventDefault();
+                      showError(username, 'اسم المستخدم يجب أن يحتوي على أحرف وأرقام ورموز . @ + - _ فقط');
+                  }
+
+                  // Validate email
+                  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value)) {
+                      event.preventDefault();
+                      showError(email, 'الرجاء إدخال بريد إلكتروني صحيح');
+                  }
+
+                  // Validate password
+                  if (password.value.length < 8) {
+                      event.preventDefault();
+                      showError(password, 'يجب أن تكون كلمة المرور 8 أحرف على الأقل');
+                  }
+
+                  // Check if passwords match
+                  if (password.value !== repeatPassword.value) {
+                      event.preventDefault();
+                      showError(repeatPassword, 'كلمات المرور غير متطابقة');
+                  }
+              });
+
+              function showError(input, message) {
+                  var error = document.createElement('div');
+                  error.className = 'error-message text-red-500 text-sm mt-1';
+                  error.textContent = message;
+                  input.parentNode.insertBefore(error, input.nextSibling);
+              }
+          </script>
 </section>
 {% endblock%}
                                             

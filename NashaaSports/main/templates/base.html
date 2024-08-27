@@ -25,7 +25,8 @@
 
 
 
-<body style="font-family: Tajawal;">
+
+<body class="min-h-screen" style="font-family: Tajawal;">
     <nav
       class="fixed top-0 w-full bg-gray-100 z-20 shadow-lg"
       id="topnav"
@@ -116,7 +117,7 @@
               </li>
               <li>
                 <a
-                  href="javascript:;"
+                  href="{% url 'main:about' %}"
                   class="text-gray-500 text-sm font-medium hover:text-prime-blue-700 transition-all duration-500 mb-2 block lg:mr-6 lg:text-base md:mb-0 md:mr-3 hover:text-gray-900"
                   >من نحن</a
                 >
@@ -249,15 +250,6 @@
                   >
                 </li>
               </ul>
-
-              <ul>
-                <li>
-                  <div class="display-mode d-flex align-items-center gap-1">    
-                    <a href="{% url 'main:mode_view' 'light' %}?next={{request.path}}" class="nav-link"><span class="material-symbols-outlined {% if 'mode' not in request.COOKIES or 'mode' in request.COOKIES and request.COOKIES.mode != 'dark' %} active-icon {% endif %}">light_mode</span></a>
-                    <a href="{% url 'main:mode_view' 'dark' %}?next={{request.path}}" class="nav-link"><span class="material-symbols-outlined {% if 'mode' in request.COOKIES and request.COOKIES.mode == 'dark' %} active-icon {% endif %}">dark_mode</span></a>
-                  </div>
-                </li>
-              </ul>
 </div>
 
 
@@ -368,16 +360,18 @@
         </div>
       </div>
 </nav>
+<div class="">
 
 {% block content %}
 
 {% endblock %}
 
+</div>
 
 
 
 
-<footer class="w-full bg-gray-100 bottom-0">
+<footer class="w-full bg-gray-100 mt-12">
   <div class="mx-auto w-full max-w-screen-xl p-4 py-6 lg:py-8">
       <div class="md:flex md:justify-between">
         <div class="mb-6 md:mb-0">
