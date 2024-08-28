@@ -470,7 +470,7 @@ def update_programs_info_view(request:HttpRequest,program_id):
                             program.registration_end_date=registration_end_date
                         
                             program.save()
-                            messages.success(request, "تم إنشاء البرنامج بنجاح!", "green")
+                            
                             return redirect("academy:update_time_slot_view",program_id=program.id)
                  except Exception as e:
                      messages.error(request, f"Error creating program: {str(e)}", "red")
