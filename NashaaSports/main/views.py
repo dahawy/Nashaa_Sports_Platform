@@ -10,6 +10,7 @@ from django.db.models import F, ExpressionWrapper
 from django.db.models.functions import ExtractDay
 import math
 from django.db.models import F, Q
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
 def home_view(request: HttpRequest):
@@ -117,6 +118,16 @@ def programs_view(request:HttpRequest):
         ('medium', "5-12 اسبوع"),
         ('long', '13 فأكثر'),
     ]
+
+    paginator = Paginator(programs, 9)  # Show n items per page
+
+    page_number = request.GET.get('page')  # Get page number from URL
+    try:
+        programs = paginator.get_page(page_number)
+    except PageNotAnInteger:
+        programs = paginator.page(1)  # Deliver the first page
+    except EmptyPage:
+        programs = paginator.page(paginator.num_pages)  # Deliver the last page
     context={'age_choices':age_choices,'length_choices':length_choices,'price_choices':price_choices,'programs':programs,"sport_choices":Program.SportChoices.choices,'cities':Branch.Cities.choices}
     return render(request,"programs.html",context)
 
@@ -143,7 +154,17 @@ def academies_view(request:HttpRequest):
         )
     else:  
         Academies = AcademyProfile.objects.filter(approved=True)
+    paginator = Paginator(Academies, 9)  # Show n items per page
+
+    page_number = request.GET.get('page')  # Get page number from URL
+    try:
+        Academies = paginator.get_page(page_number)
+    except PageNotAnInteger:
+        Academies = paginator.page(1)  # Deliver the first page
+    except EmptyPage:
+        Academies = paginator.page(paginator.num_pages)  # Deliver the last page
     return render(request,'academies.html',{"academies":Academies})
+
 
 
 

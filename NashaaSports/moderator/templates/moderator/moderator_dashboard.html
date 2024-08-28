@@ -80,15 +80,7 @@
           </div>
        </div>
 
-       <div class=" md:flex-row space-y-4 md:space-x-4">
-       <div class=" flex flex-col shadow-lg rounded-lg overflow-hidden" style="display: flex; justify-content: center; align-items: center; height: 400px; width: 400px; margin: 0 auto;">
-        <div style="height: 100%; width: 100%;">
-          <canvas id="chartPie"></canvas>
-        </div>
-      </div>
-    
-    
-         </div>
+      
        </div>
      
     </div>
@@ -103,8 +95,18 @@
 
 
 
-<div class="max-w-sm mx-auto w-full bg-white rounded-lg shadow  p-4 md:p-6">
-  <div class="flex justify-between mb-5">
+<div class="justify-around mx-auto w-full  flex flex-wrap gap-10 items-center  p-4 md:p-6">
+  <div class=" md:flex-row space-y-4 md:space-x-4 rounded-lg shadow py-7 ">
+    <div class=" flex flex-col  overflow-hidden" style="display: flex; justify-content: center; align-items: center; height: 400px; width: 400px; margin: 0 auto;">
+     <div style="height: 100%; width: 100%;">
+       <canvas id="chartPie"></canvas>
+     </div>
+   </div>
+ 
+ 
+      </div>
+  <div class="rounded-lg shadow px-10 py-4 ">
+  <div class="flex justify-between  ">
     <div>
       <h5 class="leading-none text-3xl font-bold text-gray-900  pb-2">{{sales_total}} ريال</h5>
       <p class="text-base font-normal text-gray-500 ">إجمالي المبيعات</p>
@@ -117,7 +119,7 @@
       </svg>
     </div>
   </div>
-  <div id="tooltip-chart"></div>
+  <div id="tooltip-chart" class="" ></div>
   <div class="grid grid-cols-1 items-center border-gray-200 border-t  justify-between mt-5">
     <div class="flex justify-between items-center pt-5">
       <!-- Button -->
@@ -154,6 +156,7 @@
       </a>
     </div>
   </div>
+</div>
 </div>
 </div>
 

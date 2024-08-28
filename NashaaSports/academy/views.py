@@ -20,6 +20,7 @@ from django.db.models import Sum
 from babel.dates import format_date
 from datetime import datetime
 from django.db.models import Count
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
 def acadmey_dashboard_view(request:HttpRequest,user_id):
@@ -405,6 +406,14 @@ def programs_list_view(request: HttpRequest):
         )  # Calculate program duration in weeks
     )
     
+    paginator = Paginator(programs, 9)  # Show n items per pa
+    page_number = request.GET.get('page')  # Get page number from URL
+    try:
+         programs = paginator.get_page(page_number)
+    except PageNotAnInteger:
+         programs = paginator.page(1)  # Deliver the first page
+    except EmptyPage:
+         programs = paginator.page(paginator.num_pages) 
     # Render the template with the filtered and annotated programs
     return render(request, 'academy/programs_list.html', {
         'programs': programs,
@@ -686,6 +695,15 @@ def subscribers_view(request, user_id):
 
                 # Apply the filters
                 subscribers = Enrollment.objects.filter(query)
+                paginator = Paginator(subscribers, 10)  # Show n items per page
+
+                page_number = request.GET.get('page')  # Get page number from URL
+                try:
+                    subscribers = paginator.get_page(page_number)
+                except PageNotAnInteger:
+                    subscribers = paginator.page(1)  # Deliver the first page
+                except EmptyPage:
+                    subscribers = paginator.page(paginator.num_pages)  # Deliver the last page
 
                 # Render the template with filtered results
                 return render(request, "academy/subscribers.html", {'subscribers': subscribers})
