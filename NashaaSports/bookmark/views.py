@@ -1,9 +1,10 @@
 from django.shortcuts import render, redirect
-from django.http import HttpRequest, HttpResponse
-from account.models import AcademyProfile ,UserProfile
+from django.http import HttpRequest
+from account.models import UserProfile
 from django.contrib import messages
 from .models import ProgramBookmark, Program
 from django.contrib.auth.models import User
+from django.core.paginator import Paginator
 
 # Create your views here.
 
@@ -34,8 +35,10 @@ def add_bookmark_view(request:HttpRequest, program_id):
 
 
 def bookmark_view(request:HttpRequest, user_id):
-    bookmark= ProgramBookmark.objects.filter(id=user_id)
-    print(bookmark)
+    bookmarks = ProgramBookmark.objects.filter(id=user_id).select_related('program')
+    context={
+        'bookmarks':bookmarks,
 
+    }
     
-    return render(request,"my_bookmark.html",{"bookmarks":bookmark})
+    return render(request,"my_bookmark.html",context)

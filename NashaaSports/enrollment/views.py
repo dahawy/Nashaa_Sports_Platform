@@ -8,6 +8,7 @@ from academy.models import TimeSlot
 from enrollment.models import Enrollment
 from django.contrib import messages
 from django.conf import settings
+from django.core.paginator import Paginator
 
 from django.core.mail import EmailMessage
 
@@ -77,8 +78,14 @@ def remove_enrollment_from_cart(request, enrollment_id):
 def my_enrollment_view(request:HttpRequest, user_id):
     enrollments = Enrollment.objects.filter(user=UserProfile.objects.filter(user=user_id).first())
 
+    paginator = Paginator(enrollments, 5)
+    page_number = request.GET.get("page", 1)
+    product_page = paginator.get_page(page_number)
     context={
         "enrollments":enrollments,
+        'page_number':page_number,
+        'paginator':paginator,
+        'product_page':product_page,
     }
     return render(request, 'my_enrollment_view.html', context)
 
