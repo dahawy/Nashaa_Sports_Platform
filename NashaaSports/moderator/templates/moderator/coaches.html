@@ -1,0 +1,35 @@
+{% extends 'moderator/base.html' %}
+{% block content %}
+<div class="md:pt-40 h-full">
+<div class="flex justify-center items-center ">
+    <h2 class="text-3xl font-semibold">طاقم التدريب</h2>
+</div>
+<div class="flex md:flex-row flex-wrap flex-col items-center justify-center md:mt-10  gap-10 ">
+    {% for coach in coaches %}
+    <div class="flex flex-col shadow-md mt-6 w-48 h-52 rounded-lg justify-center  items-center hover:scale-110 duration-300 ease-linear">
+        <div class="flex justify-start w-full">
+            <a href="{% url 'moderator:delete_coach_view' coach.id %}?next={{request.path}}"> <div class="hover:text-red-500 duration-200 ease-linear cursor-pointer hover:scale-110">
+               
+                <span class="material-symbols-outlined">
+                    delete
+                    </span></div></a>
+                <a href="{% url 'moderator:update_coach_view' coach.id %}?next={{request.path}}">
+            <div class="hover:text-blue-600 duration-200 ease-linear cursor-pointer hover:scale-110">
+            <span class="material-symbols-outlined">
+                edit
+                </span></div></a>
+                
+        </div>
+        <img src="{{coach.avatar.url}}" class="w-28 h-28 rounded-full object-cover" alt="">
+        <h2 class=" font-semibold">{{coach.name}}</h2>
+        <h2 class="text-[0.75rem] font-semibold">{{coach.nationality}}</h2>
+        <h2 class="text-[0.75rem] font-semibold">خبرة {{coach.experience}} سنوات</h2>
+
+
+    </div>
+    {% endfor %}
+                    
+
+</div>
+</div>
+{% endblock%}

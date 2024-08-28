@@ -8,20 +8,20 @@ from .forms import ReplyForm
 import os
 from django.conf import settings
 from account.models import User,UserProfile,AcademyProfile
-from academy.models import Program
+from academy.models import Program,Branch, Coach
 from django.contrib.auth.decorators import login_required, user_passes_test
 from enrollment.models import Enrollment
 from payment.models import Payment
 from django.db.models import Sum
 from django.utils import timezone
-from datetime import timedelta
+from datetime import timedelta, datetime
 from babel.dates import format_date
 from django.utils.safestring import mark_safe
 import json
 import random
+from django.db.models import Count
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
-# def superuser_required(view_func):
-#     return login_required(user_passes_test(lambda u: u.is_superuser))
 from django.core.exceptions import PermissionDenied
 
 def superuser_required(view_func):
@@ -40,6 +40,18 @@ def customers_queries_view(request: HttpRequest, status):
         queries = CustomerQuery.objects.filter(status='Closed').order_by('-created_at') 
     elif status == 'all':
         queries = CustomerQuery.objects.all().order_by('-created_at') 
+    
+    #Add for Pagination
+    paginator = Paginator(queries, 8)  # Show 10 items per page
+
+    page_number = request.GET.get('page')  # Get page number from URL
+    try:
+        queries = paginator.get_page(page_number)
+    except PageNotAnInteger:
+        queries = paginator.page(1)  # Deliver the first page
+    except EmptyPage:
+        queries = paginator.page(paginator.num_pages)  # Deliver the last page
+    
 
     return render(request, 'moderator/customers_queries.html', {'queries': queries})
 
@@ -80,6 +92,18 @@ def academies_for_approval_view(request: HttpRequest):
     
     academies = AcademyProfile.objects.filter(approved=False).order_by('-created_at')  
 
+     #Add for Pagination
+    paginator = Paginator(academies, 8)  # Show 10 items per page
+
+    page_number = request.GET.get('page')  # Get page number from URL
+    try:
+        academies = paginator.get_page(page_number)
+    except PageNotAnInteger:
+        academies = paginator.page(1)  # Deliver the first page
+    except EmptyPage:
+        academies = paginator.page(paginator.num_pages)  # Deliver the last page
+    
+
     return render(request, 'moderator/academies_for_approval.html', {'academies': academies})
 
 
@@ -87,6 +111,19 @@ def academies_for_approval_view(request: HttpRequest):
 def approved_academies_view(request: HttpRequest):
     
     academies = AcademyProfile.objects.filter(approved=True).order_by('-created_at')  
+
+    #Add for Pagination
+    paginator = Paginator(academies, 8)  # Show 10 items per page
+
+    page_number = request.GET.get('page')  # Get page number from URL
+    try:
+        academies = paginator.get_page(page_number)
+    except PageNotAnInteger:
+        academies = paginator.page(1)  # Deliver the first page
+    except EmptyPage:
+        academies = paginator.page(paginator.num_pages)  # Deliver the last page
+    
+
 
     return render(request, 'moderator/approved_academies.html', {'academies': academies})
 
@@ -129,6 +166,19 @@ def users_view(request: HttpRequest, user_type):
         users = UserProfile.objects.all()
     elif user_type == 'all':
         users = User.objects.all()
+    
+    #Add for Pagination
+    paginator = Paginator(users, 8)  # Show 10 items per page
+
+    page_number = request.GET.get('page')  # Get page number from URL
+    try:
+        users = paginator.get_page(page_number)
+    except PageNotAnInteger:
+        users = paginator.page(1)  # Deliver the first page
+    except EmptyPage:
+        users = paginator.page(paginator.num_pages)  # Deliver the last page
+    
+
 
     return render(request, 'moderator/users.html', {'users': users, 'user_type':user_type})
 
@@ -164,7 +214,7 @@ def moderator_dashboard_view(request:HttpRequest, days_ago: int):
             users = User.objects.all()
             
             # Get today's date and calculate the date 30 or 90 days ago
-            today = timezone.now().date()
+            today = timezone.now().date() + timedelta(days= 1)
             date_days_ago = today - timedelta(days=days_ago)
             # Query to get enrollments for the football category in the specified period with associated payments
             football_payments = Enrollment.objects.filter(
@@ -214,8 +264,20 @@ def moderator_dashboard_view(request:HttpRequest, days_ago: int):
 
         
                 sport_categories_colors = generate_colors(len(sport_categories_labels))
-                print(sport_categories_colors)
-              
+
+
+                #Query to get the number of enrollments for each sport category
+                enrollments_per_sport_category = (
+                    Enrollment.objects
+                    .select_related('program')  # Join with Program to access sport_category
+                    .values('program__sport_category')  # Group by sport_category
+                    .annotate(total_enrollments=Count('id'))  # Count enrollments per category
+                    .order_by('program__sport_category')  # Optional: Order by sport_category
+                )
+                enrollments_by_sport_category = []
+                for entry in enrollments_per_sport_category:
+                    enrollments_by_sport_category.append(entry['total_enrollments'])
+                
 
                 context = {
                     'football_salesList': mark_safe(json.dumps(football_salesList)),
@@ -228,6 +290,8 @@ def moderator_dashboard_view(request:HttpRequest, days_ago: int):
                     'users': users,
                     'sport_categories': mark_safe(json.dumps(sport_categories_labels)),
                     'sport_categories_colors': mark_safe(json.dumps(sport_categories_colors)),
+                    'enrollments_by_sport_category': mark_safe(json.dumps(enrollments_by_sport_category)),
+                    
                 }
                 return render(request, 'moderator/moderator_dashboard.html', context)
             except Exception as e:
@@ -278,3 +342,127 @@ def generate_colors(n):
     return base_colors[:n]
 
 
+
+@superuser_required
+def academy_branches_view(request:HttpRequest,academy_id):
+    branches = Branch.objects.filter(academy=AcademyProfile.objects.get(pk=academy_id))
+    subscriptions = Enrollment.objects.filter(time_slot__program__branch__in=branches).count()
+
+    #Add for Pagination
+    paginator = Paginator(branches, 8)  # Show 10 items per page
+
+    page_number = request.GET.get('page')  # Get page number from URL
+    try:
+        branches = paginator.get_page(page_number)
+    except PageNotAnInteger:
+        branches = paginator.page(1)  # Deliver the first page
+    except EmptyPage:
+        branches = paginator.page(paginator.num_pages)  # Deliver the last page
+    
+
+
+    return render(request,'moderator/academy_branches.html',{"branches":branches,'subscriptions':subscriptions})
+
+@superuser_required
+def update_branch_view(request, branch_id):
+    branch = get_object_or_404(Branch, pk=branch_id)
+
+    if request.method == "POST":
+        branch.branch_city = request.POST.get('branch_city')
+        branch.branch_name = request.POST.get('branch_name')
+        branch.register_no = request.POST.get('register_no')
+        
+        # Get the full Google Maps URL from the form
+        map_url = request.POST.get('map_url')
+        
+        if map_url:
+            branch.branch_location = map_url
+        
+        branch.save()
+        messages.success(request, 'تم تحديث الفرع بنجاح')
+        
+
+    # Extract coordinates from the current URL if it exists
+    lat, lng = 0.0, 0.0
+    if branch.branch_location:
+        try:
+            query = branch.branch_location.split('?q=')[-1]
+            lat, lng = map(float, query.split(','))
+        except (ValueError, IndexError):
+            lat, lng = 0.0, 0.0
+
+    return render(request, 'moderator/update_branch.html', {
+        'branch': branch,
+        'lat': lat,
+        'lng': lng,
+        'google_maps_api_key': settings.GOOGLE_API_KEY,
+    })
+
+
+@superuser_required
+def delete_branch_view(request:HttpRequest,branch_id):
+    try:
+        branch=Branch.objects.get(pk=branch_id)
+        branch.delete()
+        messages.success(request,"تم حذف الفرع بنجاح")
+        return redirect(request.GET.get('next','/'))
+    except Exception as e:
+        messages.error(request,"حدث خطأ! حاول مرة اخرى")
+
+
+@superuser_required
+def coaches_view(request:HttpRequest, academy_id):
+    if request.user.is_authenticated:
+        coaches = Coach.objects.filter(branch__academy_id= academy_id)
+    
+        return render(request,'moderator/coaches.html', {'coaches':coaches})
+    else:
+        return HttpResponse("لا تمتلك التصريح لدخول الصفحة")
+    
+
+def delete_coach_view(request: HttpRequest, coach_id: int):
+    if request.user.is_authenticated:
+        try:
+            coach = get_object_or_404(Coach, id=coach_id)
+            coach.delete()
+            messages.success(request,'تم حذف بيانات المدرب بنجاح') 
+            return redirect(request.GET.get('next','/'))
+        except Exception as e:
+            messages.error(request,"حدث خطأ! لم تتم عملية الحذف","green")
+    else:
+        return messages.error('سجل الدخول من فضلك')
+
+
+@superuser_required
+def update_coach_view(request:HttpResponse,coach_id):
+    if request.user.is_authenticated:
+        coach = get_object_or_404(Coach, pk=coach_id)
+
+        if request.method=="POST":
+            date_str = request.POST.get('birth_date')
+            birth_date = datetime.strptime(date_str, '%m/%d/%Y').date()
+            coach.name = request.POST['name']
+            coach.birth_date = birth_date
+            coach.email = request.POST['email']
+            coach.phone = request.POST['phone']
+            coach.experience = request.POST['experience']
+            coach.nationality = request.POST['nationality']
+            coach.gender = request.POST['gender']
+            coach.avatar = request.FILES['avatar']
+            coach.save()
+            messages.success(request,"تم تحديث بيانات المدرب بنجاح","green")
+            return redirect(request.GET.get('next','/'))
+        gender_choices = get_gender_choices()
+        nationality_choices = get_Nationality_choices
+        return render(request,'moderator/update_coach.html',{'coach':coach, 'gender_choices': gender_choices, 'nationality_choices': nationality_choices})
+
+    else:
+        return HttpResponse("لا تمتلك التصريح لدخول الصفحة")
+
+
+def get_gender_choices():
+    return [(choice, choice_display) for choice, choice_display in Coach.Gender.choices]
+
+
+def get_Nationality_choices():
+    return [(choice, choice_display) for choice, choice_display in Coach.Nationality.choices]

@@ -1,152 +1,108 @@
-{% extends 'base.html' %}
-
+{% extends 'moderator/base.html' %}
 {% block content %}
-<head>
-<style>
-    /* Default styling for smaller screens */
-.my-element {
-    margin-right: 1rem; /* Default margin for smaller screens */
-}
-
-/* Styling for medium screens and above */
-@media (min-width: 768px) {
-    .my-element {
-        margin-right: 16rem;
-    }
-}
-
-
-</style>
-</head>
-<section class="pt-8 lg:pt-32" >
-<aside  id="sidebar-multi-level-sidebar" class="fixed top-24  right-0 z-40 w-64 h-screen transition-transform translate-x-full sm:translate-x-0" aria-label="Sidebar">
-    <div class="h-full px-3 py-4 overflow-y-auto bg-gray-50 light:bg-gray-800">
-       <ul class="space-y-2 font-medium">
-          <li>
-             <a href="#" class="flex items-center p-2 text-gray-900 rounded-lg light:text-white hover:bg-gray-100 light:hover:bg-gray-700 group">
-                <svg class="w-5 h-5 text-gray-500 transition duration-75 light:text-gray-400 group-hover:text-gray-900 light:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 21">
-                   <path d="M16.975 11H10V4.025a1 1 0 0 0-1.066-.998 8.5 8.5 0 1 0 9.039 9.039.999.999 0 0 0-1-1.066h.002Z"/>
-                   <path d="M12.5 0c-.157 0-.311.01-.565.027A1 1 0 0 0 11 1.02V10h8.975a1 1 0 0 0 1-.935c.013-.188.028-.374.028-.565A8.51 8.51 0 0 0 12.5 0Z"/>
-                </svg>
-                <span class="ms-3">نظرة عامة</span>
-             </a>
-          </li>
-          <li>
-             <button type="button" class="flex items-center w-full p-2 text-base text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 light:text-white light:hover:bg-gray-700" aria-controls="dropdown-example" data-collapse-toggle="dropdown-example">
-                   <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 light:text-gray-400 light:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 21">
-                      <path d="M15 12a1 1 0 0 0 .962-.726l2-7A1 1 0 0 0 17 3H3.77L3.175.745A1 1 0 0 0 2.208 0H1a1 1 0 0 0 0 2h.438l.6 2.255v.019l2 7 .746 2.986A3 3 0 1 0 9 17a2.966 2.966 0 0 0-.184-1h2.368c-.118.32-.18.659-.184 1a3 3 0 1 0 3-3H6.78l-.5-2H15Z"/>
-                   </svg>
-                   <span class="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">الأكاديميات والنوادي</span>
-                   <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                      <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
-                   </svg>
-             </button>
-             <ul id="dropdown-example" class="hidden py-2 space-y-2">
-                   <li>
-                      <a href="{% url 'moderator:academies_for_approval_view' %}" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 light:text-white light:hover:bg-gray-700">اعتماد أكاديمية</a>
-                   </li>
-                   <li>
-                      <a href="#" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 light:text-white light:hover:bg-gray-700">البرامج</a>
-                   </li>
-                   <li>
-                     <a href="#" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 light:text-white light:hover:bg-gray-700">المدربين</a>
-                  </li>
-                   <li>
-                      <a href="{% url 'moderator:approved_academies_view' %}" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 light:text-white light:hover:bg-gray-700">الأكاديميات المعتمدة</a>
-                   </li>
-             </ul>
-          </li>
-          <li>
-            <button type="button" class="flex items-center w-full p-2 text-base text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 light:text-white light:hover:bg-gray-700" aria-controls="dropdown-example1" data-collapse-toggle="dropdown-example1">
-                  <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 light:text-gray-400 light:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 21">
-                     <path d="M15 12a1 1 0 0 0 .962-.726l2-7A1 1 0 0 0 17 3H3.77L3.175.745A1 1 0 0 0 2.208 0H1a1 1 0 0 0 0 2h.438l.6 2.255v.019l2 7 .746 2.986A3 3 0 1 0 9 17a2.966 2.966 0 0 0-.184-1h2.368c-.118.32-.18.659-.184 1a3 3 0 1 0 3-3H6.78l-.5-2H15Z"/>
-                  </svg>
-                  <span class="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">العناية بالعملاء</span>
-                  <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
-                  </svg>
-            </button>
-            <ul id="dropdown-example1" class="hidden py-2 space-y-2">
-                  <li>
-                     <a href="{% url 'moderator:customers_queries_view' 'Open' %}" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 light:text-white light:hover:bg-gray-700">رسائل العملاء المفتوحة</a>
-                  </li>
-                  <li>
-                     <a href="{% url 'moderator:customers_queries_view' 'Closed' %}" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 light:text-white light:hover:bg-gray-700">رسائل العملاء المغلقة</a>
-                  </li>
-                  <li>
-                     <a href="{% url 'moderator:customers_queries_view' 'all' %}" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 light:text-white light:hover:bg-gray-700">جميع الرسائل</a>
-                  </li>
-            </ul>
-         </li>
-         <li>
-            <button type="button" class="flex items-center w-full p-2 text-base text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 light:text-white light:hover:bg-gray-700" aria-controls="dropdown-example2" data-collapse-toggle="dropdown-example2">
-                  <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 light:text-gray-400 light:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 21">
-                     <path d="M15 12a1 1 0 0 0 .962-.726l2-7A1 1 0 0 0 17 3H3.77L3.175.745A1 1 0 0 0 2.208 0H1a1 1 0 0 0 0 2h.438l.6 2.255v.019l2 7 .746 2.986A3 3 0 1 0 9 17a2.966 2.966 0 0 0-.184-1h2.368c-.118.32-.18.659-.184 1a3 3 0 1 0 3-3H6.78l-.5-2H15Z"/>
-                  </svg>
-                  <span class="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">المستخدمون</span>
-                  <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
-                  </svg>
-            </button>
-            <ul id="dropdown-example2" class="hidden py-2 space-y-2">
-                  <li>
-                     <a href="{% url 'academy:add_coach_view' request.user.id %}" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 light:text-white light:hover:bg-gray-700">إضافة مستخدم</a>
-                  </li>
-                  <li>
-                     <a href="{% url 'moderator:users_view' 'academy' %}" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 light:text-white light:hover:bg-gray-700">مستخدمو الأكاديميات</a>
-                  </li>
-                  <li>
-                     <a href="{% url 'moderator:users_view' 'individual' %}" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 light:text-white light:hover:bg-gray-700">المستخدمون الأفراد</a>
-                  </li>
-                  <li>
-                     <a href="{% url 'moderator:users_view' 'all' %}" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 light:text-white light:hover:bg-gray-700">جميع المستخدمين</a>
-                  </li>
-            </ul>
-         </li>
-         <li>
-            <button type="button" class="flex items-center w-full p-2 text-base text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 light:text-white light:hover:bg-gray-700" aria-controls="dropdown-example3" data-collapse-toggle="dropdown-example3">
-                  <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 light:text-gray-400 light:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 21">
-                     <path d="M15 12a1 1 0 0 0 .962-.726l2-7A1 1 0 0 0 17 3H3.77L3.175.745A1 1 0 0 0 2.208 0H1a1 1 0 0 0 0 2h.438l.6 2.255v.019l2 7 .746 2.986A3 3 0 1 0 9 17a2.966 2.966 0 0 0-.184-1h2.368c-.118.32-.18.659-.184 1a3 3 0 1 0 3-3H6.78l-.5-2H15Z"/>
-                  </svg>
-                  <span class="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">المشتركون</span>
-                 
-            </button>
-           
-         </li>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<div class="" style="  background: linear-gradient(to bottom right, #ffffff, #ffffff);">        
+<section  >
+ <div class=""  >
+    <div class="p-4   rounded-lg " >
+       <div class=" md:grid md:grid-cols-4 gap-x-10 " >
           
+          <div class="bg-white shadow-md rounded-lg p-6 mb-4 ">
+            <div class="flex items-center justify-between">
+              <div>
+                <h2 class="text-lg font-semibold text-gray-800">أكاديمية ونادي</h2>
+                <p class="text-3xl font-bold text-gray-800" data-target="{{academies.count}}">0</p>
+              </div>
+              <div class="">
+               <span class="material-symbols-outlined text-[#cd7868]" style="font-size: 50px; color: #cd7868;">
+                  surfing
+                  </span>
+              </div>
+            </div>
+          </div>
           
-          
-       </ul>
+          <!-- <div class="flex  mb-1 flex-col items-center justify-center h-24 rounded  light:bg-gray-800" style="background-color: rgb(255,255,255,1);">
+            <p class="text-2xl text-gray-400 light:text-gray-500">
+               عدد الفروع 
+            </p>
+            <span class="text-2xl text-gray-400 light:text-gray-500">{{branches.count}}</span>
+         </div> -->
+         <div class="bg-white shadow-md rounded-lg p-6  mb-4">
+            <div class="flex items-center justify-between">
+              <div>
+                <h2 class="text-lg font-semibold text-gray-800">البرامج</h2>
+                <p class="text-3xl font-bold text-gray-800" data-target="{{programs.count}}">0</p>
+              </div>
+              <div class="text-green-500">
+               <span class="material-symbols-outlined text-[#cd7868]" style="font-size: 50px; color: #cd7868;">
+                  location_on
+                  </span>
+              </div>
+            </div>
+          </div>
+         <!-- <div class="flex  mb-1 flex-col items-center justify-center h-24 rounded  light:bg-gray-800" style="background-color: rgb(255,255,255,1);">
+            <p class="text-2xl text-gray-400 light:text-gray-500">
+               عدد المدربين 
+            </p>
+            <span class="text-2xl text-gray-400 light:text-gray-500">{{coaches.count}}</span>
+         </div> -->
+         <div class="bg-white shadow-md rounded-lg p-6 gap-10  mb-4">
+            <div class="flex items-center justify-between">
+              <div>
+                <h2 class="text-lg font-semibold text-gray-800">اشتراك</h2>
+                <p class="text-3xl font-bold text-gray-800" data-target="{{subscriptions.count}}">0</p>
+              </div>
+              <div class="text-green-500">
+               <span class="material-symbols-outlined text-[#cd7868]" style="font-size: 50px; color: #cd7868;">
+                  groups
+                  </span>
+              </div>
+            </div>
+          </div>
+         <!-- <div class="flex  mb-1 flex-col items-center justify-center h-24 rounded  light:bg-gray-800" style="background-color: rgb(255,255,255,1);">
+            <p class="text-2xl text-gray-400 light:text-gray-500">
+               عدد المشتركين 
+            </p>
+            <span class="text-2xl text-gray-400 light:text-gray-500">{{enrollments.count}}</span>
+         </div> -->
+         <div class="bg-white shadow-md rounded-lg p-6  mb-4">
+            <div class="flex items-center justify-between">
+              <div>
+                <h2 class="text-lg font-semibold text-gray-800">مستخدم</h2>
+                <p class="text-3xl font-bold text-gray-800" data-target="{{users.count}}">0</p>
+              </div>
+              <div class="text-green-500">
+               <span class="material-symbols-outlined text-[#cd7868]" style="font-size: 50px; color: #cd7868;">
+                  group_add
+                  </span>
+              </div>
+            </div>
+          </div>
+       </div>
+
+       <div class=" md:flex-row space-y-4 md:space-x-4">
+       <div class=" flex flex-col shadow-lg rounded-lg overflow-hidden" style="display: flex; justify-content: center; align-items: center; height: 400px; width: 400px; margin: 0 auto;">
+        <div style="height: 100%; width: 100%;">
+          <canvas id="chartPie"></canvas>
+        </div>
+      </div>
+    
+    
+         </div>
+       </div>
+     
     </div>
- </aside>
- 
- <div class="mx-auto max-w-screen-lg py-8 sm:px-6 sm:py-12 lg:px-8 my-element">
-   
- 
-   <dl class="mt-6 grid grid-cols-1 gap-4 sm:mt-8 sm:grid-cols-2 lg:grid-cols-4">
-     <div class="flex flex-col rounded-lg bg-blue-50 px-4 py-8 text-center">
-       <dt class="order-last text-lg font-medium text-gray-500">أكاديمية ونادي</dt>
-       <dd class="text-4xl font-extrabold text-blue-600 md:text-5xl" data-target={{academies.count}}>0</dd>
-     </div>
- 
-     <div class="flex flex-col rounded-lg bg-blue-50 px-4 py-8 text-center">
-       <dt class="order-last text-lg font-medium text-gray-500">برنامج</dt>
-       <dd class="text-4xl font-extrabold text-blue-600 md:text-5xl" data-target={{programs.count}}>0</dd>
-     </div>
- 
-     <div class="flex flex-col rounded-lg bg-blue-50 px-4 py-8 text-center">
-       <dt class="order-last text-lg font-medium text-gray-500">اشتراك</dt>
-       <dd class="text-4xl font-extrabold text-blue-600 md:text-5xl" data-target={{subscriptions.count}}>0</dd>
-     </div>
- 
-     <div class="flex flex-col rounded-lg bg-blue-50 px-4 py-8 text-center">
-       <dt class="order-last text-lg font-medium text-gray-500">مستخدم</dt>
-       <dd class="text-4xl font-extrabold text-blue-600 md:text-5xl" data-target={{users.count}}>0</dd>
-     </div>
-   </dl>
  </div>
 
- 
+
+
+
+
+
+<!-- ============//////////////////////===============///////////////////================ -->
+
+
+
 <div class="max-w-sm mx-auto w-full bg-white rounded-lg shadow  p-4 md:p-6">
   <div class="flex justify-between mb-5">
     <div>
@@ -199,43 +155,50 @@
     </div>
   </div>
 </div>
-
-
-<div class="shadow-lg rounded-lg overflow-hidden" style="display: flex; justify-content: center; align-items: center; height: 400px; width: 400px; margin: 0 auto;">
-  <div style="height: 100%; width: 100%;">
-    <canvas id="chartPie"></canvas>
-  </div>
 </div>
 
 
-<!-- Required chart.js -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-<!-- Chart pie -->
-<script>
-  const dataPie = {
-    labels: JSON.parse('{{sport_categories}}'),  //All sports categories
-    datasets: [
-      {
-        label: "My First Dataset",
-        data: [300, 50, 100, 200, 80,333,777],
-        backgroundColor: JSON.parse('{{sport_categories_colors}}'),
-        hoverOffset: 4,
-      },
-    ],
-  };
-
-  const configPie = {
-    type: "pie",
-    data: dataPie,
-    options: {},
-  };
-
-  var chartBar = new Chart(document.getElementById("chartPie"), configPie);
-</script>
+</section>
+</div>  
 
 
-<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
+
+
+ <!-- Required chart.js -->
+      <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+      
+      <!-- Chart pie -->
+      <script>
+        const dataPie = {
+          labels: JSON.parse('{{sport_categories}}'),  //All sports categories
+          datasets: [
+            {
+              label: "عدد الاشتراكات",
+              data: JSON.parse('{{enrollments_by_sport_category}}'),
+              backgroundColor: JSON.parse('{{sport_categories_colors}}'),
+              hoverOffset: 4,
+            },
+          ],
+        };
+      
+        const configPie = {
+          type: "pie",
+          data: dataPie,
+          options: {},
+        };
+      
+        var chartBar = new Chart(document.getElementById("chartPie"), configPie);
+      </script>
+      
+      
+      <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+     
+
+
+
+
+
 <script>
   document.addEventListener('DOMContentLoaded', function () { //window.onload = function() {
       const options = {
@@ -280,7 +243,7 @@
               },
           },
           dataLabels: { enabled: false },
-          stroke: { width: 6 },
+          stroke: { width: 3 },
           xaxis: {
               categories: JSON.parse('{{datesList}}') , //payments dates durning the period of time specified.
               labels: { show: false },
@@ -306,9 +269,9 @@
    
    
    <script>
-     // Function to animate the numbers
+     // Function to animate the numbers of academies, programs, subscriptions and users
      function animateNumbers() {
-       const counters = document.querySelectorAll('dd[data-target]');
+       const counters = document.querySelectorAll('p[data-target]');
        
        counters.forEach(counter => {
          const updateCount = () => {
@@ -334,10 +297,10 @@
      // Trigger the animation when the page loads
      window.addEventListener('load', animateNumbers);
 
-
-
    </script>
 
      
- 
 {% endblock %}
+
+
+

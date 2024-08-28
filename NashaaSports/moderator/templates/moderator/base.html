@@ -1,0 +1,320 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en" dir="rtl" {% if "mode" in request.COOKIES and request.COOKIES.mode == "dark" %} class="dark" {% endif %}>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@40,400,0,0" />
+    <script src="https://kit.fontawesome.com/956e34dfa0.js" crossorigin="anonymous"></script>
+     <link rel="preconnect" href="https://fonts.googleapis.com">
+     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@40,400,0,0" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="{% static 'style.css' %}" rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Platypi:ital,wght@0,300..800;1,300..800&family=Tajawal:wght@200;300;400;500;700;800;900&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap"
+        rel="stylesheet">
+    <link
+      href="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.css"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/simple-datatables@9.0.3"></script>
+    <style>
+          .my-element {
+        margin-right: 1rem; /* Default margin for smaller screens */
+     }
+     
+     /* Styling for medium screens and above */
+     @media (min-width: 768px) {
+        .my-element {
+            margin-right: 16rem;
+        }
+     }
+    </style>
+    <title>{% block title %} {% endblock %} </title>
+</head>
+
+
+
+<body style="font-family: Tajawal;">
+    {% include 'moderator/sidebar.html' %}
+    <div class="p-4 my-element ">
+    {% block content %}
+    
+    
+
+    
+    {% endblock %}
+</div>
+<script>
+  
+    const getChartOptions = () => {
+      return {
+        series: [52.8, 26.8, 20.4],
+        colors: ["#1C64F2", "#16BDCA", "#9061F9"],
+        chart: {
+          height: 420,
+          width: "100%",
+          type: "pie",
+        },
+        stroke: {
+          colors: ["white"],
+          lineCap: "",
+        },
+        plotOptions: {
+          pie: {
+            labels: {
+              show: true,
+            },
+            size: "100%",
+            dataLabels: {
+              offset: -25
+            }
+          },
+        },
+        labels: ["Direct", "Organic search", "Referrals"],
+        dataLabels: {
+          enabled: true,
+          style: {
+            fontFamily: "Inter, sans-serif",
+          },
+        },
+        legend: {
+          position: "bottom",
+          fontFamily: "Inter, sans-serif",
+        },
+        yaxis: {
+          labels: {
+            formatter: function (value) {
+              return value + "%"
+            },
+          },
+        },
+        xaxis: {
+          labels: {
+            formatter: function (value) {
+              return value  + "%"
+            },
+          },
+          axisTicks: {
+            show: false,
+          },
+          axisBorder: {
+            show: false,
+          },
+        },
+      }
+    }
+    
+    if (document.getElementById("pie-chart") && typeof ApexCharts !== 'undefined') {
+      const chart = new ApexCharts(document.getElementById("pie-chart"), getChartOptions());
+      chart.render();
+    }
+    
+    </script> 
+    <script>
+       const options1 = {
+         chart: {
+           height: "100%",
+           maxWidth: "100%",
+           type: "area",
+           fontFamily: "Inter, sans-serif",
+           dropShadow: {
+             enabled: false,
+           },
+           toolbar: {
+             show: false,
+           },
+         },
+         tooltip: {
+           enabled: true,
+           x: {
+             show: false,
+           },
+         },
+         fill: {
+           type: "gradient",
+           gradient: {
+             opacityFrom: 0.6,
+             opacityTo: 0,
+             shadeIntensity: 0,
+             stops: [20, 100],
+           },
+         },
+         dataLabels: {
+           enabled: false,
+         },
+         markers: {
+           size: 0,
+         },
+         xaxis: {
+           type: "datetime",
+           categories: ["2023-07-19", "2023-07-20", "2023-07-21", "2023-07-22", "2023-07-23", "2023-07-24", "2023-07-25"],
+           axisBorder: {
+             show: false,
+           },
+           labels: {
+             style: {
+               colors: "#97a3b9",
+             },
+           },
+         },
+         yaxis: {
+           show: false,
+           tickAmount: 3,
+         },
+         grid: {
+           strokeDashArray: 4,
+         },
+         stroke: {
+           curve: "smooth",
+           width: 2,
+         },
+         series: [{
+           name: "Users",
+           data: [30, 40, 60, 20, 50, 90, 50],
+         }, ],
+         colors: ["#4FD1C5"],
+       };
+       
+       const chart1 = new ApexCharts(document.getElementById("area-chart"), options1);
+       chart1.render();
+       
+       const options2 = {
+         chart: {
+           height: "100%",
+           maxWidth: "100%",
+           type: "area",
+           fontFamily: "Inter, sans-serif",
+           dropShadow: {
+             enabled: false,
+           },
+           toolbar: {
+             show: false,
+           },
+         },
+         tooltip: {
+           enabled: true,
+           x: {
+             show: false,
+           },
+         },
+         fill: {
+           type: "gradient",
+           gradient: {
+             opacityFrom: 0.6,
+             opacityTo: 0,
+             shadeIntensity: 0,
+             stops: [20, 100],
+           },
+         },
+         dataLabels: {
+           enabled: false,
+         },
+         markers: {
+           size: 0,
+         },
+         xaxis: {
+           type: "datetime",
+           categories: ["2023-07-19", "2023-07-20", "2023-07-21", "2023-07-22", "2023-07-23", "2023-07-24", "2023-07-25"],
+           axisBorder: {
+             show: false,
+           },
+           labels: {
+             style: {
+               colors: "#97a3b9",
+             },
+           },
+         },
+         yaxis: {
+           show: false,
+           tickAmount: 3,
+         },
+         grid: {
+           strokeDashArray: 4,
+         },
+         stroke: {
+           curve: "smooth",
+           width: 2,
+         },
+         series: [{
+           name: "Visitors",
+           data: [15, 25, 40, 18, 38, 70, 45],
+         }, ],
+         colors: ["#1A56DB"],
+       };
+       
+       const chart2 = new ApexCharts(document.getElementById("area-chart-2"), options2);
+       chart2.render();
+       </script>
+    <script>
+       // JavaScript code for Chart.js
+    
+       const data = {
+        datasets: [{
+            data: ['{{enrollments_ended.count}}', '{{enrollments_pending.count}}', '{{enrollments_in_progress.count}}'],
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)', // First bar: Red
+                'rgba(255, 165, 0, 0.2)',  // Second bar: Orange
+                'rgba(0, 128, 0, 0.2)'     // Third bar: Green
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',   // Border color for the first bar
+                'rgba(255, 165, 0, 1)',    // Border color for the second bar
+                'rgba(0, 128, 0, 1)'       // Border color for the third bar
+            ],
+            borderWidth: 1
+        }],
+        labels: ['منتهي', 'معلق', 'جاري']
+       };
+    
+       const config = {
+           type: 'bar',
+           data: data,
+           options: {
+               responsive: true,
+               plugins: {
+                   legend: {
+                       display: false // Hide legend if not needed
+                   },
+                   tooltip: {
+                       callbacks: {
+                           label: function(tooltipItem) {
+                               return tooltipItem.label + ': ' + tooltipItem.raw;
+                           }
+                       }
+                   }
+               },
+               scales: {
+                   x: {
+                       grid: {
+                           display: false // Hide x-axis grid lines
+                       },
+                       ticks: {
+                           display: false // Hide x-axis labels
+                       }
+                   },
+                   y: {
+                       grid: {
+                           display: false // Hide y-axis grid lines
+                       },
+                       ticks: {
+                           display: false // Hide y-axis labels
+                       }
+                   }
+               }
+           }
+       };
+    
+       window.onload = function() {
+           // Create and render the chart
+           const ctx = document.getElementById('myChart').getContext('2d');
+           new Chart(ctx, config);
+       };
+    </script>
+
+<script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.js"></script>
+</body>
