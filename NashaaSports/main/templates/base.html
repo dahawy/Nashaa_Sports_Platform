@@ -83,7 +83,7 @@
               </svg>
             </button>
           </div>
-          <a href="/" class="flex items-center  rtl:space-x-reverse">
+          <a href="/" class="flex items-center md rtl:space-x-reverse">
             <img
               src="/media/logos/NLogo.png"
               class="h-10"
@@ -106,6 +106,13 @@
                   href="{% url 'main:programs_view' %}"
                   class="text-gray-500 text-sm font-medium hover:text-prime-blue-700 transition-all duration-500 mb-2 block lg:mr-6 lg:text-base md:mb-0 md:mr-3 hover:text-gray-900"
                   >البرامج</a
+                >
+              </li>
+              <li>
+                <a
+                  href="{% url 'main:academies_view' %}"
+                  class="text-gray-500 text-sm font-medium hover:text-prime-blue-700 transition-all duration-500 mb-2 block lg:mr-6 lg:text-base md:mb-0 md:mr-3 hover:text-gray-900"
+                  >ألاكاديميات</a
                 >
               </li>
               <li>
@@ -135,7 +142,7 @@
 
             <button
                 type="button"
-                class="flex mx-3 text-sm bg-gray-800 rounded-full md:mr-0 focus:ring-4 focus:ring-gray-300 light:focus:ring-gray-600"
+                class="flex mx-3 text-sm bg-white-800 rounded-full md:mr-0 focus:ring-4 focus:ring-gray-300 light:focus:ring-gray-600"
                 id="user-menu-button"
                 aria-expanded="false"
                 data-dropdown-toggle="dropdown"
@@ -200,6 +207,26 @@
                       href="{% url 'account:profile_view' user.id %}"
                       class="block py-2 px-4 text-sm hover:bg-gray-100 light:hover:bg-gray-600 light:text-gray-400 light:hover:text-white">حسابي الشخصي </a>
                     </div>
+                    <li>
+                  <div class="flex flex-row">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="M320-280q17 0 28.5-11.5T360-320q0-17-11.5-28.5T320-360q-17 0-28.5 11.5T280-320q0 17 11.5 28.5T320-280Zm0-160q17 0 28.5-11.5T360-480q0-17-11.5-28.5T320-520q-17 0-28.5 11.5T280-480q0 17 11.5 28.5T320-440Zm0-160q17 0 28.5-11.5T360-640q0-17-11.5-28.5T320-680q-17 0-28.5 11.5T280-640q0 17 11.5 28.5T320-600Zm120 320h240v-80H440v80Zm0-160h240v-80H440v80Zm0-160h240v-80H440v80ZM200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm0-560v560-560Z"/></svg>
+                    <a
+                      href="{% url 'enrollment:my_enrollment_view' user.id%}"
+                      class="block py-2 px-4 text-sm hover:bg-gray-100 light:hover:bg-gray-600 light:text-gray-400 light:hover:text-white"
+                      >اشتراكاتي</a
+                    >
+                  </div>
+                </li>
+                <li>
+                  <div class="flex flex-row">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="m389-400 91-55 91 55-24-104 80-69-105-9-42-98-42 98-105 9 80 69-24 104ZM200-120v-640q0-33 23.5-56.5T280-840h400q33 0 56.5 23.5T760-760v640L480-240 200-120Zm80-122 200-86 200 86v-518H280v518Zm0-518h400-400Z"/></svg>
+                    <a
+                      href="{% url 'bookmark:bookmark_view' user.id%}"
+                      class="block py-2 px-4 text-sm hover:bg-gray-100 light:hover:bg-gray-600 light:text-gray-400 light:hover:text-white"
+                      >المفضلة</a
+                    >
+                  </div>
+                </li>
                 {% else %}
                 <li>
                   <div class="flex flex-row">
@@ -250,9 +277,7 @@
                   >
                 </li>
               </ul>
-</div>
-
-
+          </div>
             </div>
             {%else%}
             <a href="{% url 'account:log_in'%}"
@@ -262,8 +287,9 @@
               </a>
             {%endif%}
             </div>
+            {% if request.user.is_authenticated or request.user.is_superuser %}
             <!-- Cart Button -->
-            {% block cart_items %}
+
               <div class="flex items-center lg:space-x-2">
                 <button 
                   id="myCartDropdownButton1"
@@ -300,7 +326,7 @@
                         SR
                         {{ enrollment.program.fees }}
                       </p>
-                      <button
+                      <!-- <button
                         data-tooltip-target="tooltipRemoveItem1a"
                         type="button"
                         class="text-red-600 hover:text-red-700 light:text-red-500 light:hover:text-red-600"
@@ -319,15 +345,33 @@
                             clip-rule="evenodd"
                           />
                         </svg>
-                      </button>
+                      </button> -->
+                      <form method="POST" action="{% url 'enrollment:remove_enrollment_from_cart' enrollment.id %} {% if 'next' in request.GET %}?next={{request.GET.next}}{% endif %}">
+                        {% csrf_token %}
+                        <span class="sr-only"> Remove </span>
+                        
+                        <button type="submit"><svg
+                          class="h-4 w-4"
+                          aria-hidden="true"
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            fill-rule="evenodd"
+                            d="M2 12a10 10 0 1 1 20 0 10 10 0 0 1-20 0Zm7.7-3.7a1 1 0 0 0-1.4 1.4l2.3 2.3-2.3 2.3a1 1 0 1 0 1.4 1.4l2.3-2.3 2.3 2.3a1 1 0 0 0 1.4-1.4L13.4 12l2.3-2.3a1 1 0 0 0-1.4-1.4L12 10.6 9.7 8.3Z"
+                            clip-rule="evenodd"
+                          />
+                        </svg></button>
+                      </form>
                       <div
                         id="tooltipRemoveItem1a"
                         role="tooltip"
                         class="tooltip invisible absolute z-10 inline-block rounded-lg bg-gray-900 px-3 py-2 text-sm font-medium text-white opacity-0 shadow-sm transition-opacity duration-300 light:bg-gray-700"
                       >
                         Remove item
-                        <div class="tooltip-arrow" data-popper-arrow></div>
                       </div>
+
                     </div>
                   </div>
                   {%endfor%}
@@ -345,18 +389,17 @@
                   <p>السلة فارغة</p>
                   {% endif %}
                 </div>
-
-                <ul>
+                <!-- <ul>
                   <li>
                     <div class="flex items-center gap-1 px-4">    
                       <a href="{% url 'main:mode_view' 'light' %}?next={{request.path}}" class="nav-link px-1"><span class="material-symbols-outlined {% if 'mode' not in request.COOKIES or 'mode' in request.COOKIES and request.COOKIES.mode != 'dark' %} active-icon {% endif %}">light_mode</span></a>
                       <a href="{% url 'main:mode_view' 'dark' %}?next={{request.path}}" class="nav-link px-1"><span class="material-symbols-outlined {% if 'mode' in request.COOKIES and request.COOKIES.mode == 'dark' %} active-icon {% endif %}">dark_mode</span></a>
                     </div>
                   </li>
-                </ul>
+                </ul> -->
             </div>
-            
-            {% endblock%}        
+              
+            {%endif%}    
         </div>
       </div>
 </nav>
@@ -382,7 +425,7 @@
         </div>
         <div class="grid grid-cols-2 gap-8 sm:gap-6 sm:grid-cols-3">
             <div>
-                <h2 class="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white">روابط مهمة</h2>
+                <h2 class="mb-6 text-sm font-semibold text-gray-900 uppercase">روابط مهمة</h2>
                 <ul class="text-gray-500 dark:text-gray-400 font-medium">
                     <li class="mb-2">
                         <a href="{% url 'main:home_view' %}" class="hover:underline">الرئيسية</a>
@@ -399,7 +442,7 @@
                 </ul>
             </div>
             <div>
-                <h2 class="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white">تابعنا</h2>
+                <h2 class="mb-6 text-sm font-semibold text-gray-900 uppercase ">تابعنا</h2>
                 <ul class="text-gray-500 dark:text-gray-400 font-medium">
                     <li class="mb-2">
                         <a href="#" class="hover:underline ">انستغرام</a>
@@ -410,7 +453,7 @@
                 </ul>
             </div>
             <div>
-                <h2 class="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white">مصادر مهمة</h2>
+                <h2 class="mb-6 text-sm font-semibold text-gray-900 uppercase">مصادر مهمة</h2>
                 <ul class="text-gray-500 dark:text-gray-400 font-medium">
                     <li class="mb-2">
                         <a href="#" class="hover:underline">الخصوصية</a>
