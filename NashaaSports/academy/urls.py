@@ -27,6 +27,7 @@ urlpatterns = [
     path('subscribers/<user_id>',views.subscribers_view,name="subscribers_view"),
     path('image/delete/<image_id>/',views.delete_image,name="delete_image"),
     path('video/delete/<video_id>/',views.delete_video,name="delete_video"),
+    path('more/programs/<academy_id>',views.more_programs_view,name='more_programs_view'),
    
     
 ]

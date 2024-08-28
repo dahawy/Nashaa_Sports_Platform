@@ -334,9 +334,37 @@ def program_detail_view(request:HttpRequest,program_id):
 def academies_profile_view(request:HttpRequest,academy_id):
     academy=AcademyProfile.objects.get(pk=academy_id)
     branches=Branch.objects.filter(academy=academy)
-    programs = Program.objects.filter(branch__in=branches)[:3]
+    programs = Program.objects.filter(branch__in=branches).annotate(
+    avg_rating=Round(Avg(Cast('review__rating', FloatField())), 1))[:3]
+    programs_2 = Program.objects.filter(branch__in=branches)
     coach=Coach.objects.filter(branch__in=branches)
-    return render(request,'academy/academies_profile.html',{"academy":academy,'branches':branches,"programs":programs,'coaches':coach})
+    total_programs = programs.count()
+
+    # Aggregate data: Count the number of programs per sport category
+    sport_category_distribution = programs_2.values('sport_category').annotate(
+            count=Count('id')
+        ).order_by('sport_category')
+
+        # Manually initialize the dictionary with all sport categories set to 0
+    percentage_dict = {value: 0 for key, value in Program.SportChoices.choices}
+
+        # Update the dictionary with actual counts from the sport_category_distribution
+    for sport in sport_category_distribution:
+            for key, value in Program.SportChoices.choices:
+                if key == sport['sport_category']:
+                    display_label = value
+                    # Calculate the percentage
+                    percentage_dict[display_label] = round((sport['count'] / total_programs) * 100, 2)
+
+        # Filter out categories with a percentage of 0
+    filtered_percentage_dict = {label: percentage for label, percentage in percentage_dict.items() if percentage > 0}
+
+        # Convert the filtered dictionary to lists for use in the template
+    summation = list(filtered_percentage_dict.values())
+    labels = list(filtered_percentage_dict.keys())
+    print(labels)
+
+    return render(request,'academy/academies_profile.html',{"academy":academy,'branches':branches,"programs":programs,'coaches':coach,'labels':labels})
 def programs_list_view(request: HttpRequest):
     # Retrieve the academy for the logged-in user
     academy = AcademyProfile.objects.filter(user=request.user).first()
@@ -561,6 +589,7 @@ def update_branch_view(request, branch_id):
         'lat': lat,
         'lng': lng,
         'google_maps_api_key': settings.GOOGLE_API_KEY,
+        'cities':Branch.Cities.choices
     })
 
 def coach_list_view(request:HttpRequest, academy_id):
@@ -675,3 +704,79 @@ def delete_image(request:HttpRequest,image_id):
     image=ProgramImage.objects.get(pk=image_id)
     image.delete()
     return redirect(request.GET.get('next','/'))
+def more_programs_view(request:HttpRequest,academy_id):
+    search_query = request.GET.get('search', '')
+    price_filter = request.GET.get('price', '')
+    age_filter = request.GET.get('age', '')
+    length_filter = request.GET.get('length', '')
+    city_filter = request.GET.get('city', '')
+    category_filter = request.GET.get('category', '')
+    academy=AcademyProfile.objects.get(pk=academy_id)
+    programs=Program.objects.filter(branch__academy=academy)
+    programs = programs.annotate(
+    avg_rating=Round(Avg(Cast('review__rating', FloatField())), 1), # Calculate the average rating for each program
+    start_days=ExtractDay(F('start_date')),
+    end_days=ExtractDay(F('end_date'))
+        ).annotate(
+    duration =ExpressionWrapper(
+    ExtractDay(F('end_date') - F('start_date')) / 7,
+    output_field=IntegerField()
+            )
+    )
+    if length_filter == 'short':
+        programs = programs.filter(duration__gte=1, duration__lte=4)
+    elif length_filter == 'medium':
+        programs = programs.filter(duration__gte=5, duration__lte=12)
+    elif length_filter == 'long':
+        programs = programs.filter(duration__gte=13)
+    if age_filter=='children':
+        min_age=1
+        max_age=12
+    elif age_filter=='teens':
+        min_age=13
+        max_age=17
+    elif age_filter=='adults':
+        min_age=18
+        max_age=100
+    else:
+        min_age = 1  # Default minimum age
+        max_age = 100 
+    
+
+    programs = programs.filter(
+    
+    Q(is_available=True)&
+    Q(is_active=True)&
+    Q(admin_activtion=True)&
+    Q(program_name__icontains=search_query)&
+    Q(branch__branch_city__icontains=city_filter)&
+    Q(sport_category__icontains=category_filter)&
+    Q(min_age__lte=max_age) &  # Program's min_age should be less than or equal to the selected max_age
+    Q(max_age__gte=min_age) 
+
+            )
+
+    if price_filter == 'high_to_low':
+        programs = programs.order_by('-fees')  # Assuming 'fees' is the price field
+    elif price_filter == 'low_to_high':
+        programs = programs.order_by('fees')
+   
+    
+    price_choices = [
+        ('high_to_low', 'من الاعلى الى الاقل'),
+        ('low_to_high', 'من الاقل الى الاعلى'),
+    ]
+
+    age_choices = [
+        ('children', '1-12'),
+        ('teens', '13-17'),
+        ('adults', '18 فأكثر'),
+    ]
+
+    length_choices = [
+        ('short', '1-4 اسبوع'),
+        ('medium', "5-12 اسبوع"),
+        ('long', '13 فأكثر'),
+    ]
+    context={'age_choices':age_choices,'academy':academy,'length_choices':length_choices,'price_choices':price_choices,'programs':programs,"sport_choices":Program.SportChoices.choices,'cities':Branch.Cities.choices}
+    return render(request,"academy/more_program.html",context)
