@@ -35,7 +35,7 @@
     >
     {% if messages %}
     {% for message in messages %}
-        <div id="toast-{{ message.tag }}" class="flex absolute z-40 items-center w-full max-w-sm py-5 px-6 mt-24 text-gray-600 bg-white rounded-xl border border-gray-200 shadow-sm mb-6 left-2" role="alert">
+        <div id="toast-{{ message.tag }}" class="flex absolute z-40 items-center w-full max-w-sm py-5 px-6 mt-24 text-gray-600 bg-white rounded-xl border border-gray-200 shadow-sm mb-6 right-2" role="alert">
             <div class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 {% if 'error' in message.tags %} text-red-500 bg-red-100 {% elif 'success' in message.tags %} text-green-500 bg-green-100 {% elif 'warning' in message.tags %} text-orange-500 bg-orange-100 {% endif %} rounded-lg">
                 <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
                     {% if 'error' in message.tags %}

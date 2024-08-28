@@ -1,154 +1,224 @@
+{% extends 'academy/base.html' %}
 
-<button data-drawer-target="sidebar-multi-level-sidebar" data-drawer-toggle="sidebar-multi-level-sidebar" aria-controls="sidebar-multi-level-sidebar" type="button" class="inline-flex items-center p-2 mt-2 ms-3 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 ">
-    <span class="sr-only">Open sidebar</span>
-    <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-    <path clip-rule="evenodd" fill-rule="evenodd" d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"></path>
-    </svg>
- </button>
-
-<aside  id="sidebar-multi-level-sidebar" class="fixed  top-0   right-0 z-40 w-64 h-screen transition-transform translate-x-full sm:translate-x-0" aria-label="Sidebar">
+{% block content %}
+<div class="pt-28 flex justify-center">
+    <h2 class="text-3xl"> المشتركين</h2>
+</div>
+<form id="filter-form" class="max-w-md mx-auto mt-10" method="GET" action="">
+    <label for="default-search" class="mb-2 text-sm font-medium text-gray-900 sr-only">Search</label>
+    <div class="flex justify-center">
+    <div class="relative md:w-full w-11/12 ">
+        <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+            <svg class="w-4 h-4 text-gray-500 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+            </svg>
+        </div>
+        <input type="search" id="default-search" name="search" value="{{ request.GET.search }}" class="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 " placeholder="ابحث بأسم المشترك" />
+    </div>
+</div>
+<div class="flex justify-center flex-wrap mt-3 gap-x-5 gap-y-0">
+    <div class="mb-5 w-32">
+        <select id="status-filter" name="status" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+            <option value="all" >الحالة (الكل)</option>
+            <option value="pending" {% if request.GET.status == "pending" %}selected{% endif %}>معلق</option>
+            <option value="in_progress" {% if request.GET.status == "in_progress" %}selected{% endif %}>جاري</option>
+        </select>
+    </div>
+</div>
+</form>
+<div class="mt-10 w-full  flex justify-center items-center ">
+        
     
-    <div class="h-full px-3 py-4 overflow-y-auto shadow-lg bg-gray-50 " >
-       <div class="flex justify-center">
-          <a href="{% url 'main:home_view' %}" class="cursor-pointer">
-          <img
-               src="/media/logos/NLogo.png"
-               class="h-10"
-               alt="Nashaa Logo"
-             /></a>
-       </div>
-        <ul class="space-y-2 font-medium pt-20">
-           <li class="">
-              <a href="{% url 'academy:academy_dashboard_view' request.user.id %}" class="flex items-center p-2 text-gray-900 rounded-lg light:text-white hover:bg-gray-100 light:hover:bg-gray-700 group">
-                 <svg class="w-5 h-5 text-[#cd7868] transition duration-75   " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="#cd7868" viewBox="0 0 22 21">
-                    <path d="M16.975 11H10V4.025a1 1 0 0 0-1.066-.998 8.5 8.5 0 1 0 9.039 9.039.999.999 0 0 0-1-1.066h.002Z"/>
-                    <path d="M12.5 0c-.157 0-.311.01-.565.027A1 1 0 0 0 11 1.02V10h8.975a1 1 0 0 0 1-.935c.013-.188.028-.374.028-.565A8.51 8.51 0 0 0 12.5 0Z"/>
-                 </svg>
-                 <span class="ms-3">نظرة عامة</span>
-              </a>
-           </li>
-           <li>
-              <button type="button" class="flex items-center w-full p-2 text-base text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 light:text-white light:hover:bg-gray-700" aria-controls="dropdown-example" data-collapse-toggle="dropdown-example">
-                <div class="">
-                   <span class="material-symbols-outlined text-[#cd7868]" style="font-size: 28px; color: #cd7868;">
-                      surfing
-                      </span>
-                  </div>
-                    <span class="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">البرامج</span>
-                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                       <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
-                    </svg>
-              </button>
-              <ul id="dropdown-example" class="hidden py-2 space-y-2">
-                    <li>
-                       <a href="{% url 'academy:add_program_view' request.user.id %}" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 light:text-white light:hover:bg-gray-700">اضف برنامج</a>
+    {% if  subscribers %}
+    <div class=" w-96 md:w-3/4 relative overflow-x-auto shadow-md sm:rounded-lg">
+        
+        <table class="w-full text-sm text-left rtl:text-right text-gray-500 ">
+            <thead class="text-xs md:text-sm text-gray-700 uppercase bg-gray-100">
+                <tr>
+                    <th scope="col" class="px-6 py-3">
+                        اسم المشترك
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        الفرع
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        البرنامج
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        الفترة
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        الحالة الصحية
+                    </th>
+                    
+                    <th scope="col" class="px-6 py-3">
+                        تاريخ الانضمام للبرنامج 
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        <span class="flex items-center text-sm font-medium text-gray-900  me-3"><span class="flex w-2.5 h-2.5 bg-green-600 rounded-full me-1.5 flex-shrink-0"></span>جاري</span>
+                        <span class="flex items-center text-sm font-medium text-gray-900  me-3"><span class="flex w-2.5 h-2.5 bg-orange-500 rounded-full me-1.5 flex-shrink-0"></span>معلق</span>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                
+               
+                
+                {% for subscriber in subscribers %}
+                <tr class="bg-white border-b  hover:bg-gray-50">
+                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
+                        {{subscriber.first_name}} {{subscriber.last_name}}
+                    </th>
+                    <td class="px-6 py-4">
+                        {{subscriber.program.branch.branch_name}}
+                    </td>
+                    <td class="px-6 py-4">
+                        {{subscriber.program.program_name}}
+                    </td>
+                    <td class="px-6 py-4" dir="ltr">
+                       
+                       {{subscriber.time_slot.end_time}}-
+                       {{subscriber.time_slot.start_time}}
+                       <br>
+                       {{subscriber.time_slot.days}}
+                       
+                    </td>
+                    <td class="px-6 py-4">
+                        {{subscriber.health_condition}}
+                    </td>
+                    <td class="px-6 py-4">
+                        {{subscriber.created_at}}
+                    </td>
+                    <td class="px-6 py-4 text-right">
+                        
+
+<!-- Modal toggle -->
+<button data-modal-target="select-modal-{{subscriber.id}}" data-modal-toggle="select-modal-{{subscriber.id}}" {% if  subscriber.status == 'pending' %} class="block text-white bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center " {% else %} class="block text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center " {% endif %} type="button">
+    حالة الأشتراك
+  </button>
+  
+  <!-- Main modal -->
+  <div id="select-modal-{{subscriber.id}}" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+      <div class="relative p-4 w-full max-w-md max-h-full">
+          <!-- Modal content -->
+          <div class="relative bg-white rounded-lg shadow ">
+              <!-- Modal header -->
+              <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t ">
+                  <h3 class="text-lg font-semibold text-gray-900 ">
+                    تغيير الحالة
+                  </h3>
+                  <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm h-8 w-8 ms-auto inline-flex justify-center items-center " data-modal-toggle="select-modal-{{subscriber.id}}">
+                      <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                      </svg>
+                      <span class="sr-only">Close modal</span>
+                  </button>
+              </div>
+              <!-- Modal body -->
+              <div class="p-4 md:p-5">
+                  <p class="text-gray-500  mb-4"> اختيار الحالة</p>
+                  <ul class="space-y-4 mb-4">
+                      <li>
+                        <a href="{% url 'enrollment:pending_enrollment_status_view' subscriber.id %}?next={{request.path}}">
+                          <label for="job-3" {% if subscriber.status == 'pending' %} class="inline-flex items-center justify-between w-full p-5  bg-white border  rounded-lg cursor-pointer border-blue-600 text-blue-600 hover:text-gray-900 hover:bg-gray-100 " {% else %}class="inline-flex items-center justify-between w-full p-5 text-gray-900 bg-white border border-gray-200 rounded-lg cursor-pointer peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-900 hover:bg-gray-100 " {% endif %}>
+                              <div class="block">
+                                <div class="w-full text-lg font-semibold">معلق</div>
+                              </div>
+                                                        </label></a>
+                      </li>
+                      <li>
+                        <a href="{% url 'enrollment:in_progress_enrollment_status_view' subscriber.id %}?next={{request.path}}">
+                        <label for="job-3" {% if not subscriber.status == 'pending' %} class="inline-flex items-center justify-between w-full p-5  bg-white border  rounded-lg cursor-pointer border-blue-600 text-blue-600 hover:text-gray-900 hover:bg-gray-100 " {% else %}class="inline-flex items-center justify-between w-full p-5 text-gray-900 bg-white border border-gray-200 rounded-lg cursor-pointer peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-900 hover:bg-gray-100 " {% endif %}>
+                            <div class="block">
+                                <div class="w-full text-lg font-semibold">جاري</div>
+                            </div>
+                                                      </label></a>
                     </li>
- 
-                    <li>
-                       <a href="{% url 'academy:programs_list_view' %}" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 light:text-white light:hover:bg-gray-700">قائمة البرامج</a>
-                    </li>
-              </ul>
-           </li>
-           <li>
-             <button type="button" class="flex items-center w-full p-2 text-base text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 light:text-white light:hover:bg-gray-700" aria-controls="dropdown-example1" data-collapse-toggle="dropdown-example1">
-                <div class="">
-                   <span class="material-symbols-outlined text-[#cd7868]" style="font-size: 28px; color: #cd7868;">
-                      location_on
-                      </span>
-                  </div>
-                   <span class="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">الفروع</span>
-                   <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                      <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
-                   </svg>
-             </button>
-             <ul id="dropdown-example1" class="hidden py-2 space-y-2">
-                   <li>
-                      <a href="{% url 'academy:add_branch_view' request.user.id %}" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 light:text-white light:hover:bg-gray-700">اضف فرع</a>
-                   </li>
-                   <li>
-                      <a href="{% url 'academy:branches_list_view' request.user.id %}" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 light:text-white light:hover:bg-gray-700">قائمة الفروع</a>
-                   </li>
-             </ul>
-          </li>
-          <li>
-             <button type="button" class="flex items-center w-full p-2 text-base text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 light:text-white light:hover:bg-gray-700" aria-controls="dropdown-example2" data-collapse-toggle="dropdown-example2">
-                <div class="">
-                   <span class="material-symbols-outlined text-[#cd7868]" style="font-size: 28px; color: #cd7868;">
-                      groups
-                      </span>
-                  </div>
-                   <span class="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">المدربين</span>
-                   <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                      <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
-                   </svg>
-             </button>
-             <ul id="dropdown-example2" class="hidden py-2 space-y-2">
-                   <li>
-                      <a href="{% url 'academy:add_coach_view' request.user.id %}" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 light:text-white light:hover:bg-gray-700">اضف مدرب</a>
-                   </li>
- 
-                   <li>
-                      <a href="{% url 'academy:coach_list_view' request.user.id %}" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 light:text-white light:hover:bg-gray-700">قائمة المدربين</a>
-                   </li>
-             </ul>
-          </li>
-          <li>
-             <button type="button" class="flex items-center w-full p-2 text-base text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 light:text-white light:hover:bg-gray-700" aria-controls="dropdown-example3" data-collapse-toggle="dropdown-example3">
-                <div class="">
-                   <span class="material-symbols-outlined text-[#cd7868]" style="font-size: 28px; color: #cd7868;">
-                      group_add
-                      </span>
-                  </div>
-                   <a href="{% url 'academy:subscribers_view' user.id %}">
-                   <span class="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap ">المشتركين</span>
-                </a>
-                  
-             </button>
+                  </ul>
             
-          </li>
-           
-           
-           
+                  
+              </div>
+          </div>
+      </div>
+  </div> 
+  
+                    </td>
+                </tr>
+                {% endfor %}
+                
+
+            </tbody>
+        </table>
+        
+    </div>
+    {% else %}
+        <div class="flex justify-center items-center ">
+        <h2 class="text-gray-400 text-2xl">لايوجد مشتركين حتى الان</h2>
+    </div>
+        {% endif %}
+    
+    
+    
+
+
+</div>
+
+
+<div class="flex justify-center mt-6">
+    <nav aria-label="Page navigation example">
+        <ul class="inline-flex -space-x-px text-sm" dir="rtl">
+            <!-- Previous button -->
+            {% if subscribers.has_previous %}
+                <li>
+                    <a href="?page=1" class="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:text-gray-700  ">الصفحة الاولى</a>
+                </li>
+                <li>
+                    <a href="?page={{ subscribers.previous_page_number }}" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:text-gray-700  ">السابق</a>
+                </li>
+            {% else %}
+                <li>
+                    <span class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg cursor-not-allowed opacity-50">السابق</span>
+                </li>
+            {% endif %}
+
+            <!-- Page numbers -->
+            {% for num in subscribers.paginator.page_range %}
+                {% if subscribers.number == num %}
+                    <li>
+                        <a href="#" aria-current="page" class="flex items-center justify-center px-3 h-8 text-orange-600 border border-gray-300 bg-orange-50 hover:bg-orange-100 hover:text-orange-700  ">{{ num }}</a>
+                    </li>
+                {% else %}
+                    <li>
+                        <a href="?page={{ num }}" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 ">{{ num }}</a>
+                    </li>
+                {% endif %}
+            {% endfor %}
+
+            <!-- Next button -->
+            {% if page_obj.has_next %}
+                <li>
+                    <a href="?page={{ subscribers.next_page_number }}" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700">التالي</a>
+                </li>
+                <li>
+                    <a href="?page={{ subscribers.paginator.num_pages }}" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700">التالي</a>
+                </li>
+            {% else %}
+                <li>
+                    <span class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 cursor-not-allowed opacity-50">التالي</span>
+                </li>
+            {% endif %}
         </ul>
-        <ul class="pt-4 mt-4 space-y-2 font-medium border-t border-gray-200 ">
-          <li >
-             <a href="{% url 'contactUs:customer_query_view' %}" class="flex items-center p-2 text-gray-900 transition duration-75 rounded-lg hover:bg-gray-100 ">
-                <div class="flex items-center">
-                   <span class="material-symbols-outlined text-[#cd7868]" style="font-size: 28px; color: #cd7868;">
-                      help
-                      </span>
-                      <span class="ms-3">تواصل معنا</span>
-                  </div>
-                
-             </a>
-          </li> 
-          <li >
-             <a href="#" class="flex items-center p-2 text-gray-900 transition duration-75 rounded-lg hover:bg-gray-100  group">
-                <div class="flex items-center">
-                   <span class="material-symbols-outlined text-[#cd7868]" style="font-size: 28px; color: #cd7868;">
-                      info
-                      </span>
-                       <span class="ms-3"> من نحن </span>
-                  </div>
-                
-             </a>
-          </li> 
-          <li >
-             <a href="{% url 'account:log_out' %}" class="flex items-center p-2 text-gray-900 transition duration-75 rounded-lg hover:bg-gray-100 ">
-                <div class="flex items-center">
-                   <span class="material-symbols-outlined text-[#cd6868]" style="font-size: 28px; color: #cd7868;">
-                      logout
-                      </span>
-                      
-                        <span class="ms-3">تسجيل خروج</span>
-                     
-                  </div>
-                
-             </a>
-          </li> 
-          </ul>
- 
-     </div>
-  </aside>
+    </nav>
+</div>
 
+<script>
+    
+    function handleFilterChange(event) {
+        document.getElementById('filter-form').submit();
+    }
+    document.querySelectorAll('#filter-form select').forEach(selectElement => {
+        selectElement.addEventListener('change', handleFilterChange);
+    });
+</script>
 
+{% endblock %}

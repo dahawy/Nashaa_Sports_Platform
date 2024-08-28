@@ -73,6 +73,52 @@
 </div>
 {% endif %}
         </div>
+        <div class="flex justify-center mt-6">
+            <nav aria-label="Page navigation example">
+                <ul class="inline-flex -space-x-px text-sm" dir="rtl">
+                    <!-- Previous button -->
+                    {% if programs.has_previous %}
+                        <li>
+                            <a href="?page=1" class="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:text-gray-700  ">الصفحة الاولى</a>
+                        </li>
+                        <li>
+                            <a href="?page={{ programs.previous_page_number }}" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:text-gray-700  ">السابق</a>
+                        </li>
+                    {% else %}
+                        <li>
+                            <span class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg cursor-not-allowed opacity-50">السابق</span>
+                        </li>
+                    {% endif %}
+
+                    <!-- Page numbers -->
+                    {% for num in programs.paginator.page_range %}
+                        {% if programs.number == num %}
+                            <li>
+                                <a href="#" aria-current="page" class="flex items-center justify-center px-3 h-8 text-orange-600 border border-gray-300 bg-orange-50 hover:bg-orange-100 hover:text-orange-700  ">{{ num }}</a>
+                            </li>
+                        {% else %}
+                            <li>
+                                <a href="?page={{ num }}" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 ">{{ num }}</a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+
+                    <!-- Next button -->
+                    {% if page_obj.has_next %}
+                        <li>
+                            <a href="?page={{ programs.next_page_number }}" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700">التالي</a>
+                        </li>
+                        <li>
+                            <a href="?page={{ programs.paginator.num_pages }}" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700">التالي</a>
+                        </li>
+                    {% else %}
+                        <li>
+                            <span class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 cursor-not-allowed opacity-50">التالي</span>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
         
 
             
