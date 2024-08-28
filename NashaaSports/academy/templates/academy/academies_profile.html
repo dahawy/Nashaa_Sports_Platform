@@ -32,10 +32,13 @@
             <!--  -->
             <div class="flex flex-col gap-4 mt-10">
                 <h2 class="text-3xl font-semibold">انواع الرياضات </h2>
-                <div class="bg-gray-50 rounded-lg flex flex-row gap-1 justify-center items-center w-fit px-5">
+                <div class=" rounded-lg flex flex-row gap-4 justify-center items-center w-fit px-5">
+                    {% for lable in labels %}
+                    <div class="bg-gray-50">
                     <i class="fa-solid fa-medal"></i>
-                    <a class="text-gray-600 ">كرة القدم </a>
-
+                    <a class="text-gray-600 ">{{lable}}</a>
+                </div>
+                {% endfor %}
                 </div>
             </div>
             <!--  -->
@@ -73,13 +76,13 @@
                 <div class="item1">
                     <h2 class="text-3xl font-semibold">ابرز برامج الاكاديمية </h2>
                 </div>
-                <div class="item md:ml-9 ml-5"><a class="text-xl font-semibold cursor-pointer"> المزيد</a></div>
+                <div class="item md:ml-9 ml-5"><a href="{% url 'academy:more_programs_view' academy.id %}" class="text-xl font-semibold cursor-pointer"> المزيد</a></div>
             </div>
 
-            <div class="flex flex-col gap-10 mt-10 self-center">
+            <div class="flex flex-col gap-10 mt-10 self-center w-full">
 
 
-                {% include 'program_card.html' with programs=programs %}
+                {% include 'academy/programs_Highlight.html' with programs=programs %}
 
 
 

@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="" >
+    <div class="flex justify-center  md:pt-40 mr-5">
+        <h1 class="text-4xl self-start ">برامج {{academy.academy_name}}</h1>
+        </div>
+    <div>
+        
+        
+        </div>  <!-- end of form  -->
+{% if programs %}
+<div class="">
+
+    {% include 'program_card2.html'%}
+</div>
+{% else %}
+<div class="flex justify-center items-center">
+<h3 class="text-zinc-400 text-2xl mt-5">لا يوجد برامج تطابق بحثك</h3>
+</div>
+{% endif %}
+        </div>
+        
+
+            
+        <script>
+            // Function to handle form submission
+            function handleFilterChange(event) {
+                document.getElementById('filter-form').submit();
+            }
+        
+            // Add event listeners to all select elements
+            document.querySelectorAll('#filter-form select').forEach(selectElement => {
+                selectElement.addEventListener('change', handleFilterChange);
+            });
+        </script>
+           
+             
+{% endblock %}
