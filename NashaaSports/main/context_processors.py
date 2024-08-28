@@ -8,9 +8,10 @@ def cart_data(request):
     programs = Program.objects.all()
     count_item = 0  # Initialize count_item with a default value
     total_fees = 0  # Initialize total_fees with a default value
-    profile = UserProfile.objects.get(user_id=request.user)
+    profile = None
     if request.user.is_authenticated:
         try:
+            profile = UserProfile.objects.get(user_id=request.user)
             user = UserProfile.objects.get(user_id=request.user.id)
             carts = Cart.objects.filter(user=user, status='Active').first()
             if carts:

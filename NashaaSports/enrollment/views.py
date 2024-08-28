@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect,get_object_or_404
 from django.contrib.auth import authenticate
 from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest
@@ -57,6 +57,20 @@ def enroll_in_program_view(request:HttpRequest, program_id):
             messages.error(request, f"حدث خطأ: {str(e)}")
 
     return render(request, "enrollment_page.html", context)
+
+@login_required(login_url="account:log_in")
+def remove_enrollment_from_cart(request, enrollment_id):
+    enrollment = get_object_or_404(Enrollment, id=enrollment_id)
+
+    if request.method == 'POST':
+        cart = enrollment.cart
+        enrollment.delete()
+
+        messages.success(request, 'تمت إزالة التسجيل من سلة التسوق.')
+        return redirect(request.GET.get("next", "/"))  # Adjust this to the correct cart view URL name
+
+    messages.error(request, 'Invalid request.')
+    return redirect(request.GET.get("next", "/"))
 
 
 @login_required(login_url="account:log_in")
