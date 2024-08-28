@@ -18,6 +18,19 @@ def customer_query_view(request: HttpRequest):
                 query.status = 'Open'  # Explicitly set the status to 'open'
                 query.save()  # Now save the instance
                 messages.success(request, "Your message sent successfully", extra_tags="alert-success")
+                subject = form.cleaned_data['subject']
+                message = form.cleaned_data['message']
+                content_html = render_to_string("moderator/customer_care_reply.html",{'query':query, 'message':message}) 
+                recipient = query.email
+
+                email = EmailMessage(
+                    subject,
+                    content_html,
+                    settings.EMAIL_HOST_USER,
+                    [recipient],
+                )
+                email.content_subtype = "html"
+                email.send()
                 return redirect('main:home_view')
         except Exception as e:
             print(e)
