@@ -19,9 +19,9 @@ from babel.dates import format_date
 from django.utils.safestring import mark_safe
 import json
 import random
+from django.db.models import Count
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
-# def superuser_required(view_func):
-#     return login_required(user_passes_test(lambda u: u.is_superuser))
 from django.core.exceptions import PermissionDenied
 
 def superuser_required(view_func):
@@ -40,6 +40,18 @@ def customers_queries_view(request: HttpRequest, status):
         queries = CustomerQuery.objects.filter(status='Closed').order_by('-created_at') 
     elif status == 'all':
         queries = CustomerQuery.objects.all().order_by('-created_at') 
+    
+    #Add for Pagination
+    paginator = Paginator(queries, 8)  # Show 10 items per page
+
+    page_number = request.GET.get('page')  # Get page number from URL
+    try:
+        queries = paginator.get_page(page_number)
+    except PageNotAnInteger:
+        queries = paginator.page(1)  # Deliver the first page
+    except EmptyPage:
+        queries = paginator.page(paginator.num_pages)  # Deliver the last page
+    
 
     return render(request, 'moderator/customers_queries.html', {'queries': queries})
 
@@ -80,6 +92,18 @@ def academies_for_approval_view(request: HttpRequest):
     
     academies = AcademyProfile.objects.filter(approved=False).order_by('-created_at')  
 
+     #Add for Pagination
+    paginator = Paginator(academies, 8)  # Show 10 items per page
+
+    page_number = request.GET.get('page')  # Get page number from URL
+    try:
+        academies = paginator.get_page(page_number)
+    except PageNotAnInteger:
+        academies = paginator.page(1)  # Deliver the first page
+    except EmptyPage:
+        academies = paginator.page(paginator.num_pages)  # Deliver the last page
+    
+
     return render(request, 'moderator/academies_for_approval.html', {'academies': academies})
 
 
@@ -87,6 +111,19 @@ def academies_for_approval_view(request: HttpRequest):
 def approved_academies_view(request: HttpRequest):
     
     academies = AcademyProfile.objects.filter(approved=True).order_by('-created_at')  
+
+    #Add for Pagination
+    paginator = Paginator(academies, 8)  # Show 10 items per page
+
+    page_number = request.GET.get('page')  # Get page number from URL
+    try:
+        academies = paginator.get_page(page_number)
+    except PageNotAnInteger:
+        academies = paginator.page(1)  # Deliver the first page
+    except EmptyPage:
+        academies = paginator.page(paginator.num_pages)  # Deliver the last page
+    
+
 
     return render(request, 'moderator/approved_academies.html', {'academies': academies})
 
@@ -128,6 +165,19 @@ def users_view(request: HttpRequest, user_type):
         users = UserProfile.objects.all()
     elif user_type == 'all':
         users = User.objects.all()
+    
+    #Add for Pagination
+    paginator = Paginator(users, 8)  # Show 10 items per page
+
+    page_number = request.GET.get('page')  # Get page number from URL
+    try:
+        users = paginator.get_page(page_number)
+    except PageNotAnInteger:
+        users = paginator.page(1)  # Deliver the first page
+    except EmptyPage:
+        users = paginator.page(paginator.num_pages)  # Deliver the last page
+    
+
 
     return render(request, 'moderator/users.html', {'users': users, 'user_type':user_type})
 
@@ -163,7 +213,7 @@ def moderator_dashboard_view(request:HttpRequest, days_ago: int):
             users = User.objects.all()
             
             # Get today's date and calculate the date 30 or 90 days ago
-            today = timezone.now().date()
+            today = timezone.now().date() + timedelta(days= 1)
             date_days_ago = today - timedelta(days=days_ago)
             # Query to get enrollments for the football category in the specified period with associated payments
             football_payments = Enrollment.objects.filter(
@@ -213,8 +263,20 @@ def moderator_dashboard_view(request:HttpRequest, days_ago: int):
 
         
                 sport_categories_colors = generate_colors(len(sport_categories_labels))
-                print(sport_categories_colors)
-              
+
+
+                #Query to get the number of enrollments for each sport category
+                enrollments_per_sport_category = (
+                    Enrollment.objects
+                    .select_related('program')  # Join with Program to access sport_category
+                    .values('program__sport_category')  # Group by sport_category
+                    .annotate(total_enrollments=Count('id'))  # Count enrollments per category
+                    .order_by('program__sport_category')  # Optional: Order by sport_category
+                )
+                enrollments_by_sport_category = []
+                for entry in enrollments_per_sport_category:
+                    enrollments_by_sport_category.append(entry['total_enrollments'])
+                
 
                 context = {
                     'football_salesList': mark_safe(json.dumps(football_salesList)),
@@ -227,6 +289,8 @@ def moderator_dashboard_view(request:HttpRequest, days_ago: int):
                     'users': users,
                     'sport_categories': mark_safe(json.dumps(sport_categories_labels)),
                     'sport_categories_colors': mark_safe(json.dumps(sport_categories_colors)),
+                    'enrollments_by_sport_category': mark_safe(json.dumps(enrollments_by_sport_category)),
+                    
                 }
                 return render(request, 'moderator/moderator_dashboard.html', context)
             except Exception as e:
@@ -282,6 +346,19 @@ def generate_colors(n):
 def academy_branches_view(request:HttpRequest,academy_id):
     branches = Branch.objects.filter(academy=AcademyProfile.objects.get(pk=academy_id))
     subscriptions = Enrollment.objects.filter(time_slot__program__branch__in=branches).count()
+
+    #Add for Pagination
+    paginator = Paginator(branches, 8)  # Show 10 items per page
+
+    page_number = request.GET.get('page')  # Get page number from URL
+    try:
+        branches = paginator.get_page(page_number)
+    except PageNotAnInteger:
+        branches = paginator.page(1)  # Deliver the first page
+    except EmptyPage:
+        branches = paginator.page(paginator.num_pages)  # Deliver the last page
+    
+
 
     return render(request,'moderator/academy_branches.html',{"branches":branches,'subscriptions':subscriptions})
 
