@@ -561,6 +561,7 @@ def update_branch_view(request, branch_id):
         'lat': lat,
         'lng': lng,
         'google_maps_api_key': settings.GOOGLE_API_KEY,
+        'cities':Branch.Cities.choices
     })
 
 def coach_list_view(request:HttpRequest, academy_id):

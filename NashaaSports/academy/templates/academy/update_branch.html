@@ -1,7 +1,7 @@
 {% extends 'academy/base.html' %}
 {% block content %}
 
-<script src="https://maps.googleapis.com/maps/api/js?key={{ google_maps_api_key }}&libraries=places"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key={{ google_maps_api_key }}&libraries=places&callback=initMap" async defer></script>
 
 <form class="max-w-sm pt-36 mx-auto" method="post" >
       
