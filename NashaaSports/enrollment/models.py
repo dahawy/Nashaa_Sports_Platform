@@ -21,6 +21,6 @@ class Enrollment(models.Model):
     status = models.CharField(
         max_length=20,
         choices=StatusChoices.choices,
-        default=StatusChoices.PENDING,
+        default=StatusChoices.IN_PROGRESS,
     )
 
