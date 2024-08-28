@@ -168,7 +168,7 @@ def users_view(request: HttpRequest, user_type):
         users = User.objects.all()
     
     #Add for Pagination
-    paginator = Paginator(users, 8)  # Show 10 items per page
+    paginator = Paginator(users, 8)  # Show 8 items per page
 
     page_number = request.GET.get('page')  # Get page number from URL
     try:
@@ -251,7 +251,7 @@ def moderator_dashboard_view(request:HttpRequest, days_ago: int):
                 datesList = list(set(football_datesList + volleyball_datesList))
 
                 # A list of all sport categories
-                sport_categories = Program.objects.values_list('sport_category', flat=True).distinct()
+                sport_categories = Program.objects.values_list('sport_category', flat=True).distinct().order_by('sport_category')
                 # Get all sport categories labels in Arabic
                 #sport_categories_labels = [Program.SportChoices(sport).label for sport in sport_categories] 
                 sport_categories_labels = []
@@ -259,7 +259,9 @@ def moderator_dashboard_view(request:HttpRequest, days_ago: int):
                     try:
                         label = Program.SportChoices(sport).label
                         sport_categories_labels.append(label)
-                    except ValueError:
+                        print(label)
+                    except ValueError as e:
+                        print(e)
                         print(f"Invalid sport category: {sport}")
 
         
@@ -274,9 +276,28 @@ def moderator_dashboard_view(request:HttpRequest, days_ago: int):
                     .annotate(total_enrollments=Count('id'))  # Count enrollments per category
                     .order_by('program__sport_category')  # Optional: Order by sport_category
                 )
+                
+            
+                # Initialize lists for totals and Arabic labels
                 enrollments_by_sport_category = []
+                sport_categories_labels = []
+
+                # Dictionary to map sport category codes to Arabic labels
+                sport_category_translation = dict(Program.SportChoices.choices)
+
+                # Process the queryset results
                 for entry in enrollments_per_sport_category:
-                    enrollments_by_sport_category.append(entry['total_enrollments'])
+                    category_code = entry['program__sport_category']
+                    total = entry['total_enrollments']
+                    
+                    # Append total enrollments to the list
+                    enrollments_by_sport_category.append(total)
+                    
+                    # Translate sport category to Arabic
+                    category_arabic = sport_category_translation.get(category_code, category_code)  # Fallback to code if not found
+                    sport_categories_labels.append(category_arabic)
+
+                # Output the lists
                 
 
                 context = {
