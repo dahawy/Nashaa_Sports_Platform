@@ -47,9 +47,9 @@ class Program(models.Model):
         WATER_POLO = 'water_polo', 'كرة الماء'
         ATHLETICS = 'athletics', 'ألعاب القوى'
         HANDBALL = 'handball', 'كرة اليد'
-        TAEKWONDO = 'taekwondo', 'تايكوندو',
-        ARROWS='arrows','سهام',
-    
+        TAEKWONDO = 'taekwondo', 'تايكوندو'
+        ARROWS = 'arrows', 'سهام' 
+
 
 
     branch = models.ForeignKey(Branch, on_delete=models.CASCADE)
