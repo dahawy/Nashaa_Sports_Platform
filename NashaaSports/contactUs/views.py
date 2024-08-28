@@ -3,9 +3,9 @@ from django.http import HttpRequest,HttpResponse
 from contactUs.models import CustomerQuery
 from .forms import CustomerQueryForm
 from django.contrib import messages
-
-# Create your views here.
-
+from django.core.mail import EmailMessage
+from django.conf import settings
+from django.template.loader import render_to_string
 
 
 def customer_query_view(request: HttpRequest):
@@ -15,26 +15,18 @@ def customer_query_view(request: HttpRequest):
             customerQuery_form = CustomerQueryForm(request.POST)
             if customerQuery_form.is_valid():
                 query = customerQuery_form.save(commit=False)  # Don't save to the database just yet
-                query.status = 'Open'  # Explicitly set the status to 'open'
-                query.save()  # Now save the instance
-                messages.success(request, "Your message sent successfully", extra_tags="alert-success")
-                subject = form.cleaned_data['subject']
-                message = form.cleaned_data['message']
-                content_html = render_to_string("moderator/customer_care_reply.html",{'query':query, 'message':message}) 
-                recipient = query.email
-
-                email = EmailMessage(
-                    subject,
-                    content_html,
-                    settings.EMAIL_HOST_USER,
-                    [recipient],
-                )
-                email.content_subtype = "html"
-                email.send()
+                query.status = 'Open'  # Explicitly set the status to 
+                query.save()  
+                messages.success(request, "لقد تم ارسال رسالتك بنجاح", extra_tags="alert-success")
+                content_html = render_to_string("mail/respond.html",{"query":query}) #set email
+                send_to = query.email
+                email_message = EmailMessage("شكراً لك لإختيارك منصة نشـء", content_html, settings.EMAIL_HOST_USER, [send_to])
+                email_message.content_subtype = "html"
+                email_message.send()
                 return redirect('main:home_view')
         except Exception as e:
             print(e)
-            messages.error(request, "Message can't be sent!", extra_tags="alert-danger")
+            messages.error(request, "لا يمكن إرسال الرسالة!", extra_tags="alert-danger")
     else:
         customerQuery_form = CustomerQueryForm()
    
