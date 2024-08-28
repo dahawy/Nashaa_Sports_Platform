@@ -14,6 +14,12 @@ urlpatterns = [
     path('programs/<academy_id>',views.programs_view, name='programs_view'),
     path('deactivate_program/<academy_id>',views.deactivate_program_view, name='deactivate_program_view'),
     path('query_detail/<query_id>/', views.query_detail_view, name='query_detail_view'),
+    path('academy_branches/<academy_id>',views.academy_branches_view,name="academy_branches_view"),
+    path('branch/delete/<branch_id>',views.delete_branch_view,name="delete_branch_view"),
+    path('branch/update/<branch_id>',views.update_branch_view,name="update_branch_view"),
+    path('coaches/<academy_id>',views.coaches_view,name="coaches_view"),
+    path('coach/delete/<coach_id>',views.delete_coach_view,name="delete_coach_view"),
+    path('coach/update/<coach_id>',views.update_coach_view,name="update_coach_view"),
 ]
 
 
