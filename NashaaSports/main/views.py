@@ -14,7 +14,6 @@ from django.db.models import F, Q
 
 def home_view(request: HttpRequest):
     programs = Program.objects.all()
-
     # Initialize variables
     user_profile = None
     carts = None
@@ -44,7 +43,6 @@ def home_view(request: HttpRequest):
         "programs": programs,
         "carts": carts,
         "enrollments": enrollments,
-        # Add any other context data needed for the academy
     }
     return render(request, "index.html", context)
 
@@ -158,3 +156,9 @@ def mode_view(request:HttpRequest, mode):
     elif mode == "dark":
         response.set_cookie("mode", "dark")
     return response
+
+
+
+def about_view(request:HttpRequest):
+    
+    return render(request, "about.html")

@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect,get_object_or_404
 from django.contrib.auth import authenticate
 from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest
@@ -12,10 +12,20 @@ from django.conf import settings
 from django.core.mail import EmailMessage
 
 @login_required(login_url="account:log_in")
-def enroll_in_program_view(request:HttpRequest, program_id, user_id):
-    programs = Program.objects.get(id=program_id)
-    user = UserProfile.objects.get(user_id=user_id)
-    time_slots = TimeSlot.objects.filter(program=programs)
+def enroll_in_program_view(request:HttpRequest, program_id):
+    profile = UserProfile.objects.filter(user_id=request.user).first()
+    if not profile:
+        messages.warning(request,"رجاء أكمل معلومتك الشخصية أولاً!")
+        return redirect("account:create_profile_view", user_id=request.user.id)
+    else:
+        programs = Program.objects.get(id=program_id)
+        user = UserProfile.objects.get(user_id=request.user)
+        time_slots = TimeSlot.objects.filter(program=programs)
+        context={
+        "programs":programs,
+        "time_slots": time_slots,
+    }
+
     if not request.user.is_authenticated:
         messages.error(request, "نرجوا منك التسجيل لإكمال الاشتراك")
         return redirect("account:log_in")
@@ -46,46 +56,21 @@ def enroll_in_program_view(request:HttpRequest, program_id, user_id):
         except Exception as e:
             messages.error(request, f"حدث خطأ: {str(e)}")
 
-    context={
-        "programs":programs,
-        "time_slots": time_slots,
-    }
     return render(request, "enrollment_page.html", context)
 
-# For test, I will remove it later depending on UI Design
-# @login_required(login_url="account:log_in")
-# def add_enrollment_view(request:HttpRequest):
+@login_required(login_url="account:log_in")
+def remove_enrollment_from_cart(request, enrollment_id):
+    enrollment = get_object_or_404(Enrollment, id=enrollment_id)
 
-#     if not request.user.is_authenticated:
-#         messages.error(request, "نرجوا منك التسجيل لإكمال الاشتراك")
-#         return redirect("account:log_in")
-#     if request.method == "POST":
-#         try:
-#             # user_profile = request.user.userprofile
-#             # program = Program.objects.get(id=program_id)
-#             user1 = UserProfile.objects.get(id=request.POST['user'])
-#             program = Program.objects.get(id=request.POST['program'])
-#             first_name= request.POST.get('first_name')
-#             father_name =request.POST.get('father_name')
-#             last_name= request.POST.get('last_name')
-#             health_condition= request.POST.get('health_condition')
-#             id_number= request.POST.get('id_number')
+    if request.method == 'POST':
+        cart = enrollment.cart
+        enrollment.delete()
 
-#             new_enrollment= Enrollment(
-#                 user1=user1,
-#                 program=program,
-#                 first_name=first_name,
-#                 father_name=father_name,
-#                 last_name=last_name,
-#                 health_condition=health_condition,
-#                 id_number=id_number,
-#             )
-#             new_enrollment.save()
-#             messages.success(request, "تم إضافة الأشتراك بنجاح")
-#             return redirect("academy:program_detail_view", program) 
-#         except Exception as e:
-#             messages.error(request, f"حدث خطأ: {str(e)}")
-#     return render(request,"enrollment_page.html")
+        messages.success(request, 'تمت إزالة التسجيل من سلة التسوق.')
+        return redirect(request.GET.get("next", "/"))  # Adjust this to the correct cart view URL name
+
+    messages.error(request, 'Invalid request.')
+    return redirect(request.GET.get("next", "/"))
 
 
 @login_required(login_url="account:log_in")

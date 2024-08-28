@@ -14,31 +14,86 @@ from django.db.models.functions import ExtractDay
 from django.db.models import F, ExpressionWrapper
 from enrollment.models import Enrollment
 from review.models import Review
-
+from django.utils import timezone
+from datetime import timedelta
+from django.db.models import Sum
+from babel.dates import format_date
+from datetime import datetime
+from django.db.models import Count
 
 
 def acadmey_dashboard_view(request:HttpRequest,user_id):
     if request.user.is_authenticated:
-        sport_categories = Program.objects.values_list('sport_category', flat=True).distinct()
-        sport_categories_labels = []
-        for sport in sport_categories:
-            try:
-                label = Program.SportChoices(sport).label
-                sport_categories_labels.append(label)
-            except ValueError:
-                    print(f"Invalid sport category: {sport}")
         # sport_categories_colors = generate_colors(len(sport_categories_labels))
         acadmey=AcademyProfile.objects.filter(user=User.objects.get(pk=user_id)).first()
         branches=Branch.objects.filter(academy=acadmey)
         programs=Program.objects.filter(branch__academy=acadmey)
+        total_programs = programs.count()
+
+    # Aggregate data: Count the number of programs per sport category
+        sport_category_distribution = programs.values('sport_category').annotate(
+            count=Count('id')
+        ).order_by('sport_category')
+
+        # Manually initialize the dictionary with all sport categories set to 0
+        percentage_dict = {value: 0 for key, value in Program.SportChoices.choices}
+
+        # Update the dictionary with actual counts from the sport_category_distribution
+        for sport in sport_category_distribution:
+            for key, value in Program.SportChoices.choices:
+                if key == sport['sport_category']:
+                    display_label = value
+                    # Calculate the percentage
+                    percentage_dict[display_label] = round((sport['count'] / total_programs) * 100, 2)
+
+        # Filter out categories with a percentage of 0
+        filtered_percentage_dict = {label: percentage for label, percentage in percentage_dict.items() if percentage > 0}
+
+        # Convert the filtered dictionary to lists for use in the template
+        summation = list(filtered_percentage_dict.values())
+        labels = list(filtered_percentage_dict.keys())
+
+        # Print debugging information
+        
+
+
         coaches=Coach.objects.filter(branch__academy=acadmey)
+        today = timezone.now().date()
+        date_days_ago = today - timedelta(days=30)
+        cart__payment__status=True,  #status=True means payment completed
+        cart__payment__payment_date__range=[date_days_ago, today]
+        subscriptions = Enrollment.objects.filter(Q(time_slot__program__branch__academy=acadmey) & Q(cart__status='Paid')&Q(cart__payment__payment_date__range=[date_days_ago, today]))
+        
+        aggregated_enrollments = subscriptions.values('cart__payment__payment_date').annotate(enrollment_count=Count('id') ).order_by('cart__payment__payment_date')
+        aggregated_payments = subscriptions.values('cart__payment__payment_date').annotate(sales_total=Sum('program__fees')).order_by('cart__payment__payment_date')
+        aggregated_payments = subscriptions.values('cart__payment__payment_date').annotate(sales_total=Sum('program__fees')).order_by('cart__payment__payment_date')
+        
+        salesList =[]
+        salesList = [float(item['sales_total']) for item in aggregated_payments]
+        total_income=sum(salesList)
+        salesList = salesList if salesList else [0]
+        datesList = [item['cart__payment__payment_date'].strftime('%d %B') for item in aggregated_payments]
+        enrollmentList = [int(item['enrollment_count']) for item in aggregated_enrollments]
+        total_enrollments = sum(enrollmentList)
+        enrollmentList = enrollmentList if enrollmentList else [0]
+        # 
+        
+
+
+
+
+
+        # 
+
+# Format dates for the datesList
+        enrollements_datesList = [item['cart__payment__payment_date'].strftime('%d %B') for item in aggregated_enrollments]
         enrollments=Enrollment.objects.filter(Q(program__branch__academy=acadmey) & Q(cart__status='Paid') )
         enrollments_ended=enrollments.filter(status="ended")
         enrollments_in_progress=enrollments.filter(status='in_progress')
         enrollments_pending=enrollments.filter(status="pending")
         if acadmey:
             if  request.user.id==int(user_id) and acadmey.approved==True: 
-                context={"academy":acadmey,'programs':programs,'branches':branches,'enrollments':enrollments,'enrollments_ended':enrollments_ended,'enrollments_in_progress':enrollments_in_progress,'enrollments_pending':enrollments_pending,'coaches':coaches}
+                context={"academy":acadmey,'programs':programs,'branches':branches,'enrollments':enrollments,'enrollments_ended':enrollments_ended,'enrollments_in_progress':enrollments_in_progress,'enrollments_pending':enrollments_pending,'coaches':coaches,'salesList':salesList,'datesList':datesList,'total_income':total_income,'total_enrollments':total_enrollments,'enrollements_datesList':enrollements_datesList,'enrollmentList':enrollmentList,'labels':labels,'summation':summation}
                 return render(request,"academy/dashboard.html",context)
             else:
                 return HttpResponse(f"غير مصرح لك")
@@ -119,7 +174,7 @@ def add_program_time_slot_view(request:HttpResponse,program_id):
                  messages.error(request, "الرجاء تعبئة ايام عمل البرنامج", "red")
             else:
               days_str = ', '.join(days)  
-              print(days_str)
+              
                 # Create the time slot for the program
               time_slot = TimeSlot(
                 program=Program.objects.get(id=program_id),
@@ -172,7 +227,7 @@ def upload_media_view(request, program_id):
 
         images_str = ', '.join(image_urls) if image_urls else None
         videos_str = ', '.join(video_urls) if video_urls else None
-        print(image_urls,video_urls)
+       
         messages.success(request, f"تم انشاء البرنامج بنجاح", extra_tags="green")
         if 'save_project' in request.POST:
             return redirect('academy_dashboard_view',user_id=request.user)  
@@ -405,7 +460,7 @@ def update_time_slot_view(request:HttpRequest,program_id):
                  messages.error(request, "الرجاء تعبئة ايام عمل البرنامج", "red")
             else:
               days_str = ', '.join(days)  
-              print(days_str)
+              
                 # Create the time slot for the program
               time_slot = TimeSlot(
                 program=Program.objects.get(id=program_id),

@@ -1,5 +1,5 @@
 
-<div class=" grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 md:gap-16 gap-6 h-screen  md:mx-24 ">
+<div class=" grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 md:gap-16 gap-6  md:mx-24 ">
     {% for program in programs %}
     <div class="relative mx-auto md:w-full w-3/4 ">
       <a href="{% url 'academy:program_detail_view' program.id %}" class="relative inline-block duration-300 ease-in-out transition-transform transform hover:-translate-y-2 w-full">
@@ -71,7 +71,7 @@
               </span>
             </p>
           </div>
-          <a href="{% url 'enrollment:enroll_in_program_view' program.id user.id %}">
+          <a href="{% url 'enrollment:enroll_in_program_view' program.id %}">
           <div class="grid grid-cols-2 mt-8">
             <div>
              

@@ -141,8 +141,9 @@ def approve_academy_view(request: HttpRequest, academy_id):
         academy = AcademyProfile.objects.get(pk=academy_id)
         academy.approved = True
         academy.save()
-        subject = "تهانينا..تم اعتماد منشأتكم"
-        message = f"نبارك لكم اعتماد منشأتكم: {academy.academy_name} ونتطلع لمزيد من التعاون... منصة نشء"
+
+        message = render_to_string("mail/academy_reg.html",{"academy":academy})
+        subject = "شكراً لي أختياركم منصة نشـء"
         recipient = academy.user.email
 
         email = EmailMessage(
