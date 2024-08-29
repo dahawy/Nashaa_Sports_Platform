@@ -452,7 +452,7 @@ def programs_list_view(request: HttpRequest):
 def delete_program_view(request:HttpRequest, program_id):
         program=Program.objects.get(pk=program_id)
         program.delete()
-        messages.success(request,"deleted successfully") 
+        messages.success(request,"تم حذف البرنامج بنجاح") 
         return redirect(request.GET.get('next','/'))
 def update_programs_info_view(request:HttpRequest,program_id):
     program=Program.objects.get(pk=program_id)
@@ -636,9 +636,9 @@ def coach_list_view(request:HttpRequest, academy_id):
             coaches = Coach.objects.filter(branch__academy=academy).all()
             return render(request,'academy/coaches_list.html',{'coaches':coaches})
         else:
-           return HttpResponse("غير مصرح لك بالدخول الى هذه الصفحة")
+           return render(request,'academy/404.html')
     else:
-        return HttpResponse("غير مصرح لك")
+        return render(request,'academy/404.html')
 def delete_coach_view(request: HttpRequest, coach_id: int):
     if request.user.is_authenticated:
        
@@ -654,9 +654,9 @@ def delete_coach_view(request: HttpRequest, coach_id: int):
             messages.success(request,'تم حذف المدرب بنجاح') 
             return redirect(request.GET.get('next','/'))
         else:
-            return HttpResponse("You are not allowed to delete this coach.")
+            return render(request,'academy/404.html')
     else:
-        return messages.error('لست مصرحا تحتاج الى تسجيل الدخول')
+        return render(request,'academy/404.html')
 
 def update_coach_view(request:HttpResponse,coach_id):
     if request.user.is_authenticated:
