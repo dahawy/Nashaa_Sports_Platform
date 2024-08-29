@@ -187,6 +187,18 @@ def users_view(request: HttpRequest, user_type):
 def programs_view(request: HttpRequest, academy_id):
     academy = AcademyProfile.objects.get(id=academy_id)
     programs = Program.objects.filter(branch__academy_id=academy_id).order_by('branch__branch_city')
+
+    #Add for Pagination
+    paginator = Paginator(programs, 8)  # Show 10 items per page
+
+    page_number = request.GET.get('page')  # Get page number from URL
+    try:
+        programs = paginator.get_page(page_number)
+    except PageNotAnInteger:
+        programs = paginator.page(1)  # Deliver the first page
+    except EmptyPage:
+        programs = paginator.page(paginator.num_pages)  # Deliver the last page
+    
     return render(request, 'moderator/programs.html', {'academy': academy, 'programs': programs})
 
 @superuser_required

@@ -5,13 +5,13 @@
 {% block content %}
 <div class="pt-36 bg-gray-100 min-h-screen">
     <div class="max-w-6xl mx-auto mt-10 px-8"> <!-- Increased padding here -->
-        <div class="bg-gray-100 p-12 rounded-xl shadow-xl text-white text-center transform transition-transform hover:scale-105">
+        <div class="bg-gray-100 p-12 rounded-xl shadow-xl text-white text-center transform ">
             {% if user_type == 'academy' %}
-                <h1 class="text-5xl text-black font-extrabold mb-4">مستخدمو الأكاديميات: <span class="bg-[#cd6868] text-gray-900 px-4 py-2 rounded-full inline-block">{{ users.count }}</span> مستخدم</h1>
+                <h2 class="text-4xl text-[#cd786a] font-extrabold mb-4">مستخدمو الأكاديميات: <span class="bg-gray-700  text-white px-4 py-2 rounded-full inline-block">{{ users.count }}</span> مستخدم</h2>
             {% elif user_type == 'individual' %}
-                <h1 class="text-5xl text-black font-extrabold mb-4">المستخدمون الأفراد: <span class="bg-[#cd6868]text-gray-900 px-4 py-2 rounded-full inline-block">{{ users.count }}</span> مستخدم</h1>
+                <h2 class="text-4xl text-[#cd786a] font-extrabold mb-4">المستخدمون الأفراد: <span class="bg-gray-700 text-white px-4 py-2 rounded-full inline-block">{{ users.count }}</span> مستخدم</h2>
             {% elif user_type == 'all' %}
-                <h1 class="text-5xl font-extrabold mb-4">جميع المستخدمين: <span class="bg-[#cd6868] text-gray-900 px-4 py-2 rounded-full inline-block">{{ users.count }}</span> مستخدم</h1>
+                <h2 class="text-4xl text-[#cd786a] font-extrabold mb-4">جميع المستخدمين: <span class="bg-gray-700  text-white px-5 py-5 rounded-full inline-block">{{ users.count }}</span> مستخدم</h2>
             {% endif %}
         </div>
         
@@ -19,19 +19,19 @@
             <table class="min-w-full bg-white">
                 <thead class="w-full bg-gray-100">
                     <tr class=" text-white">
-                        <th class="py-4 text-black px-8 border-b-2 border-gray-200 text-right text-lg leading-5 font-semibold uppercase tracking-wider">الاسم</th>
-                        <th class="py-4 text-black px-8 border-b-2 border-gray-200 text-right text-lg leading-5 font-semibold uppercase tracking-wider">المعرف</th>
-                        <th class="py-4 text-black px-8 border-b-2 border-gray-200 text-right text-lg leading-5 font-semibold uppercase tracking-wider">الإيميل</th>
+                        <th class="py-4 text-[#cd786a] px-8 border-b-2 border-gray-200 text-right text-lg leading-5 font-semibold uppercase tracking-wider">الاسم</th>
+                        <th class="py-4 text-[#cd786a] px-8 border-b-2 border-gray-200 text-right text-lg leading-5 font-semibold uppercase tracking-wider">المعرف</th>
+                        <th class="py-4 text-[#cd786a] px-8 border-b-2 border-gray-200 text-right text-lg leading-5 font-semibold uppercase tracking-wider">الإيميل</th>
                         {% if user_type == 'individual' %}
-                        <th class="py-4 px-8 text-black border-b-2 border-gray-200 text-right text-lg leading-5 font-semibold uppercase tracking-wider">الهوية </th>
+                        <th class="py-4 px-8 text-[#cd786a] border-b-2 border-gray-200 text-right text-lg leading-5 font-semibold uppercase tracking-wider">الهوية </th>
                         {% endif %}
                         {% if user_type == 'academy' %}
-                        <th class="py-4 px-8 text-black border-b-2 border-gray-200 text-right text-lg leading-5 font-semibold uppercase tracking-wider">السجل التجاري</th>
+                        <th class="py-4 px-8 text-[#cd786a] border-b-2 border-gray-200 text-right text-lg leading-5 font-semibold uppercase tracking-wider">السجل التجاري</th>
                         {% endif %}
                         {% if user_type == 'all' %}
-                        <th class="py-4 px-8 text-black border-b-2 border-gray-200 text-right text-lg leading-5 font-semibold uppercase tracking-wider">السجل </th>
+                        <th class="py-4 px-8 text-[#cd786a] border-b-2 border-gray-200 text-right text-lg leading-5 font-semibold uppercase tracking-wider">السجل </th>
                         {% endif %}
-                        <th class="py-4 px-8 text-black border-b-2 border-gray-200 text-right text-lg leading-5 font-semibold uppercase tracking-wider">تاريخ التسجيل</th>
+                        <th class="py-4 px-8 text-[#cd786a] border-b-2 border-gray-200 text-right text-lg leading-5 font-semibold uppercase tracking-wider">تاريخ التسجيل</th>
                     </tr>
                 </thead>
                 <tbody class="bg-white">
@@ -39,14 +39,14 @@
                     <tr class="hover:bg-gray-100 transform transition-transform hover:scale-105 mx-2">
                         <td class="py-4 px-8 border-b border-gray-200">
                             {% if user_type == 'academy' %}
-                            <a href="{% url 'moderator:academy_detail_view' user.id %}" class="text-blue-700 hover:text-blue-900 font-semibold text-lg">{{ user.academy_name }}</a>
+                            <a href="{% url 'moderator:academy_detail_view' user.id %}" class="text-blue-700 hover:text-gray-700 font-semibold text-lg">{{ user.academy_name }}</a>
                             {% elif user_type == 'individual' %}
-                            <a href="#" class="text-blue-700 hover:text-blue-900 font-semibold text-lg">{{ user.name }}</a>
+                            <a href="#" class="text-black hover:text-gray-700 font-semibold text-lg">{{ user.name }}</a>
                             {% elif user_type == 'all' %}
                                 {% if user.academyprofile %}
-                                <a href="#" class="text-blue-700 hover:text-blue-900 font-semibold text-lg">{{ user.academyprofile.academy_name }}</a>
+                                <a href="#" class="text-black hover:text-gray-700 font-semibold text-lg">{{ user.academyprofile.academy_name }}</a>
                                 {% elif user.userprofile %}
-                                <a href="#" class="text-blue-700 hover:text-blue-900 font-semibold text-lg">{{ user.userprofile.name }}</a>
+                                <a href="#" class="text-black hover:text-gray-700 font-semibold text-lg">{{ user.userprofile.name }}</a>
                                 {% endif %}
                             {% endif %}
                         </td>
@@ -102,14 +102,14 @@
             <!-- Previous button -->
             {% if users.has_previous %}
                 <li>
-                    <a href="?page=1" class="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:text-gray-700  ">Previous</a>
+                    <a href="?page=1" class="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:text-gray-700  ">الأولى</a>
                 </li>
                 <li>
-                    <a href="?page={{ users.previous_page_number }}" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:text-gray-700  ">Previous</a>
+                    <a href="?page={{ users.previous_page_number }}" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:text-gray-700  ">السابقة</a>
                 </li>
             {% else %}
                 <li>
-                    <span class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg cursor-not-allowed opacity-50">Previous</span>
+                    <span class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg cursor-not-allowed opacity-50">الأولى</span>
                 </li>
             {% endif %}
 
@@ -117,7 +117,7 @@
             {% for num in users.paginator.page_range %}
                 {% if users.number == num %}
                     <li>
-                        <a href="#" aria-current="page" class="flex items-center justify-center px-3 h-8 text-orange-600 border border-gray-300 bg-orange-50 hover:bg-orange-100 hover:text-orange-700  ">{{ num }}</a>
+                        <a href="#" aria-current="page" class="flex items-center justify-center px-3 h-8 text-orange-600 border border-gray-300 bg-orange-50 hover:bg-orange-100 hover:text-orange-700">{{ num }}</a>
                     </li>
                 {% else %}
                     <li>
@@ -127,16 +127,16 @@
             {% endfor %}
 
             <!-- Next button -->
-            {% if page_obj.has_next %}
+            {% if users.has_next %}
                 <li>
-                    <a href="?page={{ users.next_page_number }}" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700">Next</a>
+                    <a href="?page={{ users.next_page_number }}" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700">التالية</a>                                                      
                 </li>
                 <li>
-                    <a href="?page={{ users.paginator.num_pages }}" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700">Next</a>
+                    <a href="?page={{ users.paginator.num_pages }}" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700">الأخيرة</a>                                         
                 </li>
             {% else %}
                 <li>
-                    <span class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 cursor-not-allowed opacity-50">Next</span>
+                    <span class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg cursor-not-allowed opacity-50">الأخيرة</span>
                 </li>
             {% endif %}
         </ul>

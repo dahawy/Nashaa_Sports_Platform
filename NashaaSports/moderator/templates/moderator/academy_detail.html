@@ -1,49 +1,48 @@
 {% extends 'moderator/base.html' %}
-{% block title %} Academy Profile  {% endblock %}
-
+{% block title %} Academy Profile {% endblock %}
 
 {% block content %}
-<div class="pt-36">
-<div class="max-w-4xl mx-auto mt-12 p-8 bg-white rounded-3xl shadow-xl t">
-    <div class="flex flex-col md:flex-row items-center space-y-6 md:space-y-0 md:space-x-6 mb-8 ">
-        <div class="w-full md:w-1/3 flex justify-center">
-            <img src="{{ academy.logo.url }}" alt="{{ academy.academy_name }} Logo" class="w-40 h-40 rounded-full border-8 border-white shadow-xl">
+<div class="pt-36  min-h-screen">
+    <div class="max-w-6xl mx-auto mt-12 p-8 bg-white rounded-xl shadow-lg" dir="rtl">
+        <!-- Academy Header Section -->
+        <div class="flex flex-row items-center md:items-start justify-between pb-5">
+            <h1 class="text-4xl md:text-5xl font-semibold text-gray-800">{{academy.academy_name}}</h1>
+            <p class="mt-2 text-base md:text-lg text-gray-600 italic self-start md:self-auto">تاريخ الانضمام: {{ academy.created_at|date:"Y-m-d" }}</p>
         </div>
-        <div class="w-full md:w-2/3 text-center md:text-right">
-            <h1 class="text-5xl font-extrabold text-gray-900">{{ academy.academy_name }}</h1>
-            <p class="mt-2 text-lg text-gray-700 italic font-bold">انضمت لنشء بتاريخ: {{ academy.created_at|date:"Y-m-d" }}</p>
-            <div class="mt-4">
-                {% if academy.approved %}
-                    <span class="inline-block px-8 py-3 text-lg font-bold text-white bg-[#cd6868] rounded-full shadow-lg transform ">معتمدة</span>
-                {% else %}
-                    <span class="inline-block px-8 py-3 text-lg font-bold text-white bg-red-600 rounded-full shadow-lg">لم تعتمد</span>
-                {% endif %}
+        <div class="flex flex-col justify-between pe-8 items-end md:flex-row  space-y-6 md:space-y-0 md:space-x-6 mb-12">
+            <!-- Adjusted for logo size and image placement -->
+            <div class=" md:w-1/3 ">
+                <img src="{{ academy.logo.url }}" alt="{{ academy.academy_name }} Logo" class="rounded-md border-4 border-gray-100 shadow-md">
             </div>
+          
+                <!-- New flex container for separate alignment of name and date -->
+      
+                <div class="mt-4 text-center md:text-left">
+                    {% if academy.approved %}
+                        <img src="/media/images/approved.png" alt="" class="w-24 h-24 rounded-md border-4 border-gray-100 shadow-md">
+                    {% else %}
+                        <img src="/media/images/NotApproved.png" alt="" class="w-48 h-48 rounded-md border-4 border-gray-100 shadow-md">
+                    {% endif %}
+                </div>
+            
+        </div>
+
+        <!-- Academy Description Section -->
+        <div class="bg-gray-100 p-6 md:p-8 shadow-md transition-transform">
+            <p class="text-3xl md:text-2xl font-semibold text-gray-700 mb-4">الوصف</p>
+            <p class="text-base md:text-xl text-gray-600 leading-relaxed">{{ academy.description }}</p>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-4">
+            {% if academy.approved == False %}
+                <a href="{% url 'moderator:approve_academy_view' academy.id %}" class="inline-block w-full m-4 md:w-auto px-8 py-3 bg-[#cd786a] text-white text-base md:text-lg font-medium rounded-full shadow hover:bg-red-700 transition-colors">اعتمد</a>
+            {% else %}
+                <a href="{% url 'moderator:programs_view' academy.id %}" class="m-4 md:w-auto px-8 py-3 bg-[#cd786a] text-white text-base md:text-lg font-medium rounded-full shadow hover:bg-orange-300 transition-colors">البرامج</a>
+                <a href="{% url 'moderator:academy_branches_view' academy.id %}" class="m-4 md:w-auto px-8 py-3 bg-[#cd786a] text-white text-base md:text-lg font-medium rounded-full shadow hover:bg-orange-300 transition-colors">الفروع</a>
+                <a href="{% url 'moderator:coaches_view' academy.id %}" class="m-4 md:w-auto px-8 py-3 bg-[#cd786a] text-white text-base md:text-lg font-medium rounded-full shadow hover:bg-orange-300 transition-colors">المدربون</a>
+            {% endif %}
         </div>
     </div>
-
-    <div class="bg-gray-100 p-8 rounded-3xl shadow-xl transform transition-transform hover:scale-105 mb-8">
-        <h2 class="text-4xl font-semibold text-[#cd6868] mb-6">الوصف</h2>
-        <p class="text-xl text-gray-800 leading-loose">{{ academy.description }}</p>
-    </div>
-    {% if academy.approved == False %}
-    <div class="flex justify-center mt-8 ">
-        <a href="{% url 'moderator:approve_academy_view' academy.id %}" class="inline-block px-12 py-4 bg-[#cd6868] text-white text-lg font-semibold rounded-full shadow-lg  hover:bg-red-700  focus:outline-none focus:ring-4 ">
-            اعتمد
-        </a>
-    {% else %}
-
-    <a href="{% url 'moderator:programs_view' academy.id %}" class="inline-block px-12 py-4 bg-green-600 text-white text-lg font-semibold rounded-full shadow-lg transform transition-transform hover:bg-red-700 hover:scale-110 focus:outline-none focus:ring-4 focus:ring-blue-300">
-        البرامج
-    </a>
-    <a href="{% url 'moderator:academy_branches_view' academy.id %}" class="inline-block px-12 py-4 bg-green-600 text-white text-lg font-semibold rounded-full shadow-lg transform transition-transform hover:bg-red-700 hover:scale-110 focus:outline-none focus:ring-4 focus:ring-blue-300">
-         الفروع
-    </a>
-    <a href="{% url 'moderator:coaches_view' academy.id %}" class="inline-block px-12 py-4 bg-green-600 text-white text-lg font-semibold rounded-full shadow-lg transform transition-transform hover:bg-red-700 hover:scale-110 focus:outline-none focus:ring-4 focus:ring-blue-300">
-        المدربون
-   </a>
-    </div>
-    {% endif %}
-</div>
 </div>
 {% endblock %}

@@ -6,9 +6,9 @@
 <div class="pt-36 bg-white min-h-screen">
     <div class="max-w-6xl mx-auto mt-10 px-8"> <!-- Increased padding here -->
         <div class="bg-gray-100 p-12 rounded-xl shadow-xl flex-col items-center  text-white text-center transform transition-transform hover:scale-105">
-            <h1 class="text-5xl font-extrabold mb-4 text-black">الأكاديميات المعتمدة من نشء</h1>
-            <h3 class="text-4xl font-bold text-gray-700 flex items-center justify-center">عدد الأكاديميات المعتمدة: 
-                <span class="inline-flex items-center justify-center text-lg font-bold text-gray-900 bg-gray-300 rounded-full w-12 h-12">{{ academies.count }}</span>
+            <h1 class="text-4xl font-extrabold mb-4 text-[#cd786a]">الأكاديميات المعتمدة</h1>
+            <h3 class="text-3xl font-bold text-gray-700 flex items-center justify-center">المجموع: 
+                <span class="inline-flex items-center justify-center text-lg font-bold text-white bg-orange-300 rounded-full w-12 h-12">{{ academies.count }}</span>
                 
             </h3>
         </div>
@@ -27,7 +27,7 @@
                     {% for academy in academies %}
                     <tr class="hover:bg-gray-100 transform transition-transform hover:scale-105 mx-2">
                         <td class="py-4 px-8 border-b border-gray-200">
-                            <a href="{% url 'moderator:academy_detail_view' academy.id %}" class="text-blue-700 hover:text-blue-900 font-semibold text-lg">{{ academy.academy_name }}</a>
+                            <a href="{% url 'moderator:academy_detail_view' academy.id %}" class="text-[#cd786a] hover:text-orange-300 font-semibold text-lg">{{ academy.academy_name }}</a>
                         </td>
                         <td class="py-4 px-8 border-b border-gray-200">{{ academy.user.last_name }}</td>
                         <td class="py-4 px-8 border-b border-gray-200 text-green-500">معتمدة</td>
@@ -43,52 +43,51 @@
         </div>
     </div>
 </div>
-
-         <!-- Pagination controls -->
-         <div class="flex justify-center mt-6">
-            <nav aria-label="Page navigation example">
-                <ul class="inline-flex -space-x-px text-sm">
-                    <!-- Previous button -->
-                    {% if academies.has_previous %}
-                        <li>
-                            <a href="?page=1" class="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:text-gray-700  ">Previous</a>
-                        </li>
-                        <li>
-                            <a href="?page={{ academies.previous_page_number }}" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:text-gray-700  ">Previous</a>
-                        </li>
-                    {% else %}
-                        <li>
-                            <span class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg cursor-not-allowed opacity-50">Previous</span>
-                        </li>
-                    {% endif %}
-
-                    <!-- Page numbers -->
-                    {% for num in academies.paginator.page_range %}
-                        {% if academies.number == num %}
+             <!-- Pagination controls -->
+             <div class="flex justify-center mt-6">
+                <nav aria-label="Page navigation example">
+                    <ul class="inline-flex -space-x-px text-sm">
+                        <!-- Previous button -->
+                        {% if academies.has_previous %}
                             <li>
-                                <a href="#" aria-current="page" class="flex items-center justify-center px-3 h-8 text-orange-600 border border-gray-300 bg-orange-50 hover:bg-orange-100 hover:text-orange-700  ">{{ num }}</a>
+                                <a href="?page=1" class="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:text-gray-700  ">الأولى</a>
+                            </li>
+                            <li>
+                                <a href="?page={{ academies.previous_page_number }}" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:text-gray-700  ">السابقة</a>
                             </li>
                         {% else %}
                             <li>
-                                <a href="?page={{ num }}" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 ">{{ num }}</a>
+                                <span class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg cursor-not-allowed opacity-50">الأولى</span>
                             </li>
                         {% endif %}
-                    {% endfor %}
-
-                    <!-- Next button -->
-                    {% if page_obj.has_next %}
-                        <li>
-                            <a href="?page={{ academies.next_page_number }}" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700">Next</a>
-                        </li>
-                        <li>
-                            <a href="?page={{ academies.paginator.num_pages }}" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700">Next</a>
-                        </li>
-                    {% else %}
-                        <li>
-                            <span class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 cursor-not-allowed opacity-50">Next</span>
-                        </li>
-                    {% endif %}
-                </ul>
-            </nav>
-        </div>
-{% endblock %}
+    
+                        <!-- Page numbers -->
+                        {% for num in academies.paginator.page_range %}
+                            {% if academies.number == num %}
+                                <li>
+                                    <a href="#" aria-current="page" class="flex items-center justify-center px-3 h-8 text-orange-600 border border-gray-300 bg-orange-50 hover:bg-orange-100 hover:text-orange-700">{{ num }}</a>
+                                </li>
+                            {% else %}
+                                <li>
+                                    <a href="?page={{ num }}" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 ">{{ num }}</a>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+    
+                        <!-- Next button -->
+                        {% if academies.has_next %}
+                            <li>
+                                <a href="?page={{ academies.next_page_number }}" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700">التالية</a>                                                      
+                            </li>
+                            <li>
+                                <a href="?page={{ academies.paginator.num_pages }}" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700">الأخيرة</a>                                         
+                            </li>
+                        {% else %}
+                            <li>
+                                <span class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg cursor-not-allowed opacity-50">الأخيرة</span>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            </div>
+         {% endblock %}
