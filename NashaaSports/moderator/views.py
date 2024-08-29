@@ -91,7 +91,7 @@ def query_detail_view(request, query_id):
 def academies_for_approval_view(request: HttpRequest):
     
     academies = AcademyProfile.objects.filter(approved=False).order_by('-created_at')  
-
+     
      #Add for Pagination
     paginator = Paginator(academies, 8)  # Show 10 items per page
 
@@ -103,6 +103,7 @@ def academies_for_approval_view(request: HttpRequest):
     except EmptyPage:
         academies = paginator.page(paginator.num_pages)  # Deliver the last page
     
+    
 
     return render(request, 'moderator/academies_for_approval.html', {'academies': academies})
 
@@ -111,7 +112,7 @@ def academies_for_approval_view(request: HttpRequest):
 def approved_academies_view(request: HttpRequest):
     
     academies = AcademyProfile.objects.filter(approved=True).order_by('-created_at')  
-
+    count = academies.count()
     #Add for Pagination
     paginator = Paginator(academies, 8)  # Show 10 items per page
 
@@ -125,7 +126,7 @@ def approved_academies_view(request: HttpRequest):
     
 
 
-    return render(request, 'moderator/approved_academies.html', {'academies': academies})
+    return render(request, 'moderator/approved_academies.html', {'academies': academies, 'count':count})
 
 @superuser_required
 def academy_detail_view(request: HttpRequest, academy_id):
@@ -143,7 +144,7 @@ def approve_academy_view(request: HttpRequest, academy_id):
         academy.save()
 
         message = render_to_string("mail/academy_reg.html",{"academy":academy})
-        subject = "شكراً لي أختياركم منصة نشـء"
+        subject = "شكراً لاختياركم منصة نشـء"
         recipient = academy.user.email
 
         email = EmailMessage(
@@ -161,11 +162,14 @@ def approve_academy_view(request: HttpRequest, academy_id):
 @superuser_required
 def users_view(request: HttpRequest, user_type):
     if user_type == 'academy':
-        users = AcademyProfile.objects.all() 
+        users = AcademyProfile.objects.all()
+        count = users.count()
     elif user_type == 'individual':
         users = UserProfile.objects.all()
+        count = users.count()
     elif user_type == 'all':
         users = User.objects.all()
+        count = users.count()
     
     #Add for Pagination
     paginator = Paginator(users, 8)  # Show 8 items per page
@@ -180,13 +184,14 @@ def users_view(request: HttpRequest, user_type):
     
 
 
-    return render(request, 'moderator/users.html', {'users': users, 'user_type':user_type})
+    return render(request, 'moderator/users.html', {'users': users, 'user_type':user_type , 'count':count})
 
 
 @superuser_required
 def programs_view(request: HttpRequest, academy_id):
     academy = AcademyProfile.objects.get(id=academy_id)
     programs = Program.objects.filter(branch__academy_id=academy_id).order_by('branch__branch_city')
+    count = programs.count()
 
     #Add for Pagination
     paginator = Paginator(programs, 8)  # Show 10 items per page
@@ -199,7 +204,7 @@ def programs_view(request: HttpRequest, academy_id):
     except EmptyPage:
         programs = paginator.page(paginator.num_pages)  # Deliver the last page
     
-    return render(request, 'moderator/programs.html', {'academy': academy, 'programs': programs})
+    return render(request, 'moderator/programs.html', {'academy': academy, 'programs': programs , 'count':count})
 
 @superuser_required
 def deactivate_program_view(request: HttpRequest,academy_id):
@@ -211,6 +216,10 @@ def deactivate_program_view(request: HttpRequest,academy_id):
             is_active = 'is_active' in request.POST
             program.admin_activtion = is_active
             program.save()
+            if is_active:
+                messages.success(request, "تم إعادة تنشيط البرنامج بنجاح", "green")
+            else:
+                messages.success(request, "تم تعطيل البرنامج بنجاح","green")
             return redirect('moderator:programs_view', academy_id=academy_id)
         except Program.DoesNotExist:
             return redirect('moderator:programs_view', academy_id=academy_id)

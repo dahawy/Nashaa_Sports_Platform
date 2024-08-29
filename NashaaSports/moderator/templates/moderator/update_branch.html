@@ -2,7 +2,7 @@
 {% block content %}
 
 <script src="https://maps.googleapis.com/maps/api/js?key={{ google_maps_api_key }}&libraries=places"></script>
-
+ 
 <form class="max-w-sm pt-36 mx-auto" method="post" > 
     {% csrf_token %}
     <div class="mb-5">
@@ -36,7 +36,7 @@
         <button data-modal-target="popup-modal" data-modal-toggle="popup-modal" type="submit" class="text-center w-full text-white font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 transition-all duration-500 bg-[#ED786A] hover:bg-[#f05e4e]">تحديث بيانات الفرع</button>
     </div>
 </form>
-  <script>
+<script>
     let map;
     let marker;
 
@@ -48,7 +48,10 @@
 
         map = new google.maps.Map(document.getElementById('map'), {
             zoom: 15,
-            center: initialLocation
+            center: initialLocation,
+            mapTypeControl: false, // Disable map/satellite view option
+            streetViewControl: false, // Disable Pegman (Street View)
+            zoomControl: false, // Disable zoom controls
         });
 
         marker = new google.maps.Marker({

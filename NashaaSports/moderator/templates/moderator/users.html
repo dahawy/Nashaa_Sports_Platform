@@ -7,11 +7,11 @@
     <div class="max-w-6xl mx-auto mt-10 px-8"> <!-- Increased padding here -->
         <div class="bg-gray-100 p-12 rounded-xl shadow-xl text-white text-center transform ">
             {% if user_type == 'academy' %}
-                <h2 class="text-4xl text-[#cd786a] font-extrabold mb-4">مستخدمو الأكاديميات: <span class="bg-gray-700  text-white px-4 py-2 rounded-full inline-block">{{ users.count }}</span> مستخدم</h2>
+                <h2 class="text-4xl text-[#cd786a] font-extrabold mb-4">مستخدمو الأكاديميات: <span class="bg-gray-700  text-white px-4 py-2 rounded-full inline-block">{{ count }}</span> مستخدم</h2>
             {% elif user_type == 'individual' %}
-                <h2 class="text-4xl text-[#cd786a] font-extrabold mb-4">المستخدمون الأفراد: <span class="bg-gray-700 text-white px-4 py-2 rounded-full inline-block">{{ users.count }}</span> مستخدم</h2>
+                <h2 class="text-4xl text-[#cd786a] font-extrabold mb-4">المستخدمون الأفراد: <span class="bg-gray-700 text-white px-4 py-2 rounded-full inline-block">{{ count }}</span> مستخدم</h2>
             {% elif user_type == 'all' %}
-                <h2 class="text-4xl text-[#cd786a] font-extrabold mb-4">جميع المستخدمين: <span class="bg-gray-700  text-white px-5 py-5 rounded-full inline-block">{{ users.count }}</span> مستخدم</h2>
+                <h2 class="text-4xl text-[#cd786a] font-extrabold mb-4">جميع المستخدمين: <span class="bg-gray-700  text-white px-5 py-5 rounded-full inline-block">{{ count }}</span> مستخدم</h2>
             {% endif %}
         </div>
         
