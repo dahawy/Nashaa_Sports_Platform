@@ -97,12 +97,12 @@ def acadmey_dashboard_view(request:HttpRequest,user_id):
                 context={"academy":acadmey,'programs':programs,'branches':branches,'enrollments':enrollments,'enrollments_ended':enrollments_ended,'enrollments_in_progress':enrollments_in_progress,'enrollments_pending':enrollments_pending,'coaches':coaches,'salesList':salesList,'datesList':datesList,'total_income':total_income,'total_enrollments':total_enrollments,'enrollements_datesList':enrollements_datesList,'enrollmentList':enrollmentList,'labels':labels,'summation':summation}
                 return render(request,"academy/dashboard.html",context)
             else:
-                return HttpResponse(f"غير مصرح لك")
+               return render(request,"academy/404.html")
         else:
-            return HttpResponse(f"لم يتم اعتمادك من قبل منصة نشء! فضلا أنشئ ملف أكاديميتك وانتظر الاعتماد.")
+            return render(request,"academy/404.html")
         
     else:
-        return HttpResponse("غير مصرح لك")
+       return render(request,"academy/404.html")
 
 def add_program_view(request:HttpRequest,user_id):
 
@@ -158,7 +158,7 @@ def add_program_view(request:HttpRequest,user_id):
                     messages.error(request, f"Error creating program: {str(e)}", "red")
                     
             return render(request,"academy/add_program.html",context)
-    return HttpResponse("Not authraized")
+    return render(request,"academy/404.html")
 def add_program_time_slot_view(request:HttpResponse,program_id):
     status=False
     program=Program.objects.get(pk=program_id)
@@ -201,38 +201,64 @@ def delete_time_slot_view(request:HttpResponse,time_slot_id):
         messages.success(request,"تم حذف الفترة بنجاح","green")
     return redirect(request.GET.get('next'))
 def upload_media_view(request, program_id):
-    program=Program.objects.filter(id=program_id).first()
-    program.is_active=True
+    program = get_object_or_404(Program, id=program_id)
+    program.is_active = True
     program.save()
-    status=False
+
     image_urls = []
     video_urls = []
+    status = False
+
     if request.method == 'POST':
-        images = request.FILES.getlist('images')  
-        videos = request.FILES.getlist('videos')  
-
-        if not images and not videos:
-            messages.error(request, "يرجى رفع ملفات الصور أو الفيديو.","red")
-        program = get_object_or_404(Program, id=program_id)
-
         with transaction.atomic():
+            # Fetch previous images and videos
+            prev_imgs = ProgramImage.objects.filter(program=program)
+            prev_vids = ProgramVideo.objects.filter(program=program)
 
-            for image in images:
-                img_instance = ProgramImage.objects.create(program=program, image=image)
-                image_urls.append(img_instance.image.url)
-            for video in videos:
-                vid_instance = ProgramVideo.objects.create(program=program, video=video)
-                video_urls.append(vid_instance.video.url)
-                status=True
+            # Collect previous image and video URLs
+            for image in prev_imgs:
+                image_urls.append(image.image.url)  # Use image.url for consistency
+            for video in prev_vids:
+                video_urls.append(video.video.url)  # Use video.url for consistency
+
+            # Handle new uploads
+            images = request.FILES.getlist('images')
+            videos = request.FILES.getlist('videos')
+
+            if not images and not videos:
+                messages.error(request, "يرجى رفع ملفات الصور أو الفيديو.", "red")
+            else:
+                # Save images and videos, append URLs
+                for image in images:
+                    img_instance = ProgramImage.objects.create(program=program, image=image)
+                    image_urls.append(img_instance.image.url)
+                    status = True
+                for video in videos:
+                    vid_instance = ProgramVideo.objects.create(program=program, video=video)
+                    video_urls.append(vid_instance.video.url)
+                    status = True
+
                 
 
-        images_str = ', '.join(image_urls) if image_urls else None
-        videos_str = ', '.join(video_urls) if video_urls else None
-       
-        messages.success(request, f"تم انشاء البرنامج بنجاح", extra_tags="green")
-        if 'save_project' in request.POST:
-            return redirect('academy_dashboard_view',user_id=request.user)  
-    return render(request, 'academy/add_media.html', {'program_id': program_id,"status":status,"image_urls":image_urls,"video_urls":video_urls})
+            # Check which button was pressed
+            if 'save_project' in request.POST:
+                return redirect('academy_dashboard_view', user_id=request.user.id)
+
+        # If not redirected, re-render the form with updated URLs
+        return render(request, 'academy/add_media.html', {
+            'program_id': program_id,
+            "status": status,
+            "image_urls": image_urls,
+            "video_urls": video_urls
+        })
+
+    # Render the initial form without processing
+    return render(request, 'academy/add_media.html', {
+        'program_id': program_id,
+        "status": status,
+        "image_urls": image_urls,
+        "video_urls": video_urls
+    })   
 def add_branch_view(request,user_id):
     # this how to render the branch location as map
     # f"https://maps.googleapis.com/maps/api/geocode/json?address={branch.location}&key={settings.GOOGLE_API_KEY}"
@@ -257,11 +283,10 @@ def add_branch_view(request,user_id):
                     return redirect("academy:academy_dashboard_view", user_id=request.user.id)
             return render(request,"academy/add_branch.html",{'google_maps_api_key': settings.GOOGLE_API_KEY,"cities":Branch.Cities.choices})   
         else:
-            return HttpResponse("غير مصرح لك")
+            return render(request,"academy/404.html")
             
     except Exception as e:
-        print(e)
-        return HttpResponse(f"some thing went wrong{e}")
+        return render(request,"academy/404.html")
 
              
 def add_coach_view(request:HttpRequest,user_id):
@@ -273,7 +298,7 @@ def add_coach_view(request:HttpRequest,user_id):
                 date_str = request.POST.get('birth_date')
                 birth_date = datetime.strptime(date_str, '%m/%d/%Y').date()
                 branch=Branch.objects.get(pk=request.POST['branch'])
-                branch=Coach(
+                coach=Coach(
 
                              branch=branch,
                              name=request.POST['name'],
@@ -283,17 +308,21 @@ def add_coach_view(request:HttpRequest,user_id):
                              experience=request.POST['experience'],
                              nationality=request.POST['nationality'],
                              gender=request.POST['gender'],
-                             avatar=request.FILES['avatar']
+                            
                              
                              )
-                branch.save()
+                if  'avatar' in request.FILES:
+                    coach.avatar=request.FILES['avatar']
+                coach.save()
+                messages.success(request,f"المدرب {coach.name} تم اضافته بنجاح")
+                
         except Exception as e:
             print(e)
         context={"genders":Coach.Gender.choices,"nationality":Coach.Nationality.choices,"branches":branches}
         return render(request,'academy/add_coach.html',context)
     else:
 
-        return HttpResponse("not authraized")
+        return render(request,"academy/404.html")
 
 
 def program_detail_view(request:HttpRequest,program_id):
@@ -363,7 +392,7 @@ def academies_profile_view(request:HttpRequest,academy_id):
         # Convert the filtered dictionary to lists for use in the template
     summation = list(filtered_percentage_dict.values())
     labels = list(filtered_percentage_dict.keys())
-    print(labels)
+    
 
     return render(request,'academy/academies_profile.html',{"academy":academy,'branches':branches,"programs":programs,'coaches':coach,'labels':labels})
 def programs_list_view(request: HttpRequest):
@@ -423,7 +452,7 @@ def programs_list_view(request: HttpRequest):
 def delete_program_view(request:HttpRequest, program_id):
         program=Program.objects.get(pk=program_id)
         program.delete()
-        messages.success(request,"deleted successfully") 
+        messages.success(request,"تم حذف البرنامج بنجاح") 
         return redirect(request.GET.get('next','/'))
 def update_programs_info_view(request:HttpRequest,program_id):
     program=Program.objects.get(pk=program_id)
@@ -470,7 +499,7 @@ def update_programs_info_view(request:HttpRequest,program_id):
                             program.registration_end_date=registration_end_date
                         
                             program.save()
-                            messages.success(request, "تم إنشاء البرنامج بنجاح!", "green")
+                            
                             return redirect("academy:update_time_slot_view",program_id=program.id)
                  except Exception as e:
                      messages.error(request, f"Error creating program: {str(e)}", "red")
@@ -541,8 +570,6 @@ def update_media_view(request:HttpResponse,program_id):
                 vid_instance = ProgramVideo.objects.create(program=program, video=video)
                 video_urls.append(vid_instance)
                 status=True
-            
-        
         if 'save_project' in request.POST:
             messages.success(request, f"تم انشاء البرنامج بنجاح", extra_tags="green")
             return redirect('academy_dashboard_view',user_id=request.user)  
@@ -582,6 +609,7 @@ def update_branch_view(request, branch_id):
         
         branch.save()
         messages.success(request, 'تم تحديث الفرع بنجاح')
+        return redirect(request.GET.get('next','/'))
         
 
     # Extract coordinates from the current URL if it exists
@@ -608,9 +636,9 @@ def coach_list_view(request:HttpRequest, academy_id):
             coaches = Coach.objects.filter(branch__academy=academy).all()
             return render(request,'academy/coaches_list.html',{'coaches':coaches})
         else:
-           return HttpResponse("غير مصرح لك بالدخول الى هذه الصفحة")
+           return render(request,'academy/404.html')
     else:
-        return HttpResponse("غير مصرح لك")
+        return render(request,'academy/404.html')
 def delete_coach_view(request: HttpRequest, coach_id: int):
     if request.user.is_authenticated:
        
@@ -623,12 +651,12 @@ def delete_coach_view(request: HttpRequest, coach_id: int):
         if coach.branch.academy == user_academy:
             # Perform the deletion
             coach.delete()
-            messages.success(request,'تم الحذف بنجاح') 
+            messages.success(request,'تم حذف المدرب بنجاح') 
             return redirect(request.GET.get('next','/'))
         else:
-            return HttpResponse("You are not allowed to delete this coach.")
+            return render(request,'academy/404.html')
     else:
-        return messages.error('لست مصرحا تحتاج الى تسجيل الدخول')
+        return render(request,'academy/404.html')
 
 def update_coach_view(request:HttpResponse,coach_id):
     if request.user.is_authenticated:
@@ -653,15 +681,16 @@ def update_coach_view(request:HttpResponse,coach_id):
                 coach.experience = request.POST['experience']
                 coach.nationality = request.POST['nationality']
                 coach.gender = request.POST['gender']
-                coach.avatar = request.FILES['avatar']
+                if 'avatar' in request.FILES:
+                    coach.avatar = request.FILES['avatar']
                 coach.save()
                 messages.success(request,"تم التحديث بنجاح","green")
                 return redirect(request.GET.get('next','/'))
             return render(request,'academy/update_coach.html',{'coach':coach,"genders":Coach.Gender.choices,"nationality":Coach.Nationality.choices,"branches":branches})
         else:
-            return HttpResponse("غير مصرح لك")
+            return render(request,"academy/404.html")
     else:
-            return HttpResponse("غير مصرح لك")
+            return render(request,"academy/404.html")
 
 
 def subscribers_view(request, user_id):
@@ -708,11 +737,11 @@ def subscribers_view(request, user_id):
                 # Render the template with filtered results
                 return render(request, "academy/subscribers.html", {'subscribers': subscribers})
             else:
-                return HttpResponse("غير مصرح لك")
+                return render(request,"academy/404.html")
         else:
-            return HttpResponse("لم يتم اعتمادك من قبل منصة نشء! فضلا أنشئ ملف أكاديميتك وانتظر الاعتماد.")
+            return render(request,"academy/404.html")
     else:
-        return HttpResponse("غير مصرح لك")
+        return render(request,"academy/404.html")
     
 def delete_video(request:HttpRequest,video_id):
     video=ProgramVideo.objects.get(pk=video_id)
