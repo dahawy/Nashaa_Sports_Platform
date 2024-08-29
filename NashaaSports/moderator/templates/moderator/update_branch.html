@@ -3,7 +3,7 @@
 
 <script src="https://maps.googleapis.com/maps/api/js?key={{ google_maps_api_key }}&libraries=places"></script>
 
-<form class="max-w-sm pt-36 mx-auto" method="post" >
+<form class="max-w-sm pt-36 mx-auto" method="post" > 
     {% csrf_token %}
     <div class="mb-5">
       <label for="branch_name" class="block mb-2 text-sm font-medium text-gray-900 light:text-white">اسم الفرع: {{ branch.name }}</label>
@@ -132,3 +132,5 @@
 
 
 {% endblock %}
+
+
