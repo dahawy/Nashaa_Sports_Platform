@@ -1,12 +1,13 @@
 {% extends 'moderator/base.html' %}
 {% block content %}
 
-<script src="https://maps.googleapis.com/maps/api/js?key={{ google_maps_api_key }}&libraries=places"></script>
- 
-<form class="max-w-sm pt-36 mx-auto" method="post" > 
+<script src="https://maps.googleapis.com/maps/api/js?key={{ google_maps_api_key }}&libraries=places&callback=initMap" async defer></script>
+
+<form class="max-w-sm pt-36 mx-auto" method="post" >
+      
     {% csrf_token %}
     <div class="mb-5">
-      <label for="branch_name" class="block mb-2 text-sm font-medium text-gray-900 light:text-white">اسم الفرع: {{ branch.name }}</label>
+      <label for="branch_name" class="block mb-2 text-sm font-medium text-gray-900 light:text-white">اسم الفرع</label>
       <input type="text" name="branch_name" value="{{branch.branch_name}}" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 light:bg-gray-700 light:border-gray-600 light:placeholder-gray-400 light:text-white light:focus:ring-blue-500 light:focus:border-blue-500 light:shadow-sm-light" placeholder="name@flowbite.com" required />
     </div>
     <div class="mb-5">
@@ -20,6 +21,8 @@
       {% endfor %}
     </select>
   
+      <!-- 
+      <input type="text" name="branch_city" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 light:bg-gray-700 light:border-gray-600 light:placeholder-gray-400 light:text-white light:focus:ring-blue-500 light:focus:border-blue-500 light:shadow-sm-light" required /> -->
     </div>
     <div class="mb-5">
       <label for="register_no" class="block mb-2 text-sm font-medium text-gray-900 light:text-white">رقم السجل التجاري</label>
@@ -27,16 +30,20 @@
     </div>
 
 
-    <h1>موقع الفرع: {{ branch.branch_name }}</h1>
-    <div id="map" style="height: 500px; width: 100%;"></div>
-    <input id="search-box" class="controls" type="text" placeholder="Search Box">
+    <!--  -->
+    <h1>حدد الموقع</h1>
+    <div id="map" class="rounded-lg" style="height: 200px; width: 100%;"></div>
+    <input id="search-box" class="controls rounded-full h-5" type="text" placeholder="ابحث عن الفرع">
     <input type="hidden" id="map-url" name="map_url" value="{{ branch.branch_location }}">
     
-    <div class="pt-5 pb-5 text-center">
-        <button data-modal-target="popup-modal" data-modal-toggle="popup-modal" type="submit" class="text-center w-full text-white font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 transition-all duration-500 bg-[#ED786A] hover:bg-[#f05e4e]">تحديث بيانات الفرع</button>
-    </div>
-</form>
-<script>
+
+    <!-- Existing Form Fields -->
+
+    <!--  -->
+
+    <button data-modal-target="popup-modal" data-modal-toggle="popup-modal" type="submit" class="mt-6 text-white bg-[#ED786A] hover:bg-[#f05e4e] focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center light:bg-orange-600 light:hover:bg-orange-700 light:focus:ring-orange-800">تحديث الفرع</button>
+  </form>
+  <script>
     let map;
     let marker;
 
@@ -134,6 +141,5 @@
 </script>
 
 
+
 {% endblock %}
-
-

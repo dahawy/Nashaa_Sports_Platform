@@ -7,73 +7,59 @@
     <div class="p-4 rounded-lg " >
        <div class=" md:grid md:grid-cols-4 gap-x-10 " >
           
-          <div class="bg-white shadow-md rounded-lg p-6 mb-4">
+        <div class="bg-white shadow-md rounded-lg p-6 mb-4">
+          <div class="flex items-center justify-between">
+            <div class="flex flex-col items-center justify-center" >
+              <h2 class="text-lg font-semibold text-gray-800">أكاديمية ونادي</h2>
+              <p class="text-3xl font-bold text-gray-800" data-target="{{academies.count}}">0</p>
+            </div>
+            <div>
+             <span class="material-symbols-outlined text-[#cd7868]" style="font-size: 50px; color: #cd7868;">
+                school
+                </span>
+            </div>
+          </div>
+        </div>
+          
+          
+         <div class="bg-white shadow-md rounded-lg p-6 mb-4">
             <div class="flex items-center justify-between">
-              <div>
-                <h2 class="text-lg font-semibold text-gray-800">أكاديمية ونادي</h2>
-                <p class="text-3xl font-bold text-gray-800" data-target="{{academies.count}}">0</p>
+              <div class="flex flex-col items-center justify-center" >
+                <h2 class="text-lg font-semibold text-gray-800">البرامج</h2>
+                <p class="text-3xl font-bold text-gray-800" data-target="{{programs.count}}">0</p>
               </div>
-              <div class="">
+              <div>
                <span class="material-symbols-outlined text-[#cd7868]" style="font-size: 50px; color: #cd7868;">
                   surfing
                   </span>
               </div>
             </div>
           </div>
-          
-          <!-- <div class="flex  mb-1 flex-col items-center justify-center h-24 rounded  light:bg-gray-800" style="background-color: rgb(255,255,255,1);">
-            <p class="text-2xl text-gray-400 light:text-gray-500">
-               عدد الفروع 
-            </p>
-            <span class="text-2xl text-gray-400 light:text-gray-500">{{branches.count}}</span>
-         </div> -->
-         <div class="bg-white shadow-md rounded-lg p-6  mb-4">
-            <div class="flex items-center justify-between">
-              <div>
-                <h2 class="text-lg font-semibold text-gray-800">البرامج</h2>
-                <p class="text-3xl font-bold text-gray-800" data-target="{{programs.count}}">0</p>
-              </div>
-              <div class="text-green-500">
-               <span class="material-symbols-outlined text-[#cd7868]" style="font-size: 50px; color: #cd7868;">
-                  location_on
-                  </span>
-              </div>
-            </div>
-          </div>
-         <!-- <div class="flex  mb-1 flex-col items-center justify-center h-24 rounded  light:bg-gray-800" style="background-color: rgb(255,255,255,1);">
-            <p class="text-2xl text-gray-400 light:text-gray-500">
-               عدد المدربين 
-            </p>
-            <span class="text-2xl text-gray-400 light:text-gray-500">{{coaches.count}}</span>
-         </div> -->
+        
          <div class="bg-white shadow-md rounded-lg p-6 gap-10  mb-4">
             <div class="flex items-center justify-between">
-              <div>
+              <div class="flex flex-col items-center justify-center" >
                 <h2 class="text-lg font-semibold text-gray-800">اشتراك</h2>
                 <p class="text-3xl font-bold text-gray-800" data-target="{{subscriptions.count}}">0</p>
               </div>
               <div class="text-green-500">
                <span class="material-symbols-outlined text-[#cd7868]" style="font-size: 50px; color: #cd7868;">
-                  groups
+                  inventory
                   </span>
+                  
               </div>
             </div>
           </div>
-         <!-- <div class="flex  mb-1 flex-col items-center justify-center h-24 rounded  light:bg-gray-800" style="background-color: rgb(255,255,255,1);">
-            <p class="text-2xl text-gray-400 light:text-gray-500">
-               عدد المشتركين 
-            </p>
-            <span class="text-2xl text-gray-400 light:text-gray-500">{{enrollments.count}}</span>
-         </div> -->
+         
          <div class="bg-white shadow-md rounded-lg p-6  mb-4">
             <div class="flex items-center justify-between">
-              <div>
+              <div class="flex flex-col items-center justify-center" >
                 <h2 class="text-lg font-semibold text-gray-800">مستخدم</h2>
                 <p class="text-3xl font-bold text-gray-800" data-target="{{users.count}}">0</p>
               </div>
               <div class="text-green-500">
                <span class="material-symbols-outlined text-[#cd7868]" style="font-size: 50px; color: #cd7868;">
-                  group_add
+                  group
                   </span>
               </div>
             </div>
@@ -87,13 +73,7 @@
  </div>
 
 
-
-
-
-
-<!-- ============//////////////////////===============///////////////////================ -->
-
-
+<!-- ========================================== Charts implementation ============================================= -->
 
 <div class="justify-around mx-auto w-full  flex flex-wrap gap-10 items-center  p-4 md:p-6">
   <div class=" md:flex-row space-y-4 md:space-x-4 rounded-lg shadow py-7 ">
