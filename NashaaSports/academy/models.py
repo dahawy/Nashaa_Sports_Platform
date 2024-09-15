@@ -107,7 +107,7 @@ class Coach(models.Model):
     experience = models.IntegerField()
     nationality = models.CharField(max_length=64, choices=Nationality.choices, default=Nationality.SAUDI)
     gender = models.CharField( choices=Gender.choices)
-    avatar = models.ImageField(upload_to='coach_avatars/')
+    avatar = models.ImageField(upload_to='coach_avatars/', default="avatar/default_avatar_2.svg")
     created_at = models.DateTimeField(auto_now_add=True)
 
 class TimeSlot(models.Model):

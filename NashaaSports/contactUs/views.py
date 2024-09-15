@@ -15,7 +15,7 @@ def customer_query_view(request: HttpRequest):
             customerQuery_form = CustomerQueryForm(request.POST)
             if customerQuery_form.is_valid():
                 query = customerQuery_form.save(commit=False)  # Don't save to the database just yet
-                query.status = 'Open'  # Explicitly set the status to 
+                query.status = 'Open'  # Explicitly set the status to 'Open'
                 query.save()  
                 messages.success(request, "لقد تم ارسال رسالتك بنجاح", extra_tags="alert-success")
                 content_html = render_to_string("mail/respond.html",{"query":query}) #set email

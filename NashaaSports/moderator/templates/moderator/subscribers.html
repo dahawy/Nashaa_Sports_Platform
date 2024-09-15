@@ -1,0 +1,129 @@
+{% extends 'moderator/base.html' %}
+
+{% block content %}
+<div class="pt-28 flex justify-center">
+    <h2 class="text-3xl"> المشتركون</h2>
+</div>
+<form id="filter-form" class="max-w-md mx-auto mt-10" method="GET" action="">
+    <label for="default-search" class="mb-2 text-sm font-medium text-gray-900 sr-only">Search</label>
+    <div class="flex justify-center">
+    <div class="relative md:w-full w-11/12 ">
+        <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+            <svg class="w-4 h-4 text-gray-500 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+            </svg>
+        </div>
+        <input type="search" id="default-search" name="search" value="{{ request.GET.search }}" class="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 " placeholder="ابحث بأسم المشترك" />
+    </div>
+</div>
+<div class="flex justify-center flex-wrap mt-3 gap-x-5 gap-y-0">
+    <div class="mb-5 w-32">
+        <select id="status-filter" name="status" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+            <option value="all" >الحالة (الكل)</option>
+            <option value="pending" {% if request.GET.status == "pending" %}selected{% endif %}>معلق</option>
+            <option value="in_progress" {% if request.GET.status == "in_progress" %}selected{% endif %}>جاري</option>
+        </select>
+    </div>
+</div>
+</form>
+<div class="mt-10 w-full  flex justify-center items-center ">
+        
+    
+    {% if  enrollment_info_list %}
+    <div class=" w-96 md:w-3/4 relative overflow-x-auto shadow-md sm:rounded-lg">
+        
+        <table class="w-full text-sm text-left rtl:text-right text-gray-500 ">
+            <thead class="text-xs md:text-sm text-gray-700 uppercase bg-gray-100">
+                <tr>
+                    <th scope="col" class="px-6 py-3">
+                        اسم المشترك
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        رقم الاشتراك
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        البرنامج
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        فترة البرنامج
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        السعر
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        الفرع
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        الأكاديمية
+                    </th>
+                
+                </tr>
+            </thead>
+            <tbody>
+                
+               
+                
+                {% for enrollment in enrollment_info_list %}
+                <tr class="bg-white border-b  hover:bg-gray-50">
+                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
+                        {{ enrollment.first_name }} {{ enrollment.last_name }}
+                    </th>
+                    <td class="px-6 py-4">
+                        {{ enrollment.enrollment_id }}
+                    </td>
+                    <td class="px-6 py-4">
+                        {{ enrollment.program_name }}
+                    </td>
+                    <td class="px-6 py-4" dir="ltr">
+                       
+                       {{ enrollment.program_start_date }}-
+                       {{ enrollment.program_end_date }}
+                       
+                    </td>
+                    <td class="px-6 py-4">
+                        {{ enrollment.program_fees }}
+                    </td>
+                    <td class="px-6 py-4">
+                        {{ enrollment.branch_name }}
+                    </td>
+                    <td class="px-6 py-4">
+                        {{ enrollment.academy_name }}
+                    </td>
+                    <td class="px-6 py-4 text-right">
+                        
+
+
+  
+                    </td>
+                </tr>
+                {% endfor %}
+                
+
+            </tbody>
+        </table>
+        
+    </div>
+    {% else %}
+        <div class="flex justify-center items-center ">
+        <h2 class="text-gray-400 text-2xl">لايوجد مشتركين حتى الان</h2>
+    </div>
+        {% endif %}
+    
+    
+    
+
+
+</div>
+
+
+<script>
+    
+    function handleFilterChange(event) {
+        document.getElementById('filter-form').submit();
+    }
+    document.querySelectorAll('#filter-form select').forEach(selectElement => {
+        selectElement.addEventListener('change', handleFilterChange);
+    });
+</script>
+
+{% endblock %}

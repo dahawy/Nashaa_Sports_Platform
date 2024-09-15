@@ -3,7 +3,7 @@
 
 <script src="https://maps.googleapis.com/maps/api/js?key={{ google_maps_api_key }}&libraries=places&callback=initMap" async defer></script>
 
-<form class="max-w-sm pt-36 mx-auto" method="post" >
+<form class="max-w-sm pt-36 mx-auto" method="post"  action="?next={{ request.path }}" >
       
     {% csrf_token %}
     <div class="mb-5">

@@ -249,7 +249,7 @@ def update_academy_profile(request:HttpRequest):
             if logo:
                 profile.logo = logo
             profile.save()
-            messages.success(request, 'لقد تم تحديث ملفك الشخصي بنجاح.')
+            messages.success(request, 'لقد تم تحديث ملفك الأكاديمية بنجاح.')
             return redirect('account:academy_profile_view',user_id=request.user.id)  
         else:
             messages.error(request, 'يرجى ملء جميع الحقول المطلوبة.')

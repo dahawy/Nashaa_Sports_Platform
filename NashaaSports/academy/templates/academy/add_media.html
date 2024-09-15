@@ -16,18 +16,62 @@
                 </div>
                 <div class="sm:col-span-2">
                     <label for="program_name" class="block mb-2 text-sm font-medium text-gray-900">الملفات المرفقة</label>
-                    {% for image_url in image_urls %}
-                    {% if image_url %}
-                    <p class="text-gray-400 text-sm">{{image_url}}</p>
+                    
+                    {% if video_urls %}
+                    <div class="mt-2 mb-2">
+                        <h2>الفديوهات</h2>
+                    </div>
+                    <div class="shadow-lg w-fit flex ">
+                        <div class="flex flex-wrap gap-3 items-center justify-center bg-white p-2 rounded-lg shadow-md">
+                            {% for video_url in video_urls %}
+                            <div class="relative w-32 h-32 mb-2">
+                                <video class="w-full h-full"  controls>
+                                    {% if video_url.video %}
+                                        <source src="{{ video_url.video.url }}">
+                                    {% else %}
+                                        <source src="{{ video_url }}">
+                                    {% endif %}
+                                    Your browser does not support the video tag.
+                                </video>
+                                {% if video_url.id %}
+                                    <a href="{% url 'academy:delete_video' video_url.id %}?next={{request.path}}" 
+                                       class="cursor-pointer absolute top-1 right-1 text-center flex justify-center bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-1 rounded-full transition-colors duration-300">
+                                        <span class="material-symbols-outlined">delete</span>
+                                    </a>
+                                {% endif %}
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
                     {% endif %}
-                    {% endfor %}
-                    {% for video_url in video_urls %}
-                    {% if video_url %}
-                    <p class="text-gray-400 text-sm">{{video_url}}</p>
+                    
+                    {% if image_urls %}
+                    <div class="mt-2 mb-2">
+                        <h2>الصور</h2>
+                    </div>
+                    <div class="shadow-md rounded-lg w-fit flex mt-3">
+                        <div class="flex flex-wrap items-center justify-center bg-white p-2">
+                            {% for image_url in image_urls %}
+                            <div class="relative w-32 h-32 mb-2">
+                                {% if image_url.image %}
+                                    <img alt="" class="w-full h-full object-cover rounded-lg" src="{{ image_url.image.url }}"/>
+                                {% else %}
+                                    <img alt="" class="w-full h-full object-cover rounded-lg" src="{{ image_url }}"/>
+                                {% endif %}
+                                {% if image_url.id %}
+                                    <a href="{% url 'academy:delete_image' image_url.id %}?next={{request.path}}" 
+                                       class="cursor-pointer absolute top-1 right-1 text-center flex justify-center bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-1 rounded-full transition-colors duration-300">
+                                        <span class="material-symbols-outlined">delete</span>
+                                    </a>
+                                {% endif %}
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
                     {% endif %}
-                    {% endfor %}
-
+                
                 </div>
+                
                 
 
                 <div class="flex max-sm:flex-col md:flex-row w-full">

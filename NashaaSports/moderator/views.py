@@ -84,7 +84,7 @@ def query_detail_view(request, query_id):
             print(e)
             messages.error(request, "لم يتم إرسال الرد.", extra_tags="alert-danger")
     else:
-        form = ReplyForm(initial={'subject': f"Re: {query.subject}"})
+        form = ReplyForm(initial={'subject': f"رد: {query.subject}"})
     return render(request, 'moderator/query_detail.html', {'query': query, 'form': form})
     
 @superuser_required
@@ -143,7 +143,7 @@ def approve_academy_view(request: HttpRequest, academy_id):
         academy.approved = True
         academy.save()
 
-        message = render_to_string("mail/academy_reg.html",{"academy":academy})
+        message = render_to_string("mail/approval_response.html",{"academy":academy})
         subject = "شكراً لاختياركم منصة نشـء"
         recipient = academy.user.email
 
@@ -158,6 +158,31 @@ def approve_academy_view(request: HttpRequest, academy_id):
     except Exception as e:
         print(e)
     return redirect('moderator:academies_for_approval_view')
+
+
+@superuser_required
+def disapprove_academy_view(request: HttpRequest, academy_id):
+    if request.method == 'POST':
+        try:
+            academy = AcademyProfile.objects.get(pk=academy_id)
+            refusal_reason = request.POST.get('refusal_reason')
+            message = render_to_string("mail/refusal_response.html",{"academy":academy, 'refusal_reason':refusal_reason})
+            subject = "نشـء تأسف لعدم قبول طلبكم "
+            recipient = academy.user.email
+
+            email = EmailMessage(
+                subject,
+                message,
+                settings.EMAIL_HOST_USER,
+                [recipient],
+            )
+            email.send() 
+            messages.success(request, f"تم رفض طلب {academy.academy_name} وإبلاغهم عبر الإيميل", extra_tags="alert-success")
+        except Exception as e:
+            print(e)
+        return redirect('moderator:academies_for_approval_view')
+    return redirect('moderator:academies_for_approval_view')
+
 
 @superuser_required
 def users_view(request: HttpRequest, user_type):
@@ -228,15 +253,17 @@ def deactivate_program_view(request: HttpRequest,academy_id):
 @superuser_required
 def moderator_dashboard_view(request:HttpRequest, days_ago: int):
     if request.user.is_superuser:    
+        # Get today's date and calculate the date 30 or 90 days ago
+        today = timezone.now().date()
+        date_days_ago = today - timedelta(days=days_ago)
+
         if int(days_ago) in [30, 90]:
             academies = AcademyProfile.objects.filter(approved=True)
             programs = Program.objects.all()
-            subscriptions = Enrollment.objects.all()
+            subscriptions = Enrollment.objects.filter(program__end_date__gte= today)
             users = User.objects.all()
             
-            # Get today's date and calculate the date 30 or 90 days ago
-            today = timezone.now().date() + timedelta(days= 1)
-            date_days_ago = today - timedelta(days=days_ago)
+            
             # Query to get enrollments for the football category in the specified period with associated payments
             football_payments = Enrollment.objects.filter(
                 program__sport_category=Program.SportChoices.FOOTBALL,
@@ -508,3 +535,39 @@ def get_gender_choices():
 
 def get_Nationality_choices():
     return [(choice, choice_display) for choice, choice_display in Coach.Nationality.choices]
+
+
+@superuser_required
+def subscribers_view(request: HttpRequest):
+    # Query to get all enrollments with status 'in_progress' and payment status 'paid'
+    enrollments = Enrollment.objects.filter(
+        status=Enrollment.StatusChoices.IN_PROGRESS,
+        cart__payment__status=True  # Join with Payment and filter by status 'paid'
+    ).select_related(
+        'program__branch__academy',  # To avoid multiple queries by joining the related models
+        'cart__payment'  # Joining Cart and Payment for the payment status
+    )
+
+    # Process the data
+    enrollment_info_list = []
+
+    for enrollment in enrollments:
+        enrollment_info = {
+            "first_name": enrollment.first_name,
+            "last_name": enrollment.last_name,
+            "enrollment_id": enrollment.id,
+            "program_name": enrollment.program.program_name,
+            "program_fees": enrollment.program.fees,
+            "program_start_date": enrollment.program.start_date,
+            "program_end_date": enrollment.program.end_date,
+            "branch_name": enrollment.program.branch.branch_name,
+            "academy_name": enrollment.program.branch.academy.academy_name, 
+        }
+        
+        # Add to the list
+        enrollment_info_list.append(enrollment_info)
+        print(enrollment_info_list[0]['first_name'])
+        
+        return render(request, 'moderator/subscribers.html', {'enrollment_info_list': enrollment_info_list})
+
+
